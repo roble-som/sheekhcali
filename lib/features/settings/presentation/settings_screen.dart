@@ -14,6 +14,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../library/data/library_repository.dart';
 import '../../navigation/domain/app_destination.dart';
 import '../application/preferences_controllers.dart';
+import '../../quran/presentation/widgets/reading_controls.dart';
 
 /// Settings (concept 16, DESIGN_SYSTEM_SPECIFICATION §8.16): Reader chrome and
 /// a grouped white list. Only settings that work, or are clearly marked as
@@ -94,6 +95,14 @@ class SettingsScreen extends ConsumerWidget {
                       _Radio<bool>(value: true, label: l10n.readerThemeDark),
                       _Radio<bool>(value: false, label: l10n.readerThemeLight),
                     ],
+                  ),
+                ),
+                Padding(
+                  // Aligned with the radio rows above (start 56 + 16).
+                  padding: const EdgeInsetsDirectional.fromSTEB(72, 0, 8, 4),
+                  child: QuranTextSizeControl(
+                    dark: false,
+                    textStyle: styles.listTitle,
                   ),
                 ),
               ],

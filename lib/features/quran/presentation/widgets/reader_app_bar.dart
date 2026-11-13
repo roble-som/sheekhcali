@@ -17,6 +17,7 @@ class ReaderAppBar extends StatelessWidget {
     required this.onTranslation,
     required this.onIndex,
     required this.onAutoScroll,
+    this.autoScrolling = false,
     required this.moreButtonKey,
     required this.onMore,
   });
@@ -27,6 +28,9 @@ class ReaderAppBar extends StatelessWidget {
   final VoidCallback onTranslation;
   final VoidCallback onIndex;
   final VoidCallback onAutoScroll;
+
+  /// Shows the auto-scroll button as active (gold) while scrolling.
+  final bool autoScrolling;
   final GlobalKey moreButtonKey;
   final VoidCallback onMore;
 
@@ -100,10 +104,15 @@ class ReaderAppBar extends StatelessWidget {
                       color: const Color(0xB3FFFFFF),
                     ),
                     ToolbarAction(
-                      icon: Icons.keyboard_double_arrow_down,
-                      tooltip: l10n.readerAutoScroll,
+                      icon: autoScrolling
+                          ? Icons.pause_circle_outline
+                          : Icons.keyboard_double_arrow_down,
+                      tooltip: autoScrolling
+                          ? l10n.autoScrollStop
+                          : l10n.readerAutoScroll,
                       onPressed: onAutoScroll,
                       iconSize: 27,
+                      color: autoScrolling ? HomeColors.goldLabel : null,
                     ),
                     ToolbarAction(
                       key: moreButtonKey,

@@ -1,0 +1,21 @@
+{
+  "note": "Independent checksum manifest written by tool/quran/import_tanzil.dart. Tests compare the bundled asset against it; never edit by hand.",
+  "sourceFileSha256": "bf4f57b968d03f4131c070b1e285da9be0e0a108a21c910e872801ca273312c8",
+  "sourceLinesSha256": "5c756d88aac6ae3b5e5739e0d4e451705ed34dd3b2ea9424e29dfdbb6da7c291",
+  "surah": 66,
+  "ayahCount": 12,
+  "ayahSha256": [
+    "17876351d16a4c3d835fa528a9f67ae532c7f35580c2d865a039f67bcb33de2b",
+    "6d40febbd58d18c1d7ff652804eaceecd31ab0fa620b9f7a506500928a707b4b",
+    "7d445f4bd1ab0cecf4f79eba4323def229cf1a60631f929f2e2d1c0d9fb0821a",
+    "3c3d7f5b1a051d088441acfd04661e5f1cab897769e14af0c0c0402a49c1fdb0",
+    "217d615eb407ba97fd2d22748cbb5535ab52c72c682919ba5a70ead00d96630d",
+    "5e13d186d38c6d6718a8d69f29fc8bf371a25ca3236219a8f16dc0470877ec47",
+    "d50e56e8df9dc9caae0cc5f0da1d806620946642c317d04753f970814be069a5",
+    "99817277b49b121af619f2322f174f47692bc6e3788e0cc2c63bc3e4faf9f954",
+    "a139f24252aceaca90815affeaad879ea850f82261322d9a23939de18e793cc7",
+    "30cfa224f1d5095cb262d95ec64f46691e0ca2720d3afe308e14a8b70d18f991",
+    "a0eeac6b6d191f13000d16a7d42d303498da01c347ce31244170e531f39abc88",
+    "607ede0bfbe2eafa7e35ccb29e247b0a8489e5fb1145ba7ef1df22014512828f"
+  ]
+}

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sheekhcali/app/router.dart';
@@ -6,31 +8,49 @@ import 'package:sheekhcali/features/quran/data/quran_metadata_repository.dart';
 import 'package:sheekhcali/features/quran/presentation/quran_index_screen.dart';
 import 'package:sheekhcali/features/quran/presentation/quran_reader_screen.dart';
 
+import '../support/file_quran_repositories.dart';
 import '../support/synthetic_quran_metadata.dart';
 import '../support/test_app.dart';
 
 void main() {
-  final synthetic = [
-    quranMetadataRepositoryProvider.overrideWithValue(
-      const SyntheticQuranMetadataRepository(),
-    ),
-  ];
+  const synthetic = SyntheticQuranMetadataRepository();
+  final real = parseQuranMetadata(
+    File(BundledQuranMetadataRepository.assetPath).readAsStringSync(),
+  )!;
 
-  group('shipped state: no verified metadata', () {
-    testWidgets('reader index button opens the index with the honest notice', (
+  group('shipped state: verified Tanzil metadata', () {
+    testWidgets('reader index button opens the index listing all surahs', (
       tester,
     ) async {
       await pumpApp(tester, location: AppRoutes.quran);
       await tester.tap(find.byTooltip('Index'));
       await tester.pumpAndSettle();
       expect(find.byType(QuranIndexScreen), findsOneWidget);
-      expect(
-        find.text('Surah and juz index not available yet'),
-        findsOneWidget,
+      expect(real.surahs.length, 114);
+      expect(find.text(real.surahs[0].nameTransliterated), findsOneWidget);
+      expect(find.text(real.surahs[1].nameTransliterated), findsOneWidget);
+      expect(find.text('Surah and juz index not available yet'), findsNothing);
+    });
+
+    testWidgets('tapping surah 2 opens surah 2, not Al-Fatiha', (tester) async {
+      await pumpApp(tester, location: AppRoutes.quranIndex);
+      await tester.tap(find.byKey(const ValueKey('surah-row-2')));
+      await tester.pumpAndSettle();
+      final reader = tester.widget<QuranReaderScreen>(
+        find.byType(QuranReaderScreen),
       );
-      expect(find.text('Layout preview · not real data'), findsOneWidget);
-      // No surah rows are listed at all.
-      expect(find.bySemanticsLabel(RegExp(r'^Surah \d')), findsNothing);
+      expect(reader.surah, 2);
+    });
+
+    testWidgets('tapping juz 2 opens its first ayah', (tester) async {
+      await pumpApp(tester, location: AppRoutes.quranIndexTab('juz'));
+      await tester.tap(find.byKey(const ValueKey('juz-row-2')));
+      await tester.pumpAndSettle();
+      final reader = tester.widget<QuranReaderScreen>(
+        find.byType(QuranReaderScreen),
+      );
+      expect(reader.surah, real.juzs[1].startSurah);
+      expect(reader.initialAyah, real.juzs[1].startAyah);
     });
 
     testWidgets('drawer "Index & Bookmark" opens the index', (tester) async {
@@ -47,13 +67,30 @@ void main() {
       expect(find.byType(QuranIndexScreen), findsOneWidget);
     });
 
-    testWidgets('Arabic: tabs and notice in Arabic, RTL', (tester) async {
+    testWidgets('Arabic: tabs and Arabic names, RTL', (tester) async {
       await pumpApp(tester, locale: 'ar', location: AppRoutes.quranIndex);
       expect(find.text('السور'), findsOneWidget);
       expect(find.text('الأجزاء'), findsOneWidget);
-      expect(find.text('فهرس السور والأجزاء غير متاح بعد'), findsOneWidget);
+      expect(find.text('العلامات'), findsOneWidget);
+      expect(find.text(real.surahs[0].nameArabic), findsOneWidget);
       final ctx = tester.element(find.byType(QuranIndexScreen));
       expect(Directionality.of(ctx), TextDirection.rtl);
+    });
+  });
+
+  group('fail-closed: no verified metadata', () {
+    testWidgets('lists nothing and says why', (tester) async {
+      await pumpApp(
+        tester,
+        location: AppRoutes.quranIndex,
+        metadata: const UnavailableQuranMetadataRepository(),
+      );
+      expect(
+        find.text('Surah and juz index not available yet'),
+        findsOneWidget,
+      );
+      expect(find.text('Layout preview · not real data'), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp(r'^Surah \d')), findsNothing);
     });
   });
 
@@ -64,7 +101,7 @@ void main() {
       await pumpApp(
         tester,
         location: AppRoutes.quranIndex,
-        overrides: synthetic,
+        metadata: synthetic,
       );
       expect(find.text('Ikhtibar-Awwal'), findsOneWidget);
       expect(
@@ -86,7 +123,7 @@ void main() {
         await pumpApp(
           tester,
           location: AppRoutes.quranIndex,
-          overrides: synthetic,
+          metadata: synthetic,
         );
         final field = find.byType(TextField).first;
 
@@ -115,7 +152,7 @@ void main() {
       await pumpApp(
         tester,
         location: AppRoutes.quranIndex,
-        overrides: synthetic,
+        metadata: synthetic,
       );
       await tester.tap(find.text('Juz'));
       await tester.pumpAndSettle();
@@ -130,7 +167,7 @@ void main() {
         tester,
         locale: 'ar',
         location: AppRoutes.quranIndex,
-        overrides: synthetic,
+        metadata: synthetic,
       );
       expect(find.text('اِخْتِبَارٌ أَوَّل'), findsOneWidget);
       expect(find.text('مكية · ٣ آيات'), findsOneWidget);
@@ -145,7 +182,7 @@ void main() {
           tester,
           locale: locale,
           location: AppRoutes.quranIndex,
-          overrides: synthetic,
+          metadata: synthetic,
           textScale: 2.0,
         );
         expect(tester.takeException(), isNull);

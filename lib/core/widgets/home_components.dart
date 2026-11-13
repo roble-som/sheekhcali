@@ -67,6 +67,9 @@ class _HamburgerPainter extends CustomPainter {
 
 /// The round logo medallion. The real logo isn't supplied yet (P-02), so this
 /// draws a clearly marked placeholder inside a neutral gold ring.
+/// The app logo (derived from the supplied `logosheekh.jpeg`).
+const logoAsset = 'assets/images/logo_portrait_512.jpg';
+
 class LogoMedallion extends StatelessWidget {
   const LogoMedallion({super.key, required this.size, this.onDark = false});
 
@@ -88,22 +91,21 @@ class LogoMedallion extends StatelessWidget {
           colors: [Color(0xFFE9C766), Color(0xFFB98D2C)],
         ),
       ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: onDark ? const Color(0xFF2B5039) : const Color(0xFFF1F1EE),
-        ),
-        child: PlaceholderBox(
-          circle: true,
-          onDark: onDark,
-          showBorder: false,
-          label: size >= 40
-              ? AppLocalizations.of(context).placeholderLogo
-              : null,
-          labelStyle: context.text.placeholderLabel.copyWith(
-            fontSize: size >= 56 ? 11 : 9,
+      child: Semantics(
+        image: true,
+        label: AppLocalizations.of(context).logoSemantics,
+        child: ClipOval(
+          child: Image.asset(
+            logoAsset,
+            fit: BoxFit.cover,
+            // One shared 512 px decode (66 KB file) for every size, so the
+            // logo is already in memory wherever it appears next.
+            filterQuality: FilterQuality.medium,
+            gaplessPlayback: true,
+            errorBuilder: (context, error, stack) => ColoredBox(
+              color: onDark ? const Color(0xFF2B5039) : const Color(0xFFF1F1EE),
+            ),
           ),
-          padding: EdgeInsets.zero,
         ),
       ),
     );

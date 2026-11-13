@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "source": {
+    "name": "Tanzil Quran Text",
+    "script": "Uthmani",
+    "version": "1.1",
+    "homepage": "https://tanzil.net/",
+    "updates": "http://tanzil.net/updates/",
+    "downloadUrl": "https://tanzil.net/pub/download/index.php?quranType=uthmani&outType=txt-2&agree=true",
+    "retrievedAt": "2026-11-13T18:54:00Z",
+    "fileSha256": "bf4f57b968d03f4131c070b1e285da9be0e0a108a21c910e872801ca273312c8",
+    "licence": "PLEASE DO NOT REMOVE OR CHANGE THIS COPYRIGHT BLOCK\n====================================================================\n\n Tanzil Quran Text (Uthmani, Version 1.1)\n Copyright (C) 2007-2026 Tanzil Project\n License: Creative Commons Attribution 3.0\n\n This copy of the Quran text is carefully produced, highly \n verified and continuously monitored by a group of specialists \n at Tanzil Project.\n\n TERMS OF USE:\n\n - Permission is granted to copy and distribute verbatim copies \n   of this text, but CHANGING IT IS NOT ALLOWED.\n\n - This Quran text can be used in any website or application, \n   provided that its source (Tanzil Project) is clearly indicated, \n   and a link is made to tanzil.net to enable users to keep\n   track of changes.\n\n - This copyright notice shall be included in all verbatim copies \n   of the text, and shall be reproduced appropriately in all files \n   derived from or containing substantial portion of this text.\n\n Please check updates at: http://tanzil.net/updates/\n\n====================================================================",
+    "metadata": {
+      "name": "Tanzil Quran metadata",
+      "version": "1.0",
+      "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
+      "fileSha256": "8867c1d88191472adec9db694b3cd9f135b1a2ef580574d32cf888dcb22c5c7a"
+    }
+  },
+  "numbering": {
+    "convention": "Hafs, Kufan count, as in the source: ayah numbers are Tanzil's own. In Al-Fatiha the basmala is ayah 1 (7 ayahs).",
+    "basmalaIsAyahOne": false,
+    "basmala": {
+      "prefixedToAyahOneInSource": true,
+      "shownAs": "unnumbered heading before ayah 1",
+      "prefixLength": 40,
+      "identicalToFatihaAyahOne": false
+    }
+  },
+  "surah": {
+    "number": 97,
+    "nameArabic": "القدر",
+    "nameTransliterated": "Al-Qadr",
+    "nameEnglish": "The Power, Fate",
+    "revelation": "Meccan",
+    "ayahCount": 5
+  },
+  "ayahs": [
+    {
+      "number": 1,
+      "text": "بِّسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِنَّآ أَنزَلْنَٰهُ فِى لَيْلَةِ ٱلْقَدْرِ",
+      "sha256": "fa0a72a41230de5ddea306626453e083de69da9f88722365139788540d3ea9d6"
+    },
+    {
+      "number": 2,
+      "text": "وَمَآ أَدْرَىٰكَ مَا لَيْلَةُ ٱلْقَدْرِ",
+      "sha256": "b733d7c19ede87734e9223ced2e7f23977bd9e975b5a8110f4c1ee3cd0c576ad"
+    },
+    {
+      "number": 3,
+      "text": "لَيْلَةُ ٱلْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ",
+      "sha256": "acfc3e7f3cbc35cd7d6fd1fa8c3817373c7e3eec4590cade047ddc007e02b38b"
+    },
+    {
+      "number": 4,
+      "text": "تَنَزَّلُ ٱلْمَلَٰٓئِكَةُ وَٱلرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍ",
+      "sha256": "526ef7f9a48464ce57959187d6c601e319de3d80c5dc7ad245d5e2032804c006"
+    },
+    {
+      "number": 5,
+      "text": "سَلَٰمٌ هِىَ حَتَّىٰ مَطْلَعِ ٱلْفَجْرِ",
+      "sha256": "de379a461f99e80c5a7f116b20c42e27737b11f02f27ab930b9c3dbc359a6e65"
+    }
+  ],
+  "crossCheck": {
+    "source": "Quran Foundation Content API v4, text_uthmani (KFGQPC-based)",
+    "url": "https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=97",
+    "retrievedAt": "2026-11-13T18:54:00Z",
+    "responseSha256": "803828bbef55907cfdb31b1ca723cd92f6c3f90f90d7923ed8c4a9023b32905f",
+    "policy": "Comparison result only; the other text is not stored (QF caching terms).",
+    "results": [
+      {
+        "ayah": 1,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 2,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 3,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 4,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 5,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      }
+    ]
+  },
+  "verification": {
+    "automated": "passed",
+    "automatedChecks": [
+      "source version line is \"Uthmani, Version 1.1\"",
+      "6236 ayahs, contiguous, per-surah counts equal metadata (114 suras)",
+      "no control characters, BOM or CR in ayah text",
+      "verbatim copy; per-ayah SHA-256 recorded",
+      "letter skeleton equals independent cross-check source"
+    ],
+    "reviewer": null,
+    "reviewedAt": null
+  }
+}

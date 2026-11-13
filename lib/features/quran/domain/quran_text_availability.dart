@@ -8,7 +8,8 @@ class Ayah {
     required this.number,
     required this.text,
     required this.sha256,
-  });
+    String? displayText,
+  }) : displayText = displayText ?? text;
 
   final int surah;
 
@@ -18,6 +19,12 @@ class Ayah {
   /// Verbatim source text. Never normalised, trimmed or edited.
   final String text;
   final String sha256;
+
+  /// What the reader shows and copies for this ayah: [text] itself, except
+  /// for ayah 1 of a surah whose source line starts with the basmala (surahs
+  /// 2–114 but 9), where it is the exact remainder after that prefix. The
+  /// basmala is then shown, unnumbered, as [SurahText.basmalaHeading].
+  final String displayText;
 }
 
 /// Provenance of the installed text (QURAN_AND_AUDIO_ACCURACY §2.3).
@@ -62,6 +69,7 @@ class SurahText {
     required this.source,
     required this.numberingConvention,
     required this.basmalaIsAyahOne,
+    this.basmalaHeading,
     this.reviewer,
     this.reviewedAt,
   });
@@ -77,6 +85,11 @@ class SurahText {
   final QuranTextSource source;
   final String numberingConvention;
   final bool basmalaIsAyahOne;
+
+  /// The basmala shown above the text, unnumbered: the exact bytes the source
+  /// prefixes to this surah's ayah 1 (so 95 and 97 keep their "بِّسْمِ").
+  /// Null for Al-Fatiha (where it is ayah 1) and At-Tawbah (none).
+  final String? basmalaHeading;
 
   /// Named reviewer's on-device sign-off (C-27). Null while pending.
   final String? reviewer;

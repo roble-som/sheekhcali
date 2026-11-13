@@ -72,6 +72,9 @@ flutter:
     - assets/fonts/licenses/
     - assets/quran/tanzil-uthmani-1.1/
     - assets/content/alignments/
+    # Logo medallion, derived from assets/images/logosheekh.jpeg
+    # (tool/branding/make_logo_assets.py). The original is not bundled.
+    - assets/images/logo_portrait_512.jpg
 
   # All fonts are bundled (offline-first). Licences: assets/fonts/licenses/.
   # Mushaf page fonts (KFGQPC) are not bundled: licensing pending (P-24).

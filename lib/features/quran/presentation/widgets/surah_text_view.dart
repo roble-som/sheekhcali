@@ -43,12 +43,42 @@ class SurahTextView extends StatefulWidget {
   final double fontSize;
 
   @override
-  State<SurahTextView> createState() => _SurahTextViewState();
+  State<SurahTextView> createState() => SurahTextViewState();
 }
 
-class _SurahTextViewState extends State<SurahTextView> {
+/// Public so the reader can scroll to an ayah and know which ayah is on screen
+/// (through a `GlobalKey<SurahTextViewState>`).
+class SurahTextViewState extends State<SurahTextView> {
   final _taps = <int, TapGestureRecognizer>{};
   final _paragraphKey = GlobalKey();
+  AyahLayout? _layout;
+
+  RenderParagraph? get _paragraph {
+    final ro = _paragraphKey.currentContext?.findRenderObject();
+    return ro is RenderParagraph && ro.hasSize && ro.attached ? ro : null;
+  }
+
+  /// Global position of the top of ayah [n]'s first line (null before layout).
+  Offset? ayahGlobalTop(int n) {
+    final p = _paragraph;
+    final slot = _layout?.slots.where((s) => s.number == n).firstOrNull;
+    if (p == null || slot == null) return null;
+    final boxes = p.getBoxesForSelection(
+      TextSelection(baseOffset: slot.text.start, extentOffset: slot.text.end),
+    );
+    if (boxes.isEmpty) return null;
+    final top = boxes.map((b) => b.top).reduce((a, b) => a < b ? a : b);
+    return p.localToGlobal(Offset(0, top));
+  }
+
+  /// The ayah shown at the global point [global] (nearest character).
+  int? ayahAtGlobal(Offset global) {
+    final p = _paragraph;
+    if (p == null) return null;
+    final local = p.globalToLocal(global);
+    if (local.dy < 0) return _layout?.slots.firstOrNull?.number;
+    return _layout?.ayahAt(p.getPositionForOffset(local).offset);
+  }
 
   @override
   void dispose() {
@@ -86,7 +116,7 @@ class _SurahTextViewState extends State<SurahTextView> {
         ? l10n.revelationMakki
         : l10n.revelationMadani;
 
-    final layout = AyahLayout(surah);
+    final layout = _layout = AyahLayout(surah);
     final markerStyle = TextStyle(
       fontFamily: AppFonts.quran,
       fontSize: 15,
@@ -112,9 +142,9 @@ class _SurahTextViewState extends State<SurahTextView> {
       spans
         ..add(
           TextSpan(
-            text: ayah.text, // verbatim
+            text: ayah.displayText, // verbatim (see Ayah.displayText)
             recognizer: _tap(ayah.number),
-            semanticsLabel: '$semantics. ${ayah.text}',
+            semanticsLabel: '$semantics. ${ayah.displayText}',
             style: bg == null ? null : TextStyle(backgroundColor: bg),
           ),
         )
@@ -153,6 +183,24 @@ class _SurahTextViewState extends State<SurahTextView> {
           ),
         ),
         const SizedBox(height: 22),
+        if (surah.basmalaHeading != null) ...[
+          // Unnumbered, exactly as the source prefixes it to ayah 1.
+          Text(
+            surah.basmalaHeading!,
+            key: const ValueKey('basmala-heading'),
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.rtl,
+            textScaler: MediaQuery.textScalerOf(context)
+                .clamp(minScaleFactor: 1),
+            style: TextStyle(
+              fontFamily: AppFonts.quran,
+              fontSize: widget.fontSize * 0.92,
+              height: 2,
+              color: ink,
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
         // Long press anywhere on an ayah's text selects it.
         _LongPressByAyah(
           layout: layout,
@@ -258,7 +306,7 @@ class AyahLayout {
     for (var i = 0; i < surah.ayahs.length; i++) {
       final a = surah.ayahs[i];
       final textStart = cursor;
-      final textEnd = textStart + a.text.length;
+      final textEnd = textStart + a.displayText.length;
       final markerStart = textEnd + beforeMarker.length;
       final marker = markerText(a.number);
       final digitsStart = markerStart + _pad.length;

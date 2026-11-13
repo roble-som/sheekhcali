@@ -97,9 +97,7 @@ void main() {
         await pumpApp(
           tester,
           location: AppRoutes.quran,
-          overrides: [
-            quranTextRepositoryProvider.overrideWithValue(_UnavailableRepo()),
-          ],
+          quranText: _UnavailableRepo(),
         );
         expect(find.text('Layout preview · not Quran text'), findsOneWidget);
         expect(find.byKey(const ValueKey('quran-text')), findsNothing);

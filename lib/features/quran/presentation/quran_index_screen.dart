@@ -12,6 +12,7 @@ import '../../../core/widgets/placeholder_box.dart';
 import '../../../l10n/app_localizations.dart';
 import '../data/quran_metadata_repository.dart';
 import '../domain/quran_metadata.dart';
+import 'widgets/bookmarks_list.dart';
 
 /// Surah and Juz navigation (concept 5, DESIGN_SYSTEM_SPECIFICATION §8.5).
 ///
@@ -31,8 +32,8 @@ class QuranIndexScreen extends ConsumerWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: DefaultTabController(
-        length: 2,
-        initialIndex: initialTab,
+        length: 3,
+        initialIndex: initialTab.clamp(0, 2),
         child: Scaffold(
           backgroundColor: ReaderColors.surface,
           appBar: AppBar(
@@ -57,6 +58,7 @@ class QuranIndexScreen extends ConsumerWidget {
               tabs: [
                 Tab(text: l10n.tabSurah),
                 Tab(text: l10n.tabJuz),
+                Tab(text: l10n.tabBookmarks),
               ],
             ),
           ),
@@ -67,12 +69,17 @@ class QuranIndexScreen extends ConsumerWidget {
             ),
             data: (availability) => switch (availability) {
               QuranMetadataUnavailable() => const TabBarView(
-                children: [_UnavailableIndex(), _UnavailableIndex()],
+                children: [
+                  _UnavailableIndex(),
+                  _UnavailableIndex(),
+                  BookmarksList(metadata: null),
+                ],
               ),
               QuranMetadataAvailable(:final metadata) => TabBarView(
                 children: [
                   _SurahList(metadata: metadata),
                   _JuzList(metadata: metadata),
+                  BookmarksList(metadata: metadata),
                 ],
               ),
             },
@@ -330,7 +337,8 @@ class _SurahListState extends State<_SurahList> {
                       ),
                       excludeSemantics: true,
                       child: InkWell(
-                        onTap: () => context.push(AppRoutes.quran),
+                        key: ValueKey('surah-row-${s.number}'),
+                        onTap: () => context.push(AppRoutes.quranAt(s.number)),
                         child: Container(
                           constraints: const BoxConstraints(minHeight: 64),
                           padding: const EdgeInsets.symmetric(
@@ -448,7 +456,10 @@ class _JuzListState extends State<_JuzList> {
                       label: '$title. $subtitle',
                       excludeSemantics: true,
                       child: InkWell(
-                        onTap: () => context.push(AppRoutes.quran),
+                        key: ValueKey('juz-row-${j.number}'),
+                        onTap: () => context.push(
+                          AppRoutes.quranAt(j.startSurah, j.startAyah),
+                        ),
                         child: Container(
                           constraints: const BoxConstraints(minHeight: 64),
                           padding: const EdgeInsets.symmetric(

@@ -288,7 +288,7 @@
   "sourceBooks": "Books, Tafsir and lessons",
   "sourceBooksStatus": "None published yet",
   "sourceFonts": "Fonts",
-  "sourceFontsStatus": "Inter, Noto Sans Arabic, Noto Naskh Arabic · SIL Open Font License 1.1",
+  "sourceFontsStatus": "Amiri (Quran text), Inter, Noto Sans Arabic, Noto Naskh Arabic · SIL Open Font License 1.1",
   "sourceHijri": "Hijri calendar",
   "sourceHijriStatus": "Umm al-Qura table (hijri package, BSD-2-Clause) · provisional",
   "openLicences": "Open-source licences",
@@ -500,5 +500,83 @@
   },
   "confidenceHigh": "high",
   "confidenceMedium": "medium",
-  "confidenceLow": "low"
+  "confidenceLow": "low",
+  "autoScrollOn": "Auto-scroll on · tap the text to stop",
+  "autoScrollStop": "Stop auto-scroll",
+  "noTafsirForSurah": "The Sheikh's Tafsir recording is available for Al-Fatiha only, so far.",
+  "bookmarkAdded": "Bookmark added",
+  "bookmarkRemoved": "Bookmark removed",
+  "ayahRemoveBookmark": "Remove bookmark",
+  "tabBookmarks": "Bookmarks",
+  "bookmarksEmptyTitle": "No bookmarks yet",
+  "bookmarksEmptyBody": "Long-press an ayah in the reader and choose Bookmark. Bookmarks are kept on this device.",
+  "bookmarkAyahLine": "Ayah {reference}",
+  "@bookmarkAyahLine": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "readingControls": "Reading controls",
+  "readerDarkPage": "Dark reading page",
+  "textSizeValue": "Quran text size: {size}",
+  "@textSizeValue": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "quranTextSize": "Quran text size",
+  "textSmaller": "Smaller text",
+  "textLarger": "Larger text",
+  "textSizeReset": "Reset",
+  "previousSurah": "Previous surah",
+  "nextSurah": "Next surah",
+  "quranSearchTitle": "Search the Quran",
+  "quranSearchHint": "Search Arabic text (marks are optional)",
+  "clearSearch": "Clear search",
+  "quranSearchMinChars": "Type at least two Arabic letters. Harakat and other marks are ignored while matching; the text is always shown exactly as in the source.",
+  "quranSearchResults": "{count} ayahs",
+  "@quranSearchResults": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "quranSearchManyResults": "First {count} ayahs · refine the search for fewer",
+  "@quranSearchManyResults": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "quranSearchSkipped": "{count} surahs failed verification and were not searched",
+  "@quranSearchSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutVersion": "Version {version}",
+  "@aboutVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutQuranBody": "All 114 surahs from Tanzil Uthmani 1.1, shown verbatim. Every ayah is checked against its recorded checksum when it loads and was cross-checked letter by letter against a second source. A reader's on-device check is still pending.",
+  "aboutTafsirTitle": "Sheikh Calinuur's Tafsir",
+  "aboutTafsirBody": "The Sheikh's recorded Tafsir of Al-Fatiha, for testing builds only until distribution rights are confirmed. Ayah segments are being reviewed; unreviewed ones are clearly labelled.",
+  "aboutPrivacyTitle": "Privacy",
+  "aboutPrivacyBody": "No account and no tracking. Settings, bookmarks and your reading place stay on this device.",
+  "openSourceLicences": "Open-source licences",
+  "sourceQuranTextStatus": "All 114 surahs · Tanzil Uthmani 1.1, verbatim · cross-checked with a second source · reviewer check pending",
+  "sourceQuranMetadataStatus": "Tanzil metadata 1.0 · 114 surahs, 30 juz · cross-checked with a second source",
+  "logoSemantics": "Sheekh Calinuur logo"
 }

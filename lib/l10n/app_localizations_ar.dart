@@ -598,7 +598,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sourceFontsStatus =>
-      'Inter وNoto Sans Arabic وNoto Naskh Arabic · رخصة SIL للخطوط المفتوحة 1.1';
+      'أميري (نص القرآن)، Inter، Noto Sans Arabic، Noto Naskh Arabic · رخصة SIL المفتوحة للخطوط ١٫١';
 
   @override
   String get sourceHijri => 'التقويم الهجري';
@@ -829,4 +829,132 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get confidenceLow => 'منخفضة';
+
+  @override
+  String get autoScrollOn => 'التمرير التلقائي يعمل · اضغط على النص لإيقافه';
+
+  @override
+  String get autoScrollStop => 'إيقاف التمرير التلقائي';
+
+  @override
+  String get noTafsirForSurah =>
+      'تسجيل تفسير الشيخ متاح لسورة الفاتحة فقط حتى الآن.';
+
+  @override
+  String get bookmarkAdded => 'أُضيفت العلامة';
+
+  @override
+  String get bookmarkRemoved => 'حُذفت العلامة';
+
+  @override
+  String get ayahRemoveBookmark => 'حذف العلامة';
+
+  @override
+  String get tabBookmarks => 'العلامات';
+
+  @override
+  String get bookmarksEmptyTitle => 'لا توجد علامات بعد';
+
+  @override
+  String get bookmarksEmptyBody =>
+      'اضغط مطولًا على آية في القارئ واختر «علامة». تُحفظ العلامات على هذا الجهاز.';
+
+  @override
+  String bookmarkAyahLine(String reference) {
+    return 'الآية $reference';
+  }
+
+  @override
+  String get readingControls => 'إعدادات القراءة';
+
+  @override
+  String get readerDarkPage => 'صفحة قراءة داكنة';
+
+  @override
+  String textSizeValue(String size) {
+    return 'حجم نص القرآن: $size';
+  }
+
+  @override
+  String get quranTextSize => 'حجم نص القرآن';
+
+  @override
+  String get textSmaller => 'تصغير النص';
+
+  @override
+  String get textLarger => 'تكبير النص';
+
+  @override
+  String get textSizeReset => 'إعادة الضبط';
+
+  @override
+  String get previousSurah => 'السورة السابقة';
+
+  @override
+  String get nextSurah => 'السورة التالية';
+
+  @override
+  String get quranSearchTitle => 'البحث في القرآن';
+
+  @override
+  String get quranSearchHint => 'ابحث في النص العربي (التشكيل اختياري)';
+
+  @override
+  String get clearSearch => 'مسح البحث';
+
+  @override
+  String get quranSearchMinChars =>
+      'اكتب حرفين عربيين على الأقل. يُتجاهل التشكيل والعلامات عند المطابقة، ويُعرض النص دائمًا كما هو في المصدر.';
+
+  @override
+  String quranSearchResults(String count) {
+    return '$count آية';
+  }
+
+  @override
+  String quranSearchManyResults(String count) {
+    return 'أول $count آية · حدّد البحث لنتائج أقل';
+  }
+
+  @override
+  String quranSearchSkipped(String count) {
+    return '$count سورة لم تجتز التحقق ولم يُبحث فيها';
+  }
+
+  @override
+  String aboutVersion(String version) {
+    return 'الإصدار $version';
+  }
+
+  @override
+  String get aboutQuranBody =>
+      'السور الـ ١١٤ كلها من نص تنزيل العثماني ١٫١، تُعرض كما هي حرفيًا. تُطابَق كل آية مع بصمتها المسجلة عند التحميل، وقد قورنت حرفًا حرفًا بمصدر ثانٍ. ما زالت مراجعة القارئ على الجهاز معلّقة.';
+
+  @override
+  String get aboutTafsirTitle => 'تفسير الشيخ علي نور';
+
+  @override
+  String get aboutTafsirBody =>
+      'تفسير الشيخ المسجّل لسورة الفاتحة، لنسخ الاختبار فقط حتى تتأكد حقوق النشر. مقاطع الآيات قيد المراجعة، وما لم يُراجع منها موسوم بوضوح.';
+
+  @override
+  String get aboutPrivacyTitle => 'الخصوصية';
+
+  @override
+  String get aboutPrivacyBody =>
+      'لا حساب ولا تتبّع. الإعدادات والعلامات وموضع قراءتك تبقى على هذا الجهاز.';
+
+  @override
+  String get openSourceLicences => 'تراخيص البرمجيات المفتوحة';
+
+  @override
+  String get sourceQuranTextStatus =>
+      'السور الـ ١١٤ كلها · تنزيل العثماني ١٫١ حرفيًا · قورن بمصدر ثانٍ · مراجعة القارئ معلّقة';
+
+  @override
+  String get sourceQuranMetadataStatus =>
+      'بيانات تنزيل ١٫٠ · ١١٤ سورة و٣٠ جزءًا · قورنت بمصدر ثانٍ';
+
+  @override
+  String get logoSemantics => 'شعار الشيخ علي نور';
 }

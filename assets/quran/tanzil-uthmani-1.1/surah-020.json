@@ -1,0 +1,1411 @@
+{
+  "schema": 1,
+  "source": {
+    "name": "Tanzil Quran Text",
+    "script": "Uthmani",
+    "version": "1.1",
+    "homepage": "https://tanzil.net/",
+    "updates": "http://tanzil.net/updates/",
+    "downloadUrl": "https://tanzil.net/pub/download/index.php?quranType=uthmani&outType=txt-2&agree=true",
+    "retrievedAt": "2026-11-13T18:54:00Z",
+    "fileSha256": "bf4f57b968d03f4131c070b1e285da9be0e0a108a21c910e872801ca273312c8",
+    "licence": "PLEASE DO NOT REMOVE OR CHANGE THIS COPYRIGHT BLOCK\n====================================================================\n\n Tanzil Quran Text (Uthmani, Version 1.1)\n Copyright (C) 2007-2026 Tanzil Project\n License: Creative Commons Attribution 3.0\n\n This copy of the Quran text is carefully produced, highly \n verified and continuously monitored by a group of specialists \n at Tanzil Project.\n\n TERMS OF USE:\n\n - Permission is granted to copy and distribute verbatim copies \n   of this text, but CHANGING IT IS NOT ALLOWED.\n\n - This Quran text can be used in any website or application, \n   provided that its source (Tanzil Project) is clearly indicated, \n   and a link is made to tanzil.net to enable users to keep\n   track of changes.\n\n - This copyright notice shall be included in all verbatim copies \n   of the text, and shall be reproduced appropriately in all files \n   derived from or containing substantial portion of this text.\n\n Please check updates at: http://tanzil.net/updates/\n\n====================================================================",
+    "metadata": {
+      "name": "Tanzil Quran metadata",
+      "version": "1.0",
+      "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
+      "fileSha256": "8867c1d88191472adec9db694b3cd9f135b1a2ef580574d32cf888dcb22c5c7a"
+    }
+  },
+  "numbering": {
+    "convention": "Hafs, Kufan count, as in the source: ayah numbers are Tanzil's own. In Al-Fatiha the basmala is ayah 1 (7 ayahs).",
+    "basmalaIsAyahOne": false,
+    "basmala": {
+      "prefixedToAyahOneInSource": true,
+      "shownAs": "unnumbered heading before ayah 1",
+      "prefixLength": 39,
+      "identicalToFatihaAyahOne": true
+    }
+  },
+  "surah": {
+    "number": 20,
+    "nameArabic": "طه",
+    "nameTransliterated": "Taa-Haa",
+    "nameEnglish": "Taa-Haa",
+    "revelation": "Meccan",
+    "ayahCount": 135
+  },
+  "ayahs": [
+    {
+      "number": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ طه",
+      "sha256": "8d1e17b7e88c5a4cfa70ffaa9d287fa6d92ee90995e4b28a265133ccfe3f9d8e"
+    },
+    {
+      "number": 2,
+      "text": "مَآ أَنزَلْنَا عَلَيْكَ ٱلْقُرْءَانَ لِتَشْقَىٰٓ",
+      "sha256": "ba68c7426fbf2e64cb5d838c30d134f21399cb69f681e2df6beb0167a2204de6"
+    },
+    {
+      "number": 3,
+      "text": "إِلَّا تَذْكِرَةً لِّمَن يَخْشَىٰ",
+      "sha256": "72bef1d1c7aa2be174c7b4aa72e988613bb52e70a73da6e0cb3fb170dd7b0ba8"
+    },
+    {
+      "number": 4,
+      "text": "تَنزِيلًا مِّمَّنْ خَلَقَ ٱلْأَرْضَ وَٱلسَّمَٰوَٰتِ ٱلْعُلَى",
+      "sha256": "ed6edd5a436b50ad6d649f3304c508d264b29c3467d505eb10a2801a5b51886d"
+    },
+    {
+      "number": 5,
+      "text": "ٱلرَّحْمَٰنُ عَلَى ٱلْعَرْشِ ٱسْتَوَىٰ",
+      "sha256": "8c209fc3819da9c4ae3024c9a0887463f5910b2816bc0458c98c1e07ed088059"
+    },
+    {
+      "number": 6,
+      "text": "لَهُۥ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ وَمَا بَيْنَهُمَا وَمَا تَحْتَ ٱلثَّرَىٰ",
+      "sha256": "bb20efddad8644055393fec0f0de51229644bb1f96bb3e5fc34a55d860ac3b33"
+    },
+    {
+      "number": 7,
+      "text": "وَإِن تَجْهَرْ بِٱلْقَوْلِ فَإِنَّهُۥ يَعْلَمُ ٱلسِّرَّ وَأَخْفَى",
+      "sha256": "de0b20204f2f86f12b141fa447dda86e4a3b3a030c61c2d47ffa6f7d4a580f16"
+    },
+    {
+      "number": 8,
+      "text": "ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ لَهُ ٱلْأَسْمَآءُ ٱلْحُسْنَىٰ",
+      "sha256": "41b9a3f144ed319f01d311a12b0bbdda05e70659b62ec5209d46f70aed6cfbf4"
+    },
+    {
+      "number": 9,
+      "text": "وَهَلْ أَتَىٰكَ حَدِيثُ مُوسَىٰٓ",
+      "sha256": "baa29985529e7f7d5a85696969b95f218a0464e7de1e418c79ea6c1fde19a492"
+    },
+    {
+      "number": 10,
+      "text": "إِذْ رَءَا نَارًا فَقَالَ لِأَهْلِهِ ٱمْكُثُوٓا۟ إِنِّىٓ ءَانَسْتُ نَارًا لَّعَلِّىٓ ءَاتِيكُم مِّنْهَا بِقَبَسٍ أَوْ أَجِدُ عَلَى ٱلنَّارِ هُدًى",
+      "sha256": "c7f4777ebd9eba49fffa09c08b7211d8f588f5a6a9f4b3b5124cd3f2034ec465"
+    },
+    {
+      "number": 11,
+      "text": "فَلَمَّآ أَتَىٰهَا نُودِىَ يَٰمُوسَىٰٓ",
+      "sha256": "c9f605ed23739ba77a999aa16b218d6e0d74e7f7976a1e0806d4dfada2f8a08e"
+    },
+    {
+      "number": 12,
+      "text": "إِنِّىٓ أَنَا۠ رَبُّكَ فَٱخْلَعْ نَعْلَيْكَ إِنَّكَ بِٱلْوَادِ ٱلْمُقَدَّسِ طُوًى",
+      "sha256": "b0a0997a1123c32f3c84e67230d8eb7881d651eabefdaa991d63e032a4a77aae"
+    },
+    {
+      "number": 13,
+      "text": "وَأَنَا ٱخْتَرْتُكَ فَٱسْتَمِعْ لِمَا يُوحَىٰٓ",
+      "sha256": "939c7ee4803b11c15c1350d121e62b984676171ed65b096f9d17ec2e51acdd8b"
+    },
+    {
+      "number": 14,
+      "text": "إِنَّنِىٓ أَنَا ٱللَّهُ لَآ إِلَٰهَ إِلَّآ أَنَا۠ فَٱعْبُدْنِى وَأَقِمِ ٱلصَّلَوٰةَ لِذِكْرِىٓ",
+      "sha256": "ca74f55fcb185e42408ec365d3be118246c5b21bc2a8b03b4906057d63c0ab0e"
+    },
+    {
+      "number": 15,
+      "text": "إِنَّ ٱلسَّاعَةَ ءَاتِيَةٌ أَكَادُ أُخْفِيهَا لِتُجْزَىٰ كُلُّ نَفْسٍۭ بِمَا تَسْعَىٰ",
+      "sha256": "c0771cb92ea7669a7e58da6ad172bc475168bdaf59c68ed1de0b57a55527cced"
+    },
+    {
+      "number": 16,
+      "text": "فَلَا يَصُدَّنَّكَ عَنْهَا مَن لَّا يُؤْمِنُ بِهَا وَٱتَّبَعَ هَوَىٰهُ فَتَرْدَىٰ",
+      "sha256": "c7eecb32812d8b0e4f72f3c12c48583c6e2e11929cc0b6c6495abecdeed3899e"
+    },
+    {
+      "number": 17,
+      "text": "وَمَا تِلْكَ بِيَمِينِكَ يَٰمُوسَىٰ",
+      "sha256": "8a5ddd9f9fbcd2576932aca02fe4d9a87d0f169c1ff79700051a895e7aac2652"
+    },
+    {
+      "number": 18,
+      "text": "قَالَ هِىَ عَصَاىَ أَتَوَكَّؤُا۟ عَلَيْهَا وَأَهُشُّ بِهَا عَلَىٰ غَنَمِى وَلِىَ فِيهَا مَـَٔارِبُ أُخْرَىٰ",
+      "sha256": "d0c888e7b647b04380a94c4e3ef2f6b984cd2f0676e432493dd240d7763935d0"
+    },
+    {
+      "number": 19,
+      "text": "قَالَ أَلْقِهَا يَٰمُوسَىٰ",
+      "sha256": "366668426bdf2b5f92fc36bdd026b4a31c56dbe346e1c647784d3263a7fc541d"
+    },
+    {
+      "number": 20,
+      "text": "فَأَلْقَىٰهَا فَإِذَا هِىَ حَيَّةٌ تَسْعَىٰ",
+      "sha256": "ec533faa70a99993e7da55815cf64e25104ad456612242ad094095adac6281b8"
+    },
+    {
+      "number": 21,
+      "text": "قَالَ خُذْهَا وَلَا تَخَفْ سَنُعِيدُهَا سِيرَتَهَا ٱلْأُولَىٰ",
+      "sha256": "7059bdc187537c030b464d3717a7300519b02d6f139a59d5adbfdfca5467145f"
+    },
+    {
+      "number": 22,
+      "text": "وَٱضْمُمْ يَدَكَ إِلَىٰ جَنَاحِكَ تَخْرُجْ بَيْضَآءَ مِنْ غَيْرِ سُوٓءٍ ءَايَةً أُخْرَىٰ",
+      "sha256": "0548e9579b77448161c255550dcc319d636b9c5957aa7402e38dedc3b8499db5"
+    },
+    {
+      "number": 23,
+      "text": "لِنُرِيَكَ مِنْ ءَايَٰتِنَا ٱلْكُبْرَى",
+      "sha256": "a082c936dfaa21d0d16acb8d9dd09d2edd18b6253b4cfb172bdb563c6712874c"
+    },
+    {
+      "number": 24,
+      "text": "ٱذْهَبْ إِلَىٰ فِرْعَوْنَ إِنَّهُۥ طَغَىٰ",
+      "sha256": "32d2e77fc5031e8cd1f28f81997f5c05c47b6b7e93eb76063e24eb6842f7c4cb"
+    },
+    {
+      "number": 25,
+      "text": "قَالَ رَبِّ ٱشْرَحْ لِى صَدْرِى",
+      "sha256": "638e7c1cab464a0b98eca54d8bb80062e90b94fad8517674769fbc177fb12551"
+    },
+    {
+      "number": 26,
+      "text": "وَيَسِّرْ لِىٓ أَمْرِى",
+      "sha256": "141820db0e3b53ae0061211db24cd2aa7b866f8e81e8ba02e46fc0159e9fe6ae"
+    },
+    {
+      "number": 27,
+      "text": "وَٱحْلُلْ عُقْدَةً مِّن لِّسَانِى",
+      "sha256": "1da0cadd01694ab4d546c99003dcdace60b582fca74477454059948a3a956663"
+    },
+    {
+      "number": 28,
+      "text": "يَفْقَهُوا۟ قَوْلِى",
+      "sha256": "1116aee50e5f55f6877a4dcd3ce6867d76bf4b938e079e04447f8b6eb4030966"
+    },
+    {
+      "number": 29,
+      "text": "وَٱجْعَل لِّى وَزِيرًا مِّنْ أَهْلِى",
+      "sha256": "bc3ea436f4676fd9248d4cdfac326e5eb4e1255c74b44b01cfc76774f02d43c2"
+    },
+    {
+      "number": 30,
+      "text": "هَٰرُونَ أَخِى",
+      "sha256": "34f8f8693271022ce461adef23501b918d84d1071b3c02fb73a1b18b1aa58515"
+    },
+    {
+      "number": 31,
+      "text": "ٱشْدُدْ بِهِۦٓ أَزْرِى",
+      "sha256": "9f8e98655cce96f7f58a3636ee7d7b91dea6ab57722f3339d0b784a61682fcd9"
+    },
+    {
+      "number": 32,
+      "text": "وَأَشْرِكْهُ فِىٓ أَمْرِى",
+      "sha256": "63c1012303a84d78e12e28e426e27fae7d4f9c10a1019cbc9a0d3107b43a3482"
+    },
+    {
+      "number": 33,
+      "text": "كَىْ نُسَبِّحَكَ كَثِيرًا",
+      "sha256": "40479051e97637d5f5dcaea37275f47c420be3ef061941b9d48cac2a5f6b0808"
+    },
+    {
+      "number": 34,
+      "text": "وَنَذْكُرَكَ كَثِيرًا",
+      "sha256": "18659f0b23782ea5597180776d1b2278468e6e3860d17752f9a01c9ff45d1c4f"
+    },
+    {
+      "number": 35,
+      "text": "إِنَّكَ كُنتَ بِنَا بَصِيرًا",
+      "sha256": "256bbb5aa0c0d23b0439c2861235216c477508251491bb6723325fb2f6b4bbfc"
+    },
+    {
+      "number": 36,
+      "text": "قَالَ قَدْ أُوتِيتَ سُؤْلَكَ يَٰمُوسَىٰ",
+      "sha256": "59cfb97c75883c85136dce960d99cae01992dd113bd7787b8ec36be510ac656f"
+    },
+    {
+      "number": 37,
+      "text": "وَلَقَدْ مَنَنَّا عَلَيْكَ مَرَّةً أُخْرَىٰٓ",
+      "sha256": "e582be76f3b40458f36a8ea9191cbf42687271e427b367007125498e03fbdfe0"
+    },
+    {
+      "number": 38,
+      "text": "إِذْ أَوْحَيْنَآ إِلَىٰٓ أُمِّكَ مَا يُوحَىٰٓ",
+      "sha256": "f3a90b08a16b0040a72ccbcbc5eb0b483c993f00484c3cc64cd3bd6e4f52a8b6"
+    },
+    {
+      "number": 39,
+      "text": "أَنِ ٱقْذِفِيهِ فِى ٱلتَّابُوتِ فَٱقْذِفِيهِ فِى ٱلْيَمِّ فَلْيُلْقِهِ ٱلْيَمُّ بِٱلسَّاحِلِ يَأْخُذْهُ عَدُوٌّ لِّى وَعَدُوٌّ لَّهُۥ وَأَلْقَيْتُ عَلَيْكَ مَحَبَّةً مِّنِّى وَلِتُصْنَعَ عَلَىٰ عَيْنِىٓ",
+      "sha256": "beec65710ebe350de206a347358e6554c787bdcd9f038c12abbb794f2b51ea60"
+    },
+    {
+      "number": 40,
+      "text": "إِذْ تَمْشِىٓ أُخْتُكَ فَتَقُولُ هَلْ أَدُلُّكُمْ عَلَىٰ مَن يَكْفُلُهُۥ فَرَجَعْنَٰكَ إِلَىٰٓ أُمِّكَ كَىْ تَقَرَّ عَيْنُهَا وَلَا تَحْزَنَ وَقَتَلْتَ نَفْسًا فَنَجَّيْنَٰكَ مِنَ ٱلْغَمِّ وَفَتَنَّٰكَ فُتُونًا فَلَبِثْتَ سِنِينَ فِىٓ أَهْلِ مَدْيَنَ ثُمَّ جِئْتَ عَلَىٰ قَدَرٍ يَٰمُوسَىٰ",
+      "sha256": "20ac9f23c66e828da850bea00eb2707a67091720e2c91a3ebf80e9705d596228"
+    },
+    {
+      "number": 41,
+      "text": "وَٱصْطَنَعْتُكَ لِنَفْسِى",
+      "sha256": "01e13a059c2957655ed29da0b6826de0bf725b4deb6ad1dad4092242c130838c"
+    },
+    {
+      "number": 42,
+      "text": "ٱذْهَبْ أَنتَ وَأَخُوكَ بِـَٔايَٰتِى وَلَا تَنِيَا فِى ذِكْرِى",
+      "sha256": "de1e05f21a747e1a7e0324214f7761aab965ebe9166b79ba09b5eed7a121908e"
+    },
+    {
+      "number": 43,
+      "text": "ٱذْهَبَآ إِلَىٰ فِرْعَوْنَ إِنَّهُۥ طَغَىٰ",
+      "sha256": "9a22e6cf6de997edaf208fee4985837d25933fd6faf253c014fc334122c4cc03"
+    },
+    {
+      "number": 44,
+      "text": "فَقُولَا لَهُۥ قَوْلًا لَّيِّنًا لَّعَلَّهُۥ يَتَذَكَّرُ أَوْ يَخْشَىٰ",
+      "sha256": "749630f29017375ae473b76e2257c6dcd3dcfc97dc2a7729ee128166c447dc7e"
+    },
+    {
+      "number": 45,
+      "text": "قَالَا رَبَّنَآ إِنَّنَا نَخَافُ أَن يَفْرُطَ عَلَيْنَآ أَوْ أَن يَطْغَىٰ",
+      "sha256": "e412df5b348a8918fc67e3c52f13b01af305b67cab6768a7477c4933b4545a35"
+    },
+    {
+      "number": 46,
+      "text": "قَالَ لَا تَخَافَآ إِنَّنِى مَعَكُمَآ أَسْمَعُ وَأَرَىٰ",
+      "sha256": "29378b9898689383bde5bfce3dac8911311a06ad5aa308b9ae8f0aee6c170481"
+    },
+    {
+      "number": 47,
+      "text": "فَأْتِيَاهُ فَقُولَآ إِنَّا رَسُولَا رَبِّكَ فَأَرْسِلْ مَعَنَا بَنِىٓ إِسْرَٰٓءِيلَ وَلَا تُعَذِّبْهُمْ قَدْ جِئْنَٰكَ بِـَٔايَةٍ مِّن رَّبِّكَ وَٱلسَّلَٰمُ عَلَىٰ مَنِ ٱتَّبَعَ ٱلْهُدَىٰٓ",
+      "sha256": "3176aec8169c7bfc5df6f1de5b4154c6138313b8cd003b1c4faf9c0ad78fb182"
+    },
+    {
+      "number": 48,
+      "text": "إِنَّا قَدْ أُوحِىَ إِلَيْنَآ أَنَّ ٱلْعَذَابَ عَلَىٰ مَن كَذَّبَ وَتَوَلَّىٰ",
+      "sha256": "7ad1834cc68e2f58b7f43648854710330adfbfbaa0d25b6f06e494ebd704bfa0"
+    },
+    {
+      "number": 49,
+      "text": "قَالَ فَمَن رَّبُّكُمَا يَٰمُوسَىٰ",
+      "sha256": "233df7442e4c546cf9aefcb7cd26e7a54b04d6397926e710fe52276e3432891f"
+    },
+    {
+      "number": 50,
+      "text": "قَالَ رَبُّنَا ٱلَّذِىٓ أَعْطَىٰ كُلَّ شَىْءٍ خَلْقَهُۥ ثُمَّ هَدَىٰ",
+      "sha256": "ae23f0a6dba0c0757f3dd7cab86eb382dfcdcba544e179c03dae9d207da1a521"
+    },
+    {
+      "number": 51,
+      "text": "قَالَ فَمَا بَالُ ٱلْقُرُونِ ٱلْأُولَىٰ",
+      "sha256": "31043e6f328fb4b35a5aedbd11e4c0ec29c555de91d1b7a1e48b9c10544247b0"
+    },
+    {
+      "number": 52,
+      "text": "قَالَ عِلْمُهَا عِندَ رَبِّى فِى كِتَٰبٍ لَّا يَضِلُّ رَبِّى وَلَا يَنسَى",
+      "sha256": "6a4a8ce26622a7385f86bf2453ce0a097bd8f34a711381cb879c63e3086577a4"
+    },
+    {
+      "number": 53,
+      "text": "ٱلَّذِى جَعَلَ لَكُمُ ٱلْأَرْضَ مَهْدًا وَسَلَكَ لَكُمْ فِيهَا سُبُلًا وَأَنزَلَ مِنَ ٱلسَّمَآءِ مَآءً فَأَخْرَجْنَا بِهِۦٓ أَزْوَٰجًا مِّن نَّبَاتٍ شَتَّىٰ",
+      "sha256": "e4b94f6fd47b4d5fe95f98c0cbcdeb3f79ce01af1302f7ce905758abe08d86dd"
+    },
+    {
+      "number": 54,
+      "text": "كُلُوا۟ وَٱرْعَوْا۟ أَنْعَٰمَكُمْ إِنَّ فِى ذَٰلِكَ لَـَٔايَٰتٍ لِّأُو۟لِى ٱلنُّهَىٰ",
+      "sha256": "3ff3991b650246a0c70984f1e50bb28f98db1ed0cdbd190d18fcbeee9d1f10ca"
+    },
+    {
+      "number": 55,
+      "text": "مِنْهَا خَلَقْنَٰكُمْ وَفِيهَا نُعِيدُكُمْ وَمِنْهَا نُخْرِجُكُمْ تَارَةً أُخْرَىٰ",
+      "sha256": "416038b2a55bd323d2cc160ef02dc2b85191aa855e54189395b268321bfa026e"
+    },
+    {
+      "number": 56,
+      "text": "وَلَقَدْ أَرَيْنَٰهُ ءَايَٰتِنَا كُلَّهَا فَكَذَّبَ وَأَبَىٰ",
+      "sha256": "0057cfadb8ab7e05eeb69a72b0d97e377e7631d514f50421e064495f1710fc67"
+    },
+    {
+      "number": 57,
+      "text": "قَالَ أَجِئْتَنَا لِتُخْرِجَنَا مِنْ أَرْضِنَا بِسِحْرِكَ يَٰمُوسَىٰ",
+      "sha256": "8cd335a98de4590bae72fde756a4ad0539cd3dcbd9a1f4c856ad776e2e970c16"
+    },
+    {
+      "number": 58,
+      "text": "فَلَنَأْتِيَنَّكَ بِسِحْرٍ مِّثْلِهِۦ فَٱجْعَلْ بَيْنَنَا وَبَيْنَكَ مَوْعِدًا لَّا نُخْلِفُهُۥ نَحْنُ وَلَآ أَنتَ مَكَانًا سُوًى",
+      "sha256": "4c20a41413616b82c9a8f6de14ba33d98fd5ab13fe92acbfd98b2733f3896081"
+    },
+    {
+      "number": 59,
+      "text": "قَالَ مَوْعِدُكُمْ يَوْمُ ٱلزِّينَةِ وَأَن يُحْشَرَ ٱلنَّاسُ ضُحًى",
+      "sha256": "7da7504f7b7f5a1c8074418758162dadc65a54488fc8511feeb2e55d2d8a9179"
+    },
+    {
+      "number": 60,
+      "text": "فَتَوَلَّىٰ فِرْعَوْنُ فَجَمَعَ كَيْدَهُۥ ثُمَّ أَتَىٰ",
+      "sha256": "8db0f35da2cb72ae7868379599703557935740b7a6cf898e2b9077248088fb3b"
+    },
+    {
+      "number": 61,
+      "text": "قَالَ لَهُم مُّوسَىٰ وَيْلَكُمْ لَا تَفْتَرُوا۟ عَلَى ٱللَّهِ كَذِبًا فَيُسْحِتَكُم بِعَذَابٍ وَقَدْ خَابَ مَنِ ٱفْتَرَىٰ",
+      "sha256": "ef8ada758e77507532feec4a3350c23cf18745d32cbb9e38e6df44af4f4c204d"
+    },
+    {
+      "number": 62,
+      "text": "فَتَنَٰزَعُوٓا۟ أَمْرَهُم بَيْنَهُمْ وَأَسَرُّوا۟ ٱلنَّجْوَىٰ",
+      "sha256": "f62028860d59502e6bdf850b6f86d8463cbcb64a3f4e35fb62fefa759dcf54c0"
+    },
+    {
+      "number": 63,
+      "text": "قَالُوٓا۟ إِنْ هَٰذَٰنِ لَسَٰحِرَٰنِ يُرِيدَانِ أَن يُخْرِجَاكُم مِّنْ أَرْضِكُم بِسِحْرِهِمَا وَيَذْهَبَا بِطَرِيقَتِكُمُ ٱلْمُثْلَىٰ",
+      "sha256": "f4755976267a445ac55d2d043484b1840634516234742fc76e3c9d6399a39d3b"
+    },
+    {
+      "number": 64,
+      "text": "فَأَجْمِعُوا۟ كَيْدَكُمْ ثُمَّ ٱئْتُوا۟ صَفًّا وَقَدْ أَفْلَحَ ٱلْيَوْمَ مَنِ ٱسْتَعْلَىٰ",
+      "sha256": "90c5646a10d957b2862260ef4c3b07a76bf40c5e1d91b5db0baf89dc4c0d26aa"
+    },
+    {
+      "number": 65,
+      "text": "قَالُوا۟ يَٰمُوسَىٰٓ إِمَّآ أَن تُلْقِىَ وَإِمَّآ أَن نَّكُونَ أَوَّلَ مَنْ أَلْقَىٰ",
+      "sha256": "07a0643487ff3dbbb5de7a8f16f8b110f2f031f968023531da35812945f7e9f1"
+    },
+    {
+      "number": 66,
+      "text": "قَالَ بَلْ أَلْقُوا۟ فَإِذَا حِبَالُهُمْ وَعِصِيُّهُمْ يُخَيَّلُ إِلَيْهِ مِن سِحْرِهِمْ أَنَّهَا تَسْعَىٰ",
+      "sha256": "cd7b6f31ab1bbb60aa836f0a015a0fed4f60529ceaada6caa90766425814c8a1"
+    },
+    {
+      "number": 67,
+      "text": "فَأَوْجَسَ فِى نَفْسِهِۦ خِيفَةً مُّوسَىٰ",
+      "sha256": "161fb08933280f6e863228d468bf7dbb2ccfa8767878c2279bbd7fd413cfaf85"
+    },
+    {
+      "number": 68,
+      "text": "قُلْنَا لَا تَخَفْ إِنَّكَ أَنتَ ٱلْأَعْلَىٰ",
+      "sha256": "d70e75d64efb442dc31dd82fbcc5793cfe32729aae5488ed6c7f6b15a61744a3"
+    },
+    {
+      "number": 69,
+      "text": "وَأَلْقِ مَا فِى يَمِينِكَ تَلْقَفْ مَا صَنَعُوٓا۟ إِنَّمَا صَنَعُوا۟ كَيْدُ سَٰحِرٍ وَلَا يُفْلِحُ ٱلسَّاحِرُ حَيْثُ أَتَىٰ",
+      "sha256": "ae9b1948bd96de98051605819bf2439ca503d50b63f29278bc3a7e9c396864bb"
+    },
+    {
+      "number": 70,
+      "text": "فَأُلْقِىَ ٱلسَّحَرَةُ سُجَّدًا قَالُوٓا۟ ءَامَنَّا بِرَبِّ هَٰرُونَ وَمُوسَىٰ",
+      "sha256": "4b432279df010aec9133d7841a14220b1e959a21cf49f2edcebe09b23f0306cd"
+    },
+    {
+      "number": 71,
+      "text": "قَالَ ءَامَنتُمْ لَهُۥ قَبْلَ أَنْ ءَاذَنَ لَكُمْ إِنَّهُۥ لَكَبِيرُكُمُ ٱلَّذِى عَلَّمَكُمُ ٱلسِّحْرَ فَلَأُقَطِّعَنَّ أَيْدِيَكُمْ وَأَرْجُلَكُم مِّنْ خِلَٰفٍ وَلَأُصَلِّبَنَّكُمْ فِى جُذُوعِ ٱلنَّخْلِ وَلَتَعْلَمُنَّ أَيُّنَآ أَشَدُّ عَذَابًا وَأَبْقَىٰ",
+      "sha256": "a9baa48c217823134184b7d1d06e25bcfa0d2001bc5761e52e4588ed3ad7113e"
+    },
+    {
+      "number": 72,
+      "text": "قَالُوا۟ لَن نُّؤْثِرَكَ عَلَىٰ مَا جَآءَنَا مِنَ ٱلْبَيِّنَٰتِ وَٱلَّذِى فَطَرَنَا فَٱقْضِ مَآ أَنتَ قَاضٍ إِنَّمَا تَقْضِى هَٰذِهِ ٱلْحَيَوٰةَ ٱلدُّنْيَآ",
+      "sha256": "a37bb0e6956f4db433f91185bdf5a3c733abea036a577d0ddaa3e96e9bd69acd"
+    },
+    {
+      "number": 73,
+      "text": "إِنَّآ ءَامَنَّا بِرَبِّنَا لِيَغْفِرَ لَنَا خَطَٰيَٰنَا وَمَآ أَكْرَهْتَنَا عَلَيْهِ مِنَ ٱلسِّحْرِ وَٱللَّهُ خَيْرٌ وَأَبْقَىٰٓ",
+      "sha256": "2e81d431f16cec29156c62788fee301d4af422f7c28c8df63ddf83fa2790fdb8"
+    },
+    {
+      "number": 74,
+      "text": "إِنَّهُۥ مَن يَأْتِ رَبَّهُۥ مُجْرِمًا فَإِنَّ لَهُۥ جَهَنَّمَ لَا يَمُوتُ فِيهَا وَلَا يَحْيَىٰ",
+      "sha256": "f2527e819b85e17cf692bc08cb274126c789c05a2fabe6cc5efb1e110e7ba8ba"
+    },
+    {
+      "number": 75,
+      "text": "وَمَن يَأْتِهِۦ مُؤْمِنًا قَدْ عَمِلَ ٱلصَّٰلِحَٰتِ فَأُو۟لَٰٓئِكَ لَهُمُ ٱلدَّرَجَٰتُ ٱلْعُلَىٰ",
+      "sha256": "2274ab8c287d5abba87dd521fa400ec163f33bffe2a82a66ec10ff9e8eb97ddf"
+    },
+    {
+      "number": 76,
+      "text": "جَنَّٰتُ عَدْنٍ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ خَٰلِدِينَ فِيهَا وَذَٰلِكَ جَزَآءُ مَن تَزَكَّىٰ",
+      "sha256": "123481a6ca962709e45a14a5b61542141f2cb64c0526a39e0e3d8e6ee698f17c"
+    },
+    {
+      "number": 77,
+      "text": "وَلَقَدْ أَوْحَيْنَآ إِلَىٰ مُوسَىٰٓ أَنْ أَسْرِ بِعِبَادِى فَٱضْرِبْ لَهُمْ طَرِيقًا فِى ٱلْبَحْرِ يَبَسًا لَّا تَخَٰفُ دَرَكًا وَلَا تَخْشَىٰ",
+      "sha256": "e89b5ed9b983b7ea007a0e03e31ae026fbeaeb1e885d70ceeb594d7dae502efc"
+    },
+    {
+      "number": 78,
+      "text": "فَأَتْبَعَهُمْ فِرْعَوْنُ بِجُنُودِهِۦ فَغَشِيَهُم مِّنَ ٱلْيَمِّ مَا غَشِيَهُمْ",
+      "sha256": "c87ee26bba56871207e7ea10956903c208c16fcd8018c6383ac9beb93e1b3452"
+    },
+    {
+      "number": 79,
+      "text": "وَأَضَلَّ فِرْعَوْنُ قَوْمَهُۥ وَمَا هَدَىٰ",
+      "sha256": "ef365753ee36dd5948e71610c57fd700714081b77e0f13f2d0bf384363cc44fd"
+    },
+    {
+      "number": 80,
+      "text": "يَٰبَنِىٓ إِسْرَٰٓءِيلَ قَدْ أَنجَيْنَٰكُم مِّنْ عَدُوِّكُمْ وَوَٰعَدْنَٰكُمْ جَانِبَ ٱلطُّورِ ٱلْأَيْمَنَ وَنَزَّلْنَا عَلَيْكُمُ ٱلْمَنَّ وَٱلسَّلْوَىٰ",
+      "sha256": "bfcff924bac98350e4186d12e5edb2082f31deb328a13cb5a4b7a8969be71d62"
+    },
+    {
+      "number": 81,
+      "text": "كُلُوا۟ مِن طَيِّبَٰتِ مَا رَزَقْنَٰكُمْ وَلَا تَطْغَوْا۟ فِيهِ فَيَحِلَّ عَلَيْكُمْ غَضَبِى وَمَن يَحْلِلْ عَلَيْهِ غَضَبِى فَقَدْ هَوَىٰ",
+      "sha256": "bf8bbde94a97c1c08679288b723828556c8f8cb97937c8e5b0f73a3f7e6d7d0b"
+    },
+    {
+      "number": 82,
+      "text": "وَإِنِّى لَغَفَّارٌ لِّمَن تَابَ وَءَامَنَ وَعَمِلَ صَٰلِحًا ثُمَّ ٱهْتَدَىٰ",
+      "sha256": "c96a4a99d2076bf13dd19269e0b11efe1d49f7578e895760de35c94ee93b8efd"
+    },
+    {
+      "number": 83,
+      "text": "وَمَآ أَعْجَلَكَ عَن قَوْمِكَ يَٰمُوسَىٰ",
+      "sha256": "9133bbfdf7123b93dc3a08f27d0219979157d2f6e2050f9bf37c5c481a09458d"
+    },
+    {
+      "number": 84,
+      "text": "قَالَ هُمْ أُو۟لَآءِ عَلَىٰٓ أَثَرِى وَعَجِلْتُ إِلَيْكَ رَبِّ لِتَرْضَىٰ",
+      "sha256": "aa4c2fc069b4d976ba037dcc4200e6f43854afa3e593d46c6fd12536c121849f"
+    },
+    {
+      "number": 85,
+      "text": "قَالَ فَإِنَّا قَدْ فَتَنَّا قَوْمَكَ مِنۢ بَعْدِكَ وَأَضَلَّهُمُ ٱلسَّامِرِىُّ",
+      "sha256": "938be0cfd615f43426c266ff1eca8764db89bb25b44133548dedd21f911e7c14"
+    },
+    {
+      "number": 86,
+      "text": "فَرَجَعَ مُوسَىٰٓ إِلَىٰ قَوْمِهِۦ غَضْبَٰنَ أَسِفًا قَالَ يَٰقَوْمِ أَلَمْ يَعِدْكُمْ رَبُّكُمْ وَعْدًا حَسَنًا أَفَطَالَ عَلَيْكُمُ ٱلْعَهْدُ أَمْ أَرَدتُّمْ أَن يَحِلَّ عَلَيْكُمْ غَضَبٌ مِّن رَّبِّكُمْ فَأَخْلَفْتُم مَّوْعِدِى",
+      "sha256": "39c146c9e24bccf70400b5efa73d1f74e90fadefe5df5830265f078819a640fc"
+    },
+    {
+      "number": 87,
+      "text": "قَالُوا۟ مَآ أَخْلَفْنَا مَوْعِدَكَ بِمَلْكِنَا وَلَٰكِنَّا حُمِّلْنَآ أَوْزَارًا مِّن زِينَةِ ٱلْقَوْمِ فَقَذَفْنَٰهَا فَكَذَٰلِكَ أَلْقَى ٱلسَّامِرِىُّ",
+      "sha256": "4b76ca00e5efc502118ef95deeb705ede640384f2ddc002a5fa39856d52ca7c2"
+    },
+    {
+      "number": 88,
+      "text": "فَأَخْرَجَ لَهُمْ عِجْلًا جَسَدًا لَّهُۥ خُوَارٌ فَقَالُوا۟ هَٰذَآ إِلَٰهُكُمْ وَإِلَٰهُ مُوسَىٰ فَنَسِىَ",
+      "sha256": "4822c8babff291b641897ca248b63b333766ea62075b01d19429edbacc1d843d"
+    },
+    {
+      "number": 89,
+      "text": "أَفَلَا يَرَوْنَ أَلَّا يَرْجِعُ إِلَيْهِمْ قَوْلًا وَلَا يَمْلِكُ لَهُمْ ضَرًّا وَلَا نَفْعًا",
+      "sha256": "61b50a39f495af4383e1113e8544c61fc0d2847f153d4818069cd336e5a365cf"
+    },
+    {
+      "number": 90,
+      "text": "وَلَقَدْ قَالَ لَهُمْ هَٰرُونُ مِن قَبْلُ يَٰقَوْمِ إِنَّمَا فُتِنتُم بِهِۦ وَإِنَّ رَبَّكُمُ ٱلرَّحْمَٰنُ فَٱتَّبِعُونِى وَأَطِيعُوٓا۟ أَمْرِى",
+      "sha256": "2d4a632f1c24bc43630d123af43b612f5a14513d93dc238427a3bcf5aaa9f9c0"
+    },
+    {
+      "number": 91,
+      "text": "قَالُوا۟ لَن نَّبْرَحَ عَلَيْهِ عَٰكِفِينَ حَتَّىٰ يَرْجِعَ إِلَيْنَا مُوسَىٰ",
+      "sha256": "e2a9009c0f68840f95b57290b1757456482a5987acdf3d6b3bdb12cb63c39d98"
+    },
+    {
+      "number": 92,
+      "text": "قَالَ يَٰهَٰرُونُ مَا مَنَعَكَ إِذْ رَأَيْتَهُمْ ضَلُّوٓا۟",
+      "sha256": "8695b0540ddbbf5f14e4efebd9a58d2a5dbc307bbb39b435e2f08c3a15976a70"
+    },
+    {
+      "number": 93,
+      "text": "أَلَّا تَتَّبِعَنِ أَفَعَصَيْتَ أَمْرِى",
+      "sha256": "3dfe2b55f740e4122ea1edcc33c941365a557629522a0fb300f2fcd27be4a3b6"
+    },
+    {
+      "number": 94,
+      "text": "قَالَ يَبْنَؤُمَّ لَا تَأْخُذْ بِلِحْيَتِى وَلَا بِرَأْسِىٓ إِنِّى خَشِيتُ أَن تَقُولَ فَرَّقْتَ بَيْنَ بَنِىٓ إِسْرَٰٓءِيلَ وَلَمْ تَرْقُبْ قَوْلِى",
+      "sha256": "c75a66da3db4703e22467868bd3254d8c52e7df6bfe49666f1a1dd095cf16764"
+    },
+    {
+      "number": 95,
+      "text": "قَالَ فَمَا خَطْبُكَ يَٰسَٰمِرِىُّ",
+      "sha256": "6ff64f1ad86b26b9015a948799d5167f78215e6e5d2ff4790782766a84824b80"
+    },
+    {
+      "number": 96,
+      "text": "قَالَ بَصُرْتُ بِمَا لَمْ يَبْصُرُوا۟ بِهِۦ فَقَبَضْتُ قَبْضَةً مِّنْ أَثَرِ ٱلرَّسُولِ فَنَبَذْتُهَا وَكَذَٰلِكَ سَوَّلَتْ لِى نَفْسِى",
+      "sha256": "7dabeb7528aae310558727c40b95fc1948c4c52d6fff5c444f5b94d03ffed177"
+    },
+    {
+      "number": 97,
+      "text": "قَالَ فَٱذْهَبْ فَإِنَّ لَكَ فِى ٱلْحَيَوٰةِ أَن تَقُولَ لَا مِسَاسَ وَإِنَّ لَكَ مَوْعِدًا لَّن تُخْلَفَهُۥ وَٱنظُرْ إِلَىٰٓ إِلَٰهِكَ ٱلَّذِى ظَلْتَ عَلَيْهِ عَاكِفًا لَّنُحَرِّقَنَّهُۥ ثُمَّ لَنَنسِفَنَّهُۥ فِى ٱلْيَمِّ نَسْفًا",
+      "sha256": "4c8d761241c8d68c06ec53206e5acec7ea79772002af649ba80a427f410c5694"
+    },
+    {
+      "number": 98,
+      "text": "إِنَّمَآ إِلَٰهُكُمُ ٱللَّهُ ٱلَّذِى لَآ إِلَٰهَ إِلَّا هُوَ وَسِعَ كُلَّ شَىْءٍ عِلْمًا",
+      "sha256": "fd18f053970e8e814050238a4267e7f0553a0197b445a70540e70794de4fee76"
+    },
+    {
+      "number": 99,
+      "text": "كَذَٰلِكَ نَقُصُّ عَلَيْكَ مِنْ أَنۢبَآءِ مَا قَدْ سَبَقَ وَقَدْ ءَاتَيْنَٰكَ مِن لَّدُنَّا ذِكْرًا",
+      "sha256": "38c3d692898dff3909a5876e0aad178aba77c467285f7d681e48f3534edc168e"
+    },
+    {
+      "number": 100,
+      "text": "مَّنْ أَعْرَضَ عَنْهُ فَإِنَّهُۥ يَحْمِلُ يَوْمَ ٱلْقِيَٰمَةِ وِزْرًا",
+      "sha256": "415fab54563baf93204a13a374613b10046be58cd8a848b366221f87c2ddd351"
+    },
+    {
+      "number": 101,
+      "text": "خَٰلِدِينَ فِيهِ وَسَآءَ لَهُمْ يَوْمَ ٱلْقِيَٰمَةِ حِمْلًا",
+      "sha256": "92d57510557f8805a02bea52f27b78c4186f74dfe5125b80b50d2274ae5bb0a9"
+    },
+    {
+      "number": 102,
+      "text": "يَوْمَ يُنفَخُ فِى ٱلصُّورِ وَنَحْشُرُ ٱلْمُجْرِمِينَ يَوْمَئِذٍ زُرْقًا",
+      "sha256": "18bb5caf5e18d25b9ece2aa8284f239665ff831e0a228bc4895697423daebe2c"
+    },
+    {
+      "number": 103,
+      "text": "يَتَخَٰفَتُونَ بَيْنَهُمْ إِن لَّبِثْتُمْ إِلَّا عَشْرًا",
+      "sha256": "f5ae1500143a708b23416bf60c65f4ad65b26423122517d0778ba6a7573876b9"
+    },
+    {
+      "number": 104,
+      "text": "نَّحْنُ أَعْلَمُ بِمَا يَقُولُونَ إِذْ يَقُولُ أَمْثَلُهُمْ طَرِيقَةً إِن لَّبِثْتُمْ إِلَّا يَوْمًا",
+      "sha256": "8035d4f005d4d33c74e96a40453285d40071cdb5d20695296ca5b7d8925fb1e0"
+    },
+    {
+      "number": 105,
+      "text": "وَيَسْـَٔلُونَكَ عَنِ ٱلْجِبَالِ فَقُلْ يَنسِفُهَا رَبِّى نَسْفًا",
+      "sha256": "a11a4605f18842cb992ddb45afdfdcd9388037938b10876f41ff435e163a5c3b"
+    },
+    {
+      "number": 106,
+      "text": "فَيَذَرُهَا قَاعًا صَفْصَفًا",
+      "sha256": "bf8e0a0d86f2ad11d606d593e36e7dbceb7364ad182dc3170a78277d02275c52"
+    },
+    {
+      "number": 107,
+      "text": "لَّا تَرَىٰ فِيهَا عِوَجًا وَلَآ أَمْتًا",
+      "sha256": "15dd15259d96539756bbcd7ed966c13694ec46f851b604b075dd2347e2e91fde"
+    },
+    {
+      "number": 108,
+      "text": "يَوْمَئِذٍ يَتَّبِعُونَ ٱلدَّاعِىَ لَا عِوَجَ لَهُۥ وَخَشَعَتِ ٱلْأَصْوَاتُ لِلرَّحْمَٰنِ فَلَا تَسْمَعُ إِلَّا هَمْسًا",
+      "sha256": "e568656a8c837578e2d3cb0a1cefe0385a6227d06d02f3d36e54e61cbb46aca1"
+    },
+    {
+      "number": 109,
+      "text": "يَوْمَئِذٍ لَّا تَنفَعُ ٱلشَّفَٰعَةُ إِلَّا مَنْ أَذِنَ لَهُ ٱلرَّحْمَٰنُ وَرَضِىَ لَهُۥ قَوْلًا",
+      "sha256": "7170583b5cd57b143fd065a7009caf87ac765e036595bd51c609d1c89c096e49"
+    },
+    {
+      "number": 110,
+      "text": "يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِهِۦ عِلْمًا",
+      "sha256": "4e20335960b96cb0429e2b6d231c1253c2a71a6cdca76adda2397dea6417624c"
+    },
+    {
+      "number": 111,
+      "text": "وَعَنَتِ ٱلْوُجُوهُ لِلْحَىِّ ٱلْقَيُّومِ وَقَدْ خَابَ مَنْ حَمَلَ ظُلْمًا",
+      "sha256": "3cf83a5013d8878edfd53988a3bf7fe27787db993f14751acbf27f15e48bea1f"
+    },
+    {
+      "number": 112,
+      "text": "وَمَن يَعْمَلْ مِنَ ٱلصَّٰلِحَٰتِ وَهُوَ مُؤْمِنٌ فَلَا يَخَافُ ظُلْمًا وَلَا هَضْمًا",
+      "sha256": "2025e5c9185434fb59358620e0f705c031541a856907654fd16e45707cb76f7b"
+    },
+    {
+      "number": 113,
+      "text": "وَكَذَٰلِكَ أَنزَلْنَٰهُ قُرْءَانًا عَرَبِيًّا وَصَرَّفْنَا فِيهِ مِنَ ٱلْوَعِيدِ لَعَلَّهُمْ يَتَّقُونَ أَوْ يُحْدِثُ لَهُمْ ذِكْرًا",
+      "sha256": "9ea6ab6ee1bb12774d0c03ab725b69a318956558bc51ac340776326c94f97a80"
+    },
+    {
+      "number": 114,
+      "text": "فَتَعَٰلَى ٱللَّهُ ٱلْمَلِكُ ٱلْحَقُّ وَلَا تَعْجَلْ بِٱلْقُرْءَانِ مِن قَبْلِ أَن يُقْضَىٰٓ إِلَيْكَ وَحْيُهُۥ وَقُل رَّبِّ زِدْنِى عِلْمًا",
+      "sha256": "ee1133ea8f497da92cdce3d0aee58d44272050ecfba62dd467f96a37f8ab2831"
+    },
+    {
+      "number": 115,
+      "text": "وَلَقَدْ عَهِدْنَآ إِلَىٰٓ ءَادَمَ مِن قَبْلُ فَنَسِىَ وَلَمْ نَجِدْ لَهُۥ عَزْمًا",
+      "sha256": "7fa0f29a9f456d0c79fd1c3c87a246caed82c1c77a13dd7a34922f8760495204"
+    },
+    {
+      "number": 116,
+      "text": "وَإِذْ قُلْنَا لِلْمَلَٰٓئِكَةِ ٱسْجُدُوا۟ لِـَٔادَمَ فَسَجَدُوٓا۟ إِلَّآ إِبْلِيسَ أَبَىٰ",
+      "sha256": "8eced9b5e01058779d11e39225ad9c7ddc476418a3d3c61d7e16d258fb6058fe"
+    },
+    {
+      "number": 117,
+      "text": "فَقُلْنَا يَٰٓـَٔادَمُ إِنَّ هَٰذَا عَدُوٌّ لَّكَ وَلِزَوْجِكَ فَلَا يُخْرِجَنَّكُمَا مِنَ ٱلْجَنَّةِ فَتَشْقَىٰٓ",
+      "sha256": "0edacd3c7adfbedab9ab519d2bbf7f1c993a61a69e44d40d8c408e0f609e6e56"
+    },
+    {
+      "number": 118,
+      "text": "إِنَّ لَكَ أَلَّا تَجُوعَ فِيهَا وَلَا تَعْرَىٰ",
+      "sha256": "16dbe8d02022ba13795e1abbff99bd1f7b09e370f25031df783cc9ba3aed3e41"
+    },
+    {
+      "number": 119,
+      "text": "وَأَنَّكَ لَا تَظْمَؤُا۟ فِيهَا وَلَا تَضْحَىٰ",
+      "sha256": "4a2694847c2f105128d24a045ae130e8e53a2012a906d934a667d84c25985375"
+    },
+    {
+      "number": 120,
+      "text": "فَوَسْوَسَ إِلَيْهِ ٱلشَّيْطَٰنُ قَالَ يَٰٓـَٔادَمُ هَلْ أَدُلُّكَ عَلَىٰ شَجَرَةِ ٱلْخُلْدِ وَمُلْكٍ لَّا يَبْلَىٰ",
+      "sha256": "c6c0cc0055298cb02a66f71438124aa5bd223bc7c322e8620bb0a64e1e3aee65"
+    },
+    {
+      "number": 121,
+      "text": "فَأَكَلَا مِنْهَا فَبَدَتْ لَهُمَا سَوْءَٰتُهُمَا وَطَفِقَا يَخْصِفَانِ عَلَيْهِمَا مِن وَرَقِ ٱلْجَنَّةِ وَعَصَىٰٓ ءَادَمُ رَبَّهُۥ فَغَوَىٰ",
+      "sha256": "067b4abcd17c8dc801aa6c6d63427c053dd71748a7e83e2c89a3fa6d9fe8f395"
+    },
+    {
+      "number": 122,
+      "text": "ثُمَّ ٱجْتَبَٰهُ رَبُّهُۥ فَتَابَ عَلَيْهِ وَهَدَىٰ",
+      "sha256": "e3c7082f760023806b450d244e0c40410cb8b64bdba806a1ed29aad101dffdae"
+    },
+    {
+      "number": 123,
+      "text": "قَالَ ٱهْبِطَا مِنْهَا جَمِيعًۢا بَعْضُكُمْ لِبَعْضٍ عَدُوٌّ فَإِمَّا يَأْتِيَنَّكُم مِّنِّى هُدًى فَمَنِ ٱتَّبَعَ هُدَاىَ فَلَا يَضِلُّ وَلَا يَشْقَىٰ",
+      "sha256": "d9a83c6b58a12dc8df46e67e19866933dfcceab17e3b19a5fa576913af80b975"
+    },
+    {
+      "number": 124,
+      "text": "وَمَنْ أَعْرَضَ عَن ذِكْرِى فَإِنَّ لَهُۥ مَعِيشَةً ضَنكًا وَنَحْشُرُهُۥ يَوْمَ ٱلْقِيَٰمَةِ أَعْمَىٰ",
+      "sha256": "f7385f11a67c2f5f5c0563c197c65cf2f3d877b0925a8fc7bde6df4bfc392ab3"
+    },
+    {
+      "number": 125,
+      "text": "قَالَ رَبِّ لِمَ حَشَرْتَنِىٓ أَعْمَىٰ وَقَدْ كُنتُ بَصِيرًا",
+      "sha256": "30f8d9a648a5032d13e1a9c43edaa06d76095020ec8504a03eca433b8a909ef2"
+    },
+    {
+      "number": 126,
+      "text": "قَالَ كَذَٰلِكَ أَتَتْكَ ءَايَٰتُنَا فَنَسِيتَهَا وَكَذَٰلِكَ ٱلْيَوْمَ تُنسَىٰ",
+      "sha256": "01282ea3aa3206fb22f2419e13cc015825a8eb84ac366e201c002c3a8cf2c705"
+    },
+    {
+      "number": 127,
+      "text": "وَكَذَٰلِكَ نَجْزِى مَنْ أَسْرَفَ وَلَمْ يُؤْمِنۢ بِـَٔايَٰتِ رَبِّهِۦ وَلَعَذَابُ ٱلْـَٔاخِرَةِ أَشَدُّ وَأَبْقَىٰٓ",
+      "sha256": "dbca71a0124fcc941a9dd8ccc7c0395a0b42de4829bb24793954a566def71b69"
+    },
+    {
+      "number": 128,
+      "text": "أَفَلَمْ يَهْدِ لَهُمْ كَمْ أَهْلَكْنَا قَبْلَهُم مِّنَ ٱلْقُرُونِ يَمْشُونَ فِى مَسَٰكِنِهِمْ إِنَّ فِى ذَٰلِكَ لَـَٔايَٰتٍ لِّأُو۟لِى ٱلنُّهَىٰ",
+      "sha256": "03cea03014d2af3907d637273166a1ff02491e77101df9b1538ddfd4efc189a6"
+    },
+    {
+      "number": 129,
+      "text": "وَلَوْلَا كَلِمَةٌ سَبَقَتْ مِن رَّبِّكَ لَكَانَ لِزَامًا وَأَجَلٌ مُّسَمًّى",
+      "sha256": "471387415b60699bc6d5dafa6208117c165ad0186dd29a1ab733b72600544b75"
+    },
+    {
+      "number": 130,
+      "text": "فَٱصْبِرْ عَلَىٰ مَا يَقُولُونَ وَسَبِّحْ بِحَمْدِ رَبِّكَ قَبْلَ طُلُوعِ ٱلشَّمْسِ وَقَبْلَ غُرُوبِهَا وَمِنْ ءَانَآئِ ٱلَّيْلِ فَسَبِّحْ وَأَطْرَافَ ٱلنَّهَارِ لَعَلَّكَ تَرْضَىٰ",
+      "sha256": "7df94cb0cad8dd76d5bddb5082757fef22a68c660ec70bb5bfa78ca1c3d4e527"
+    },
+    {
+      "number": 131,
+      "text": "وَلَا تَمُدَّنَّ عَيْنَيْكَ إِلَىٰ مَا مَتَّعْنَا بِهِۦٓ أَزْوَٰجًا مِّنْهُمْ زَهْرَةَ ٱلْحَيَوٰةِ ٱلدُّنْيَا لِنَفْتِنَهُمْ فِيهِ وَرِزْقُ رَبِّكَ خَيْرٌ وَأَبْقَىٰ",
+      "sha256": "7236d6c72406362c5e679b9f107e54693559eb7ef6b9be6704cab68911dde70f"
+    },
+    {
+      "number": 132,
+      "text": "وَأْمُرْ أَهْلَكَ بِٱلصَّلَوٰةِ وَٱصْطَبِرْ عَلَيْهَا لَا نَسْـَٔلُكَ رِزْقًا نَّحْنُ نَرْزُقُكَ وَٱلْعَٰقِبَةُ لِلتَّقْوَىٰ",
+      "sha256": "fca3a3746f569bf091db2ef03c5b216002a62e83a26bf6776f357d729479fe5f"
+    },
+    {
+      "number": 133,
+      "text": "وَقَالُوا۟ لَوْلَا يَأْتِينَا بِـَٔايَةٍ مِّن رَّبِّهِۦٓ أَوَلَمْ تَأْتِهِم بَيِّنَةُ مَا فِى ٱلصُّحُفِ ٱلْأُولَىٰ",
+      "sha256": "b8f9b4544020728e6612447673bee7f9b8f9762ae6a834afe4c5ee8d689cb807"
+    },
+    {
+      "number": 134,
+      "text": "وَلَوْ أَنَّآ أَهْلَكْنَٰهُم بِعَذَابٍ مِّن قَبْلِهِۦ لَقَالُوا۟ رَبَّنَا لَوْلَآ أَرْسَلْتَ إِلَيْنَا رَسُولًا فَنَتَّبِعَ ءَايَٰتِكَ مِن قَبْلِ أَن نَّذِلَّ وَنَخْزَىٰ",
+      "sha256": "e3540744cddb8d3649c301eb12da3bd3b3aa547fc22b80c931f75bf87af78ea6"
+    },
+    {
+      "number": 135,
+      "text": "قُلْ كُلٌّ مُّتَرَبِّصٌ فَتَرَبَّصُوا۟ فَسَتَعْلَمُونَ مَنْ أَصْحَٰبُ ٱلصِّرَٰطِ ٱلسَّوِىِّ وَمَنِ ٱهْتَدَىٰ",
+      "sha256": "9ee2b254404df608883db63cd361dfbd4cf385b9a86d365315ebbeb12ce3d81b"
+    }
+  ],
+  "crossCheck": {
+    "source": "Quran Foundation Content API v4, text_uthmani (KFGQPC-based)",
+    "url": "https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=20",
+    "retrievedAt": "2026-11-13T18:54:00Z",
+    "responseSha256": "a01f61d1220d9a95569317d31051e35268abe3778c464d4c24e3f030838e9c2f",
+    "policy": "Comparison result only; the other text is not stored (QF caching terms).",
+    "results": [
+      {
+        "ayah": 1,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 2,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 3,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 4,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 5,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 6,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 7,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 8,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 9,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 10,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 11,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 12,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 13,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 14,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 15,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 16,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 17,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 18,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 19,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 20,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 21,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 22,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 23,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 24,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 25,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 26,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 27,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 28,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 29,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 30,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 31,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 32,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 33,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 34,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 35,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 36,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 37,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 38,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 39,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 40,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 41,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 42,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 43,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 44,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 45,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 46,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 47,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 48,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 49,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 50,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 51,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 52,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 53,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 54,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 55,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 56,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 57,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 58,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 59,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 60,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 61,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 62,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 63,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 64,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 65,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 66,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 67,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 68,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 69,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 70,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 71,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 72,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 73,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 74,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 75,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 76,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 77,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 78,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 79,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 80,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 81,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 82,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 83,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 84,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 85,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 86,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 87,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 88,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 89,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 90,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 91,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 92,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 93,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 94,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 95,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 96,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 97,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 98,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 99,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 100,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 101,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 102,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 103,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 104,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 105,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 106,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 107,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 108,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 109,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 110,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 111,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 112,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 113,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 114,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 115,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 116,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 117,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 118,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 119,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 120,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 121,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 122,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 123,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 124,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 125,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 126,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 127,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 128,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 129,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 130,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 131,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 132,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 133,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 134,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 135,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      }
+    ]
+  },
+  "verification": {
+    "automated": "passed",
+    "automatedChecks": [
+      "source version line is \"Uthmani, Version 1.1\"",
+      "6236 ayahs, contiguous, per-surah counts equal metadata (114 suras)",
+      "no control characters, BOM or CR in ayah text",
+      "verbatim copy; per-ayah SHA-256 recorded",
+      "letter skeleton equals independent cross-check source"
+    ],
+    "reviewer": null,
+    "reviewedAt": null
+  }
+}

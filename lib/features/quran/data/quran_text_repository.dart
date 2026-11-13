@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +13,7 @@ abstract interface class QuranTextRepository {
 }
 
 /// Loads surahs imported by `tool/quran/import_tanzil.dart` (Tanzil Uthmani
-/// 1.1, approved as C-25). Only Al-Fatiha is imported so far.
+/// 1.1, approved as C-25): all 114 surahs.
 ///
 /// Fails closed: if the asset is missing or malformed, or any ayah's text does
 /// not match its recorded SHA-256, it reports [QuranTextUnavailable] and the
@@ -23,19 +24,22 @@ class BundledQuranTextRepository implements QuranTextRepository {
 
   final AssetBundle _bundle;
 
-  static const importedSurahs = {1};
+  static bool isImported(int surah) => surah >= 1 && surah <= 114;
 
   static String assetPath(int surah) =>
       'assets/quran/tanzil-uthmani-1.1/surah-${surah.toString().padLeft(3, '0')}.json';
 
   @override
   Future<QuranTextAvailability> surah(int number) async {
-    if (!importedSurahs.contains(number)) {
+    if (!isImported(number)) {
       return const QuranTextUnavailable(reasons: ['not-imported']);
     }
     try {
       final raw = await _bundle.loadString(assetPath(number), cache: false);
-      final parsed = parseSurahAsset(raw);
+      // Parsing re-hashes every ayah: off the UI thread for long surahs.
+      final parsed = raw.length > 20000
+          ? await compute(parseSurahAsset, raw)
+          : parseSurahAsset(raw);
       return parsed == null
           ? const QuranTextUnavailable(reasons: ['integrity'])
           : QuranTextVerified(parsed);
@@ -61,6 +65,9 @@ SurahText? parseSurahAsset(String raw) {
   final verification = json['verification'] as Map<String, dynamic>;
   if (verification['automated'] != 'passed') return null;
 
+  final numbering = json['numbering'] as Map<String, dynamic>;
+  final basmala = numbering['basmala'] as Map<String, dynamic>?;
+  final prefixLength = basmala?['prefixLength'] as int?;
   final ayahs = <Ayah>[];
   final list = (json['ayahs'] as List).cast<Map<String, dynamic>>();
   for (var i = 0; i < list.length; i++) {
@@ -70,14 +77,32 @@ SurahText? parseSurahAsset(String raw) {
     final recorded = a['sha256'] as String;
     if (n != i + 1) return null; // contiguous, starting at 1
     if (sha256.convert(utf8.encode(text)).toString() != recorded) return null;
-    ayahs.add(Ayah(surah: number, number: n, text: text, sha256: recorded));
+    String? display;
+    if (n == 1 && prefixLength != null) {
+      // The prefix must end exactly at a space and leave text after it.
+      if (prefixLength >= text.length || text[prefixLength - 1] != ' ') {
+        return null;
+      }
+      display = text.substring(prefixLength);
+    }
+    ayahs.add(
+      Ayah(
+        surah: number,
+        number: n,
+        text: text,
+        sha256: recorded,
+        displayText: display,
+      ),
+    );
   }
+  final heading = prefixLength == null
+      ? null
+      : ayahs.first.text.substring(0, prefixLength - 1);
   if (ayahs.isEmpty || ayahs.length != surah['ayahCount']) return null;
 
   final cross = json['crossCheck'] as Map<String, dynamic>?;
   final crossResults = (cross?['results'] as List?)
       ?.cast<Map<String, dynamic>>();
-  final numbering = json['numbering'] as Map<String, dynamic>;
   return SurahText(
     number: number,
     nameArabic: surah['nameArabic'] as String,
@@ -87,6 +112,7 @@ SurahText? parseSurahAsset(String raw) {
     ayahs: List.unmodifiable(ayahs),
     numberingConvention: numbering['convention'] as String,
     basmalaIsAyahOne: numbering['basmalaIsAyahOne'] as bool,
+    basmalaHeading: heading,
     reviewer: verification['reviewer'] as String?,
     reviewedAt: verification['reviewedAt'] as String?,
     source: QuranTextSource(

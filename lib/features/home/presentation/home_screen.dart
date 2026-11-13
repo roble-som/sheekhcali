@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/router.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/widgets/home_components.dart';
@@ -58,7 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   sliver: SliverToBoxAdapter(
                     child: QuranHeroCard(
-                      onTap: () => context.push(AppDestination.quran.path),
+                      // Opens where the user stopped reading (Al-Fatiha
+                      // the first time).
+                      onTap: () => context.push(AppRoutes.continueReading),
                     ),
                   ),
                 ),

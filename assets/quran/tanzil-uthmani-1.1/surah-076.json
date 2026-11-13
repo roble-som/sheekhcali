@@ -1,0 +1,371 @@
+{
+  "schema": 1,
+  "source": {
+    "name": "Tanzil Quran Text",
+    "script": "Uthmani",
+    "version": "1.1",
+    "homepage": "https://tanzil.net/",
+    "updates": "http://tanzil.net/updates/",
+    "downloadUrl": "https://tanzil.net/pub/download/index.php?quranType=uthmani&outType=txt-2&agree=true",
+    "retrievedAt": "2026-11-13T18:54:00Z",
+    "fileSha256": "bf4f57b968d03f4131c070b1e285da9be0e0a108a21c910e872801ca273312c8",
+    "licence": "PLEASE DO NOT REMOVE OR CHANGE THIS COPYRIGHT BLOCK\n====================================================================\n\n Tanzil Quran Text (Uthmani, Version 1.1)\n Copyright (C) 2007-2026 Tanzil Project\n License: Creative Commons Attribution 3.0\n\n This copy of the Quran text is carefully produced, highly \n verified and continuously monitored by a group of specialists \n at Tanzil Project.\n\n TERMS OF USE:\n\n - Permission is granted to copy and distribute verbatim copies \n   of this text, but CHANGING IT IS NOT ALLOWED.\n\n - This Quran text can be used in any website or application, \n   provided that its source (Tanzil Project) is clearly indicated, \n   and a link is made to tanzil.net to enable users to keep\n   track of changes.\n\n - This copyright notice shall be included in all verbatim copies \n   of the text, and shall be reproduced appropriately in all files \n   derived from or containing substantial portion of this text.\n\n Please check updates at: http://tanzil.net/updates/\n\n====================================================================",
+    "metadata": {
+      "name": "Tanzil Quran metadata",
+      "version": "1.0",
+      "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
+      "fileSha256": "8867c1d88191472adec9db694b3cd9f135b1a2ef580574d32cf888dcb22c5c7a"
+    }
+  },
+  "numbering": {
+    "convention": "Hafs, Kufan count, as in the source: ayah numbers are Tanzil's own. In Al-Fatiha the basmala is ayah 1 (7 ayahs).",
+    "basmalaIsAyahOne": false,
+    "basmala": {
+      "prefixedToAyahOneInSource": true,
+      "shownAs": "unnumbered heading before ayah 1",
+      "prefixLength": 39,
+      "identicalToFatihaAyahOne": true
+    }
+  },
+  "surah": {
+    "number": 76,
+    "nameArabic": "الانسان",
+    "nameTransliterated": "Al-Insaan",
+    "nameEnglish": "Man",
+    "revelation": "Medinan",
+    "ayahCount": 31
+  },
+  "ayahs": [
+    {
+      "number": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ هَلْ أَتَىٰ عَلَى ٱلْإِنسَٰنِ حِينٌ مِّنَ ٱلدَّهْرِ لَمْ يَكُن شَيْـًٔا مَّذْكُورًا",
+      "sha256": "c4d45d3cd43eb231e86469b6b8f1202f8705e7ebd991cf006b065a8e0fb9a817"
+    },
+    {
+      "number": 2,
+      "text": "إِنَّا خَلَقْنَا ٱلْإِنسَٰنَ مِن نُّطْفَةٍ أَمْشَاجٍ نَّبْتَلِيهِ فَجَعَلْنَٰهُ سَمِيعًۢا بَصِيرًا",
+      "sha256": "d9b857acc8ea0fcfb9a68206dc48e160efd780df82480d445405c3033b7a6ad2"
+    },
+    {
+      "number": 3,
+      "text": "إِنَّا هَدَيْنَٰهُ ٱلسَّبِيلَ إِمَّا شَاكِرًا وَإِمَّا كَفُورًا",
+      "sha256": "4be41acf36de668b7cb188ee151daa3e33769b396d0d5edef490a8aaf563b439"
+    },
+    {
+      "number": 4,
+      "text": "إِنَّآ أَعْتَدْنَا لِلْكَٰفِرِينَ سَلَٰسِلَا۟ وَأَغْلَٰلًا وَسَعِيرًا",
+      "sha256": "ce6a8901db9231cd4b9b9c1454093b5ef2b9134a474c74926b224adda92b208e"
+    },
+    {
+      "number": 5,
+      "text": "إِنَّ ٱلْأَبْرَارَ يَشْرَبُونَ مِن كَأْسٍ كَانَ مِزَاجُهَا كَافُورًا",
+      "sha256": "d8027dd9b7e59e4a622c1c0edf5c60c606c60f0d0997e9331fefac7181a4cff5"
+    },
+    {
+      "number": 6,
+      "text": "عَيْنًا يَشْرَبُ بِهَا عِبَادُ ٱللَّهِ يُفَجِّرُونَهَا تَفْجِيرًا",
+      "sha256": "acc73243d5511041d7632509307f5fdf987133d6cb61f307e2fe6abdedf96786"
+    },
+    {
+      "number": 7,
+      "text": "يُوفُونَ بِٱلنَّذْرِ وَيَخَافُونَ يَوْمًا كَانَ شَرُّهُۥ مُسْتَطِيرًا",
+      "sha256": "c0933af8cdf185e725ce8d068bcd7bedce60bbb3ab56bed000cfdf32dec910b9"
+    },
+    {
+      "number": 8,
+      "text": "وَيُطْعِمُونَ ٱلطَّعَامَ عَلَىٰ حُبِّهِۦ مِسْكِينًا وَيَتِيمًا وَأَسِيرًا",
+      "sha256": "04772c58b1efb20bcfb170e14e8cdb3331646781dcf37b19964c579f3d51ef54"
+    },
+    {
+      "number": 9,
+      "text": "إِنَّمَا نُطْعِمُكُمْ لِوَجْهِ ٱللَّهِ لَا نُرِيدُ مِنكُمْ جَزَآءً وَلَا شُكُورًا",
+      "sha256": "08327a57aa1cf54f7b7865d0cd163fcabd7fab7de53c9fe80e4a504c9673181f"
+    },
+    {
+      "number": 10,
+      "text": "إِنَّا نَخَافُ مِن رَّبِّنَا يَوْمًا عَبُوسًا قَمْطَرِيرًا",
+      "sha256": "ecb6237a53f1807c05e4852697b1619d465e62ba62d44108d7b2157adb74a95d"
+    },
+    {
+      "number": 11,
+      "text": "فَوَقَىٰهُمُ ٱللَّهُ شَرَّ ذَٰلِكَ ٱلْيَوْمِ وَلَقَّىٰهُمْ نَضْرَةً وَسُرُورًا",
+      "sha256": "8331abbafeadb530090b7253b698f1204b0f311a894773d335280a9b730b5fe5"
+    },
+    {
+      "number": 12,
+      "text": "وَجَزَىٰهُم بِمَا صَبَرُوا۟ جَنَّةً وَحَرِيرًا",
+      "sha256": "5b926e218dea0bc572a70928e92a30e85019baa0c4030c7726a5a53cfee08ca2"
+    },
+    {
+      "number": 13,
+      "text": "مُّتَّكِـِٔينَ فِيهَا عَلَى ٱلْأَرَآئِكِ لَا يَرَوْنَ فِيهَا شَمْسًا وَلَا زَمْهَرِيرًا",
+      "sha256": "7135634955fd1a74e74e6b5d1f41bc3221f4f1ea24e31b268251e5744cd704a7"
+    },
+    {
+      "number": 14,
+      "text": "وَدَانِيَةً عَلَيْهِمْ ظِلَٰلُهَا وَذُلِّلَتْ قُطُوفُهَا تَذْلِيلًا",
+      "sha256": "6f6e4d17df3d48b376b899394dedec0d89e865321d112212c11498dee5a02d9e"
+    },
+    {
+      "number": 15,
+      "text": "وَيُطَافُ عَلَيْهِم بِـَٔانِيَةٍ مِّن فِضَّةٍ وَأَكْوَابٍ كَانَتْ قَوَارِيرَا۠",
+      "sha256": "baf24d9e3eb6b54c88923ed1f93879131210197cab46e83ac2cff4e52a76d060"
+    },
+    {
+      "number": 16,
+      "text": "قَوَارِيرَا۟ مِن فِضَّةٍ قَدَّرُوهَا تَقْدِيرًا",
+      "sha256": "a858fab926d4d379772f7103328b480d7d1c4ee4c80ae8bdf2d669ecdf53cbac"
+    },
+    {
+      "number": 17,
+      "text": "وَيُسْقَوْنَ فِيهَا كَأْسًا كَانَ مِزَاجُهَا زَنجَبِيلًا",
+      "sha256": "0f99115b712b0f008505840c1ec326af94a8eb0b6b98ed9e8c03b0ff15942699"
+    },
+    {
+      "number": 18,
+      "text": "عَيْنًا فِيهَا تُسَمَّىٰ سَلْسَبِيلًا",
+      "sha256": "6cb18ed8002886d41c85efa67d535beb2effd229ba794ce3f58d4a55ecd63005"
+    },
+    {
+      "number": 19,
+      "text": "وَيَطُوفُ عَلَيْهِمْ وِلْدَٰنٌ مُّخَلَّدُونَ إِذَا رَأَيْتَهُمْ حَسِبْتَهُمْ لُؤْلُؤًا مَّنثُورًا",
+      "sha256": "1a2dfde4ee9f15c9921e7eaa9e79b10c0c2b0cb933116ac16186ed76ba92d452"
+    },
+    {
+      "number": 20,
+      "text": "وَإِذَا رَأَيْتَ ثَمَّ رَأَيْتَ نَعِيمًا وَمُلْكًا كَبِيرًا",
+      "sha256": "4a14c16b4b2c8236541f0f4eb1e17cf7099751f724e2d1125ae023aeb94fd948"
+    },
+    {
+      "number": 21,
+      "text": "عَٰلِيَهُمْ ثِيَابُ سُندُسٍ خُضْرٌ وَإِسْتَبْرَقٌ وَحُلُّوٓا۟ أَسَاوِرَ مِن فِضَّةٍ وَسَقَىٰهُمْ رَبُّهُمْ شَرَابًا طَهُورًا",
+      "sha256": "4329384770416a5bc8a6a0be3948087a7ce44ba7ae3940637d605a6eb4c7ed46"
+    },
+    {
+      "number": 22,
+      "text": "إِنَّ هَٰذَا كَانَ لَكُمْ جَزَآءً وَكَانَ سَعْيُكُم مَّشْكُورًا",
+      "sha256": "a8252790a924372e3c67a1325d533f2d06ff494dac36f26313e3db16cbe69316"
+    },
+    {
+      "number": 23,
+      "text": "إِنَّا نَحْنُ نَزَّلْنَا عَلَيْكَ ٱلْقُرْءَانَ تَنزِيلًا",
+      "sha256": "e9ed8dfd9b2f27b8d75c5f4bc4d4c5da617377106248938a1697e796c0ebccca"
+    },
+    {
+      "number": 24,
+      "text": "فَٱصْبِرْ لِحُكْمِ رَبِّكَ وَلَا تُطِعْ مِنْهُمْ ءَاثِمًا أَوْ كَفُورًا",
+      "sha256": "4f566c2e8ec3b4f09e8717fa8f99a71396ba052ff3b6add0fe3aae906138a15d"
+    },
+    {
+      "number": 25,
+      "text": "وَٱذْكُرِ ٱسْمَ رَبِّكَ بُكْرَةً وَأَصِيلًا",
+      "sha256": "12a8ee7101a6307b84cb1db11121c968a495bb95ec898ee2dd6bf0ca2a9daa17"
+    },
+    {
+      "number": 26,
+      "text": "وَمِنَ ٱلَّيْلِ فَٱسْجُدْ لَهُۥ وَسَبِّحْهُ لَيْلًا طَوِيلًا",
+      "sha256": "400e908b37e0947e74ca52a3e7cc30df27ecdbc0f1311f330294db13a4fc16b3"
+    },
+    {
+      "number": 27,
+      "text": "إِنَّ هَٰٓؤُلَآءِ يُحِبُّونَ ٱلْعَاجِلَةَ وَيَذَرُونَ وَرَآءَهُمْ يَوْمًا ثَقِيلًا",
+      "sha256": "2ff175c4ebc4b7b011a07fb01ab28b37ed09d98e479d692c6277beae7f08dc90"
+    },
+    {
+      "number": 28,
+      "text": "نَّحْنُ خَلَقْنَٰهُمْ وَشَدَدْنَآ أَسْرَهُمْ وَإِذَا شِئْنَا بَدَّلْنَآ أَمْثَٰلَهُمْ تَبْدِيلًا",
+      "sha256": "9e786b1c9c523acd310694574895f305985aa78c7d12d67abde7bd46cc22dc30"
+    },
+    {
+      "number": 29,
+      "text": "إِنَّ هَٰذِهِۦ تَذْكِرَةٌ فَمَن شَآءَ ٱتَّخَذَ إِلَىٰ رَبِّهِۦ سَبِيلًا",
+      "sha256": "5fa0deeb77331ddde425367e22384fb3dcd7da46c6aa2209bd41c5a9f33b6de2"
+    },
+    {
+      "number": 30,
+      "text": "وَمَا تَشَآءُونَ إِلَّآ أَن يَشَآءَ ٱللَّهُ إِنَّ ٱللَّهَ كَانَ عَلِيمًا حَكِيمًا",
+      "sha256": "60c44e902292132cd9b144ce56bf0f54bc22175ecd7e90e8de1d8e9763333d89"
+    },
+    {
+      "number": 31,
+      "text": "يُدْخِلُ مَن يَشَآءُ فِى رَحْمَتِهِۦ وَٱلظَّٰلِمِينَ أَعَدَّ لَهُمْ عَذَابًا أَلِيمًۢا",
+      "sha256": "dedbf04660bdcb37ee57182f946baee7ac60881b5900eb23f847cb87dfcf3f48"
+    }
+  ],
+  "crossCheck": {
+    "source": "Quran Foundation Content API v4, text_uthmani (KFGQPC-based)",
+    "url": "https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=76",
+    "retrievedAt": "2026-11-13T18:54:00Z",
+    "responseSha256": "372c10f5a419872719c0d3afe8902eb7405164bf561741c2220cfed47de5f5f7",
+    "policy": "Comparison result only; the other text is not stored (QF caching terms).",
+    "results": [
+      {
+        "ayah": 1,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 2,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 3,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 4,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 5,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 6,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 7,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 8,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 9,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 10,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 11,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 12,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 13,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 14,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 15,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 16,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 17,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 18,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 19,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 20,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 21,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 22,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 23,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 24,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 25,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 26,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 27,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": true
+      },
+      {
+        "ayah": 28,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 29,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 30,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      },
+      {
+        "ayah": 31,
+        "letterSkeletonMatch": true,
+        "marksMatchIgnoringTatweel": false
+      }
+    ]
+  },
+  "verification": {
+    "automated": "passed",
+    "automatedChecks": [
+      "source version line is \"Uthmani, Version 1.1\"",
+      "6236 ayahs, contiguous, per-surah counts equal metadata (114 suras)",
+      "no control characters, BOM or CR in ayah text",
+      "verbatim copy; per-ayah SHA-256 recorded",
+      "letter skeleton equals independent cross-check source"
+    ],
+    "reviewer": null,
+    "reviewedAt": null
+  }
+}

@@ -1,18 +1,23 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:sheekhcali/core/widgets/home_components.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sheekhcali/app/app.dart';
 import 'package:sheekhcali/app/router.dart';
 import 'package:sheekhcali/core/providers.dart';
+import 'package:sheekhcali/features/quran/data/quran_metadata_repository.dart';
+import 'package:sheekhcali/features/quran/data/quran_text_repository.dart';
 import 'package:sheekhcali/features/tafsir_audio/application/tafsir_player.dart';
 import 'package:sheekhcali/features/tafsir_audio/data/recording_repository.dart';
 import 'package:sheekhcali/features/tafsir_audio/domain/recording.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'fakes.dart';
+import 'file_quran_repositories.dart';
 
 /// The reference screenshots' date: Thursday 12 November 2026.
 final referenceDate = DateTime(2026, 11, 12, 7, 59);
@@ -80,6 +85,8 @@ Future<void> pumpApp(
   List<Override> overrides = const [],
   RecordingStatus recording = const RecordingNotInstalled('/test/dev-media'),
   TafsirPlayer? player,
+  QuranTextRepository? quranText,
+  QuranMetadataRepository? metadata,
 }) async {
   await loadAppFonts();
   SharedPreferences.setMockInitialValues({
@@ -110,9 +117,23 @@ Future<void> pumpApp(
           FakeRecordingRepository(recording),
         ),
         tafsirPlayerProvider.overrideWithValue(player ?? FakeTafsirPlayer()),
+        quranTextRepositoryProvider.overrideWithValue(
+          quranText ?? const FileQuranTextRepository(),
+        ),
+        quranMetadataRepositoryProvider.overrideWithValue(
+          metadata ?? const FileQuranMetadataRepository(),
+        ),
         ...overrides,
       ],
       child: const SheekhCalinuurApp(),
+    ),
+  );
+  // The logo is an image asset: decode it for real so screens and goldens
+  // show it (image decoding doesn't run under the fake clock).
+  await tester.runAsync(
+    () => precacheImage(
+      const AssetImage(logoAsset),
+      tester.element(find.byType(SheekhCalinuurApp)),
     ),
   );
   await tester.pumpAndSettle();

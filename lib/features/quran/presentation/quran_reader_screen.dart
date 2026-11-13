@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,12 +24,15 @@ import '../../tafsir_audio/domain/candidates.dart';
 import '../../tafsir_audio/domain/recording.dart';
 import '../../tafsir_audio/domain/span_index.dart';
 import '../../tafsir_audio/presentation/tafsir_player_bar.dart';
+import '../application/reading_state.dart';
 import '../data/quran_text_repository.dart';
 import '../domain/quran_text_availability.dart';
 import 'widgets/ayah_action_sheet.dart';
 import 'widgets/mushaf_layout_preview.dart';
 import 'widgets/reader_app_bar.dart';
 import 'widgets/reader_overflow_menu.dart';
+import 'widgets/reading_controls.dart';
+import 'widgets/surah_navigation.dart';
 import 'widgets/surah_text_view.dart';
 
 /// Quran reader (references 03–06, DESIGN_SYSTEM_SPECIFICATION §8.4 and §8.12).
@@ -38,9 +43,13 @@ import 'widgets/surah_text_view.dart';
 /// fails verification, it falls back to the labelled layout preview and never
 /// shows unverified text.
 class QuranReaderScreen extends ConsumerStatefulWidget {
-  const QuranReaderScreen({super.key, this.surah = 1});
+  const QuranReaderScreen({super.key, this.surah = 1, this.initialAyah});
 
   final int surah;
+
+  /// Scroll to this ayah when the text first appears (index, juz, bookmark,
+  /// search result or "continue reading").
+  final int? initialAyah;
 
   @override
   ConsumerState<QuranReaderScreen> createState() => _QuranReaderScreenState();
@@ -51,6 +60,75 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
   final _moreKey = GlobalKey();
   int? _selectedAyah;
   bool _chromeVisible = true;
+  final _scroll = ScrollController();
+  final _textKey = GlobalKey<SurahTextViewState>();
+  bool _didInitialScroll = false;
+  Timer? _autoScroll;
+
+  @override
+  void dispose() {
+    _autoScroll?.cancel();
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  bool get _isFatiha => widget.surah == 1;
+
+  void _rememberPlace(int ayah) =>
+      ref.read(lastReadProvider.notifier).set(AyahRef(widget.surah, ayah));
+
+  /// Scrolls so that ayah [ayah] starts near the top of the reading area.
+  void _scrollToAyah(int ayah) {
+    if (!_scroll.hasClients) return;
+    final top = _textKey.currentState?.ayahGlobalTop(ayah);
+    final viewport = _scroll.position.context.storageContext.findRenderObject();
+    if (top == null || viewport is! RenderBox) return;
+    final viewportTop = viewport.localToGlobal(Offset.zero).dy;
+    final target = (_scroll.offset + top.dy - viewportTop - 16).clamp(
+      0.0,
+      _scroll.position.maxScrollExtent,
+    );
+    _scroll.jumpTo(target);
+  }
+
+  /// Records the ayah at the top of the reading area after a scroll.
+  bool _onScrollEnd(ScrollEndNotification n) {
+    final viewport = _scroll.position.context.storageContext.findRenderObject();
+    if (viewport is RenderBox) {
+      final at =
+          viewport.localToGlobal(const Offset(0, 0)) +
+          Offset(viewport.size.width / 2, 40);
+      final ayah = _textKey.currentState?.ayahAtGlobal(at);
+      if (ayah != null) _rememberPlace(ayah);
+    }
+    return false;
+  }
+
+  /// Slow, steady scrolling for reading; any tap or the toolbar stops it.
+  void _toggleAutoScroll() {
+    if (_autoScroll != null) {
+      _stopAutoScroll();
+      return;
+    }
+    if (!_scroll.hasClients) return;
+    showUnavailable(context, _l10n.autoScrollOn);
+    _autoScroll = Timer.periodic(const Duration(milliseconds: 50), (_) {
+      if (!_scroll.hasClients) return;
+      final next = _scroll.offset + 1.2;
+      if (next >= _scroll.position.maxScrollExtent) {
+        _stopAutoScroll();
+        return;
+      }
+      _scroll.jumpTo(next);
+    });
+    setState(() {});
+  }
+
+  void _stopAutoScroll() {
+    _autoScroll?.cancel();
+    _autoScroll = null;
+    if (mounted) setState(() {});
+  }
 
   AppLocalizations get _l10n => AppLocalizations.of(context);
 
@@ -170,12 +248,29 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
     }
   }
 
-  void _onAyahTap(int ayah) => _playExplanationFor(ayah);
+  void _onAyahTap(int ayah) {
+    _stopAutoScroll();
+    _rememberPlace(ayah);
+    if (_isFatiha) {
+      _playExplanationFor(ayah);
+      return;
+    }
+    // The Sheikh's Tafsir recording exists for Al-Fatiha only: select the
+    // ayah and say so, never play another surah's audio.
+    setState(() => _tappedAyah = _tappedAyah == ayah ? null : ayah);
+    showUnavailable(context, _l10n.noTafsirForSurah);
+  }
 
   Future<void> _onAyahLongPress(SurahText surah, int ayah) async {
     HapticFeedback.selectionClick();
+    _stopAutoScroll();
+    _rememberPlace(ayah);
     setState(() => _selectedAyah = ayah);
-    final action = await showAyahActionSheet(context);
+    final place = AyahRef(surah.number, ayah);
+    final action = await showAyahActionSheet(
+      context,
+      bookmarked: ref.read(bookmarksProvider).contains(place),
+    );
     if (!mounted) return;
     setState(() => _selectedAyah = null);
     if (action == null) return;
@@ -191,10 +286,26 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
           localizeDigits('$ayah', locale),
         );
         // The exact stored text, then its reference: never re-typed text.
-        await Clipboard.setData(ClipboardData(text: '${a.text}\n$reference'));
+        // The ayah as shown: exact stored text (without the basmala heading
+        // the source prefixes to ayah 1 of most surahs), then its reference.
+        await Clipboard.setData(
+          ClipboardData(text: '${a.displayText}\n$reference'),
+        );
         if (mounted) showUnavailable(context, _l10n.copiedAyah(reference));
       case AyahAction.playTafsir:
-        await _playExplanationFor(ayah);
+        if (_isFatiha) {
+          await _playExplanationFor(ayah);
+        } else {
+          showUnavailable(context, _l10n.noTafsirForSurah);
+        }
+      case AyahAction.bookmark:
+        final added = await ref.read(bookmarksProvider.notifier).toggle(place);
+        if (mounted) {
+          showUnavailable(
+            context,
+            added ? _l10n.bookmarkAdded : _l10n.bookmarkRemoved,
+          );
+        }
       case AyahAction.playToEnd:
       case AyahAction.playRecitationAndTafsir:
         showUnavailable(context, _l10n.unavailableRecitation);
@@ -202,7 +313,6 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
         showUnavailable(context, _l10n.unavailableTafsirText);
       case AyahAction.addNote:
       case AyahAction.addItqan:
-      case AyahAction.bookmark:
       case AyahAction.share:
         showUnavailable(context, _l10n.unavailableFeature);
     }
@@ -216,7 +326,9 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
       case ReaderMenuAction.toggleTheme:
         await ref.read(readerDarkProvider.notifier).set(dark: !dark);
       case ReaderMenuAction.search:
+        await context.push(AppRoutes.quranSearch);
       case ReaderMenuAction.controls:
+        await showReadingControls(context);
       case ReaderMenuAction.goToPage:
         showUnavailable(context, _l10n.unavailableFeature);
     }
@@ -269,7 +381,7 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
     // Highlight: the user's selection wins; otherwise the verified span playing
     // now. Derived from the position alone, so seeking can't leave a stale mark.
     final marks = <int, AyahMark>{};
-    if (playback != null && playback.phase != TafsirPhase.idle) {
+    if (_isFatiha && playback != null && playback.phase != TafsirPhase.idle) {
       final span = activeSpanAt(index, playback.position.inMilliseconds);
       if (span != null) {
         for (final n in span.ayahs) {
@@ -284,6 +396,18 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
     final verified = text.value is QuranTextVerified
         ? (text.value! as QuranTextVerified).surah
         : null;
+    final fontSize = ref.watch(quranFontSizeProvider);
+    if (verified != null && !_didInitialScroll) {
+      _didInitialScroll = true;
+      final target = widget.initialAyah;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        if (target != null && target > 1) {
+          _scrollToAyah(target);
+        }
+        _rememberPlace(target ?? 1);
+      });
+    }
 
     return Theme(
       data: AppTheme.reader(Theme.of(context), dark: dark),
@@ -307,19 +431,16 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
                       ? ReaderAppBar(
                           title: labels.hijriPadded ?? labels.gregorian,
                           onMenu: () => _scaffoldKey.currentState?.openDrawer(),
-                          onBookmark: () => showUnavailable(
-                            context,
-                            _l10n.unavailableFeature,
+                          onBookmark: () => context.push(
+                            AppRoutes.quranIndexTab('bookmarks'),
                           ),
                           onTranslation: () => showUnavailable(
                             context,
                             _l10n.unavailableTranslation,
                           ),
                           onIndex: () => context.push(AppRoutes.quranIndex),
-                          onAutoScroll: () => showUnavailable(
-                            context,
-                            _l10n.unavailableFeature,
-                          ),
+                          onAutoScroll: _toggleAutoScroll,
+                          autoScrolling: _autoScroll != null,
                           moreButtonKey: _moreKey,
                           onMore: _onMore,
                         )
@@ -331,8 +452,11 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
                 ),
                 Expanded(
                   child: text.when(
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => Center(
+                      child: CircularProgressIndicator(
+                        color: dark ? HomeColors.goldLabel : ReaderColors.icon,
+                      ),
+                    ),
                     error: (e, s) => _Preview(
                       dark: dark,
                       selected: _selectedAyah,
@@ -344,21 +468,47 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
                     data: (availability) => switch (availability) {
                       QuranTextVerified(:final surah) => GestureDetector(
                         behavior: HitTestBehavior.translucent,
-                        onTap: () =>
-                            setState(() => _chromeVisible = !_chromeVisible),
-                        child: Center(
-                          child: SingleChildScrollView(
-                            padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 560),
-                              child: SurahTextView(
-                                surah: surah,
-                                dark: dark,
-                                marks: marks,
-                                onAyahTap: _onAyahTap,
-                                onAyahLongPress: (n) =>
-                                    _onAyahLongPress(surah, n),
-                                onSourceTap: () => _showSource(surah),
+                        onTap: () {
+                          _stopAutoScroll();
+                          setState(() => _chromeVisible = !_chromeVisible);
+                        },
+                        child: NotificationListener<ScrollEndNotification>(
+                          onNotification: _onScrollEnd,
+                          child: Center(
+                            child: SingleChildScrollView(
+                              controller: _scroll,
+                              padding: const EdgeInsets.fromLTRB(
+                                20,
+                                28,
+                                20,
+                                32,
+                              ),
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxWidth: 560,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    SurahTextView(
+                                      key: _textKey,
+                                      surah: surah,
+                                      dark: dark,
+                                      marks: marks,
+                                      fontSize: fontSize,
+                                      onAyahTap: _onAyahTap,
+                                      onAyahLongPress: (n) =>
+                                          _onAyahLongPress(surah, n),
+                                      onSourceTap: () => _showSource(surah),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SurahNavigation(
+                                      surah: surah.number,
+                                      dark: dark,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

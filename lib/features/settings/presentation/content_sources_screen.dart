@@ -52,14 +52,13 @@ class ContentSourcesScreen extends StatelessWidget {
                   row(
                     Icons.auto_stories,
                     l10n.sourceQuranText,
-                    l10n.sourceQuranTextFatiha,
+                    l10n.sourceQuranTextStatus,
                     pending: true,
                   ),
                   row(
                     Icons.format_list_numbered,
                     l10n.sourceQuranMetadata,
-                    l10n.sourceNotInstalled,
-                    pending: true,
+                    l10n.sourceQuranMetadataStatus,
                   ),
                   row(
                     Icons.translate,

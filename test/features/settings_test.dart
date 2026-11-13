@@ -31,6 +31,8 @@ void main() {
   testWidgets('Wi-Fi only is stored and says when it applies', (tester) async {
     await pumpApp(tester, location: AppRoutes.settings);
     await tester.scrollUntilVisible(find.text('Download on Wi-Fi only'), 100);
+    await tester.ensureVisible(find.text('Download on Wi-Fi only'));
+    await tester.pumpAndSettle();
     expect(find.text('Applies once downloads are available.'), findsOneWidget);
     await tester.tap(find.text('Download on Wi-Fi only'));
     await tester.pumpAndSettle();
@@ -38,18 +40,27 @@ void main() {
     expect(prefs.getBool('downloads.wifiOnly'), isFalse);
   });
 
-  testWidgets('content sources say plainly what is not installed', (
+  testWidgets('content sources say plainly what is and is not installed', (
     tester,
   ) async {
     await pumpApp(tester, location: AppRoutes.contentSources);
     expect(find.byType(ContentSourcesScreen), findsOneWidget);
+    // Only the translation is still awaiting a source.
     expect(
       find.text('Not installed yet · source awaiting approval'),
-      findsNWidgets(2),
+      findsOneWidget,
     );
     expect(
       find.text(
-        'Al-Fatiha installed · Tanzil Uthmani 1.1, verbatim · reviewer check pending',
+        'All 114 surahs · Tanzil Uthmani 1.1, verbatim · cross-checked with a '
+        'second source · reviewer check pending',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Tanzil metadata 1.0 · 114 surahs, 30 juz · cross-checked with a '
+        'second source',
       ),
       findsOneWidget,
     );

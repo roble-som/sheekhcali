@@ -593,7 +593,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sourceFontsStatus =>
-      'Inter, Noto Sans Arabic, Noto Naskh Arabic · SIL Open Font License 1.1';
+      'Amiri (Quran text), Inter, Noto Sans Arabic, Noto Naskh Arabic · SIL Open Font License 1.1';
 
   @override
   String get sourceHijri => 'Hijri calendar';
@@ -825,4 +825,132 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confidenceLow => 'low';
+
+  @override
+  String get autoScrollOn => 'Auto-scroll on · tap the text to stop';
+
+  @override
+  String get autoScrollStop => 'Stop auto-scroll';
+
+  @override
+  String get noTafsirForSurah =>
+      'The Sheikh\'s Tafsir recording is available for Al-Fatiha only, so far.';
+
+  @override
+  String get bookmarkAdded => 'Bookmark added';
+
+  @override
+  String get bookmarkRemoved => 'Bookmark removed';
+
+  @override
+  String get ayahRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get tabBookmarks => 'Bookmarks';
+
+  @override
+  String get bookmarksEmptyTitle => 'No bookmarks yet';
+
+  @override
+  String get bookmarksEmptyBody =>
+      'Long-press an ayah in the reader and choose Bookmark. Bookmarks are kept on this device.';
+
+  @override
+  String bookmarkAyahLine(String reference) {
+    return 'Ayah $reference';
+  }
+
+  @override
+  String get readingControls => 'Reading controls';
+
+  @override
+  String get readerDarkPage => 'Dark reading page';
+
+  @override
+  String textSizeValue(String size) {
+    return 'Quran text size: $size';
+  }
+
+  @override
+  String get quranTextSize => 'Quran text size';
+
+  @override
+  String get textSmaller => 'Smaller text';
+
+  @override
+  String get textLarger => 'Larger text';
+
+  @override
+  String get textSizeReset => 'Reset';
+
+  @override
+  String get previousSurah => 'Previous surah';
+
+  @override
+  String get nextSurah => 'Next surah';
+
+  @override
+  String get quranSearchTitle => 'Search the Quran';
+
+  @override
+  String get quranSearchHint => 'Search Arabic text (marks are optional)';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get quranSearchMinChars =>
+      'Type at least two Arabic letters. Harakat and other marks are ignored while matching; the text is always shown exactly as in the source.';
+
+  @override
+  String quranSearchResults(String count) {
+    return '$count ayahs';
+  }
+
+  @override
+  String quranSearchManyResults(String count) {
+    return 'First $count ayahs · refine the search for fewer';
+  }
+
+  @override
+  String quranSearchSkipped(String count) {
+    return '$count surahs failed verification and were not searched';
+  }
+
+  @override
+  String aboutVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get aboutQuranBody =>
+      'All 114 surahs from Tanzil Uthmani 1.1, shown verbatim. Every ayah is checked against its recorded checksum when it loads and was cross-checked letter by letter against a second source. A reader\'s on-device check is still pending.';
+
+  @override
+  String get aboutTafsirTitle => 'Sheikh Calinuur\'s Tafsir';
+
+  @override
+  String get aboutTafsirBody =>
+      'The Sheikh\'s recorded Tafsir of Al-Fatiha, for testing builds only until distribution rights are confirmed. Ayah segments are being reviewed; unreviewed ones are clearly labelled.';
+
+  @override
+  String get aboutPrivacyTitle => 'Privacy';
+
+  @override
+  String get aboutPrivacyBody =>
+      'No account and no tracking. Settings, bookmarks and your reading place stay on this device.';
+
+  @override
+  String get openSourceLicences => 'Open-source licences';
+
+  @override
+  String get sourceQuranTextStatus =>
+      'All 114 surahs · Tanzil Uthmani 1.1, verbatim · cross-checked with a second source · reviewer check pending';
+
+  @override
+  String get sourceQuranMetadataStatus =>
+      'Tanzil metadata 1.0 · 114 surahs, 30 juz · cross-checked with a second source';
+
+  @override
+  String get logoSemantics => 'Sheekh Calinuur logo';
 }

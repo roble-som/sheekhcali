@@ -2,4 +2,6 @@
 <resources>
     <!-- Home identity page background h.bg (DESIGN_SYSTEM_SPECIFICATION §2.1). -->
     <color name="splash_background">#EBEBE9</color>
+    <!-- Adaptive icon background: the medallion's dark green. -->
+    <color name="ic_launcher_background">#2B5039</color>
 </resources>

@@ -1157,7 +1157,7 @@ abstract class AppLocalizations {
   /// No description provided for @sourceFontsStatus.
   ///
   /// In en, this message translates to:
-  /// **'Inter, Noto Sans Arabic, Noto Naskh Arabic · SIL Open Font License 1.1'**
+  /// **'Amiri (Quran text), Inter, Noto Sans Arabic, Noto Naskh Arabic · SIL Open Font License 1.1'**
   String get sourceFontsStatus;
 
   /// No description provided for @sourceHijri.
@@ -1537,6 +1537,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'low'**
   String get confidenceLow;
+
+  /// No description provided for @autoScrollOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-scroll on · tap the text to stop'**
+  String get autoScrollOn;
+
+  /// No description provided for @autoScrollStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop auto-scroll'**
+  String get autoScrollStop;
+
+  /// No description provided for @noTafsirForSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'The Sheikh\'s Tafsir recording is available for Al-Fatiha only, so far.'**
+  String get noTafsirForSurah;
+
+  /// No description provided for @bookmarkAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark added'**
+  String get bookmarkAdded;
+
+  /// No description provided for @bookmarkRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark removed'**
+  String get bookmarkRemoved;
+
+  /// No description provided for @ayahRemoveBookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove bookmark'**
+  String get ayahRemoveBookmark;
+
+  /// No description provided for @tabBookmarks.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmarks'**
+  String get tabBookmarks;
+
+  /// No description provided for @bookmarksEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No bookmarks yet'**
+  String get bookmarksEmptyTitle;
+
+  /// No description provided for @bookmarksEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Long-press an ayah in the reader and choose Bookmark. Bookmarks are kept on this device.'**
+  String get bookmarksEmptyBody;
+
+  /// No description provided for @bookmarkAyahLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Ayah {reference}'**
+  String bookmarkAyahLine(String reference);
+
+  /// No description provided for @readingControls.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading controls'**
+  String get readingControls;
+
+  /// No description provided for @readerDarkPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark reading page'**
+  String get readerDarkPage;
+
+  /// No description provided for @textSizeValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran text size: {size}'**
+  String textSizeValue(String size);
+
+  /// No description provided for @quranTextSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran text size'**
+  String get quranTextSize;
+
+  /// No description provided for @textSmaller.
+  ///
+  /// In en, this message translates to:
+  /// **'Smaller text'**
+  String get textSmaller;
+
+  /// No description provided for @textLarger.
+  ///
+  /// In en, this message translates to:
+  /// **'Larger text'**
+  String get textLarger;
+
+  /// No description provided for @textSizeReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get textSizeReset;
+
+  /// No description provided for @previousSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous surah'**
+  String get previousSurah;
+
+  /// No description provided for @nextSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'Next surah'**
+  String get nextSurah;
+
+  /// No description provided for @quranSearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search the Quran'**
+  String get quranSearchTitle;
+
+  /// No description provided for @quranSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Arabic text (marks are optional)'**
+  String get quranSearchHint;
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
+
+  /// No description provided for @quranSearchMinChars.
+  ///
+  /// In en, this message translates to:
+  /// **'Type at least two Arabic letters. Harakat and other marks are ignored while matching; the text is always shown exactly as in the source.'**
+  String get quranSearchMinChars;
+
+  /// No description provided for @quranSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} ayahs'**
+  String quranSearchResults(String count);
+
+  /// No description provided for @quranSearchManyResults.
+  ///
+  /// In en, this message translates to:
+  /// **'First {count} ayahs · refine the search for fewer'**
+  String quranSearchManyResults(String count);
+
+  /// No description provided for @quranSearchSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} surahs failed verification and were not searched'**
+  String quranSearchSkipped(String count);
+
+  /// No description provided for @aboutVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String aboutVersion(String version);
+
+  /// No description provided for @aboutQuranBody.
+  ///
+  /// In en, this message translates to:
+  /// **'All 114 surahs from Tanzil Uthmani 1.1, shown verbatim. Every ayah is checked against its recorded checksum when it loads and was cross-checked letter by letter against a second source. A reader\'s on-device check is still pending.'**
+  String get aboutQuranBody;
+
+  /// No description provided for @aboutTafsirTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sheikh Calinuur\'s Tafsir'**
+  String get aboutTafsirTitle;
+
+  /// No description provided for @aboutTafsirBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The Sheikh\'s recorded Tafsir of Al-Fatiha, for testing builds only until distribution rights are confirmed. Ayah segments are being reviewed; unreviewed ones are clearly labelled.'**
+  String get aboutTafsirBody;
+
+  /// No description provided for @aboutPrivacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get aboutPrivacyTitle;
+
+  /// No description provided for @aboutPrivacyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No account and no tracking. Settings, bookmarks and your reading place stay on this device.'**
+  String get aboutPrivacyBody;
+
+  /// No description provided for @openSourceLicences.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-source licences'**
+  String get openSourceLicences;
+
+  /// No description provided for @sourceQuranTextStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'All 114 surahs · Tanzil Uthmani 1.1, verbatim · cross-checked with a second source · reviewer check pending'**
+  String get sourceQuranTextStatus;
+
+  /// No description provided for @sourceQuranMetadataStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Tanzil metadata 1.0 · 114 surahs, 30 juz · cross-checked with a second source'**
+  String get sourceQuranMetadataStatus;
+
+  /// No description provided for @logoSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Sheekh Calinuur logo'**
+  String get logoSemantics;
 }
 
 class _AppLocalizationsDelegate

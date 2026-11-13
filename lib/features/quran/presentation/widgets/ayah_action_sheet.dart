@@ -21,7 +21,10 @@ enum AyahAction {
 /// The ayah action sheet from screenshot 05: a white sheet with a 16 dp top
 /// radius, a drag handle, 52 dp rows, icons centred at 32 dp, labels starting
 /// at 60.4 dp, and a divider before Copy and Share.
-Future<AyahAction?> showAyahActionSheet(BuildContext context) {
+Future<AyahAction?> showAyahActionSheet(
+  BuildContext context, {
+  bool bookmarked = false,
+}) {
   return showModalBottomSheet<AyahAction>(
     context: context,
     backgroundColor: ReaderColors.surface,
@@ -31,12 +34,15 @@ Future<AyahAction?> showAyahActionSheet(BuildContext context) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.sheet)),
     ),
-    builder: (context) => const _AyahActionSheet(),
+    builder: (context) => _AyahActionSheet(bookmarked: bookmarked),
   );
 }
 
 class _AyahActionSheet extends StatelessWidget {
-  const _AyahActionSheet();
+  const _AyahActionSheet({required this.bookmarked});
+
+  /// The ayah is already bookmarked: the row offers to remove it.
+  final bool bookmarked;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +131,11 @@ class _AyahActionSheet extends StatelessWidget {
               l10n.ayahAddItqan,
             ),
             row(AyahAction.tafsir, Icons.menu_book, l10n.ayahTafsir),
-            row(AyahAction.bookmark, Icons.bookmark_border, l10n.ayahBookmark),
+            row(
+              AyahAction.bookmark,
+              bookmarked ? Icons.bookmark : Icons.bookmark_border,
+              bookmarked ? l10n.ayahRemoveBookmark : l10n.ayahBookmark,
+            ),
             const Divider(height: 1, thickness: 1, color: ReaderColors.divider),
             row(AyahAction.copy, Icons.description_outlined, l10n.ayahCopy),
             row(AyahAction.share, Icons.ios_share, l10n.ayahShare),

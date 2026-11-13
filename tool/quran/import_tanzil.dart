@@ -1,10 +1,23 @@
-// Imports one surah from the Tanzil Quran text into a verified app asset.
+// Imports surahs from the Tanzil Quran text into verified app assets.
 //
 // Usage (from the repo root):
 //   dart run tool/quran/import_tanzil.dart \
 //     --text <quran-uthmani.txt> --metadata <quran-data.xml> \
 //     --retrieved-at <ISO time> --surah 1 \
 //     [--crosscheck <qf_chapter.json>]
+//   dart run tool/quran/import_tanzil.dart \
+//     --text <quran-uthmani.txt> --metadata <quran-data.xml> \
+//     --retrieved-at <ISO time> --all --crosscheck-dir <dir with chapter_N.json>
+//
+// --all writes surahs 2–114 and re-verifies (never rewrites) the reviewed
+// Al-Fatiha asset against the same source bytes.
+//
+// Basmala rule (QURAN_AND_AUDIO_ACCURACY §3): in this source the basmala is
+// ayah 1 of Al-Fatiha, and is prefixed to ayah 1 of every other surah except
+// At-Tawbah (9), where it is absent. The importer checks this exactly (the
+// prefix must equal Al-Fatiha ayah 1 followed by one space) and records it.
+// The stored ayah text stays verbatim; the reader shows the prefix as the
+// unnumbered basmala heading, not as part of ayah 1.
 //
 // What it guarantees (QURAN_AND_AUDIO_ACCURACY §2–§3):
 // * The whole source file is validated before anything is extracted: 6,236
@@ -40,9 +53,9 @@ Never _fail(String message) {
 Map<String, String> _args(List<String> argv) {
   final out = <String, String>{};
   for (var i = 0; i < argv.length; i++) {
-    if (argv[i].startsWith('--') && i + 1 < argv.length) {
-      out[argv[i].substring(2)] = argv[++i];
-    }
+    if (!argv[i].startsWith('--')) continue;
+    final hasValue = i + 1 < argv.length && !argv[i + 1].startsWith('--');
+    out[argv[i].substring(2)] = hasValue ? argv[++i] : 'true';
   }
   return out;
 }
@@ -71,12 +84,14 @@ Map<String, String> _attrs(String tag) => {
 
 void main(List<String> argv) {
   final a = _args(argv);
+  final all = argv.contains('--all');
   final textPath = a['text'] ?? _fail('--text is required');
   final metaPath = a['metadata'] ?? _fail('--metadata is required');
   final retrievedAt = a['retrieved-at'] ?? _fail('--retrieved-at is required');
-  final surahNo =
-      int.tryParse(a['surah'] ?? '') ?? _fail('--surah is required');
-  final crossPath = a['crosscheck'];
+  final surahArg = int.tryParse(a['surah'] ?? '');
+  if (!all && surahArg == null) _fail('--surah or --all is required');
+  final crossDir = a['crosscheck-dir'];
+  if (all && crossDir == null) _fail('--all needs --crosscheck-dir');
 
   final textBytes = File(textPath).readAsBytesSync();
   final metaBytes = File(metaPath).readAsBytesSync();
@@ -147,8 +162,94 @@ void main(List<String> argv) {
   }
   if (index != _expectedAyahTotal) _fail('Metadata covers $index ayahs');
 
+  // ---- Basmala rule, checked for every surah ---------------------------------
+  // The prefix is the first four words of ayah 1. It must equal Al-Fatiha's
+  // basmala letter for letter; marks may differ (95 and 97 read "بِّسْمِ", with
+  // a shadda), and the reader shows each surah's own bytes.
+  final basmala = ayahs.first.$3; // 1:1
+  final basmalaWords = basmala.split(' ').length;
+  final prefixLengths = <int, int>{};
+  for (final tag in suraTags) {
+    final s = int.parse(tag['index']!);
+    if (s == 1) continue;
+    final first = ayahs.firstWhere((x) => x.$1 == s && x.$2 == 1).$3;
+    final words = first.split(' ');
+    final candidate = words.take(basmalaWords).join(' ');
+    final isBasmala =
+        words.length > basmalaWords && skeleton(candidate) == skeleton(basmala);
+    if (s == 9) {
+      if (isBasmala) _fail('At-Tawbah must not start with the basmala');
+      continue;
+    }
+    if (!isBasmala) _fail('Surah $s ayah 1 lacks the basmala prefix');
+    prefixLengths[s] = candidate.length + 1;
+  }
+
+  final surahs = all
+      ? [for (var n = 2; n <= _expectedSurahs; n++) n]
+      : [surahArg!];
+  if (all) _verifyExistingFatiha(ayahs, textSha);
+  for (final surahNo in surahs) {
+    final crossPath = all ? '$crossDir/chapter_$surahNo.json' : a['crosscheck'];
+    _writeSurah(
+      surahNo: surahNo,
+      tag: suraTags.firstWhere((t) => int.parse(t['index']!) == surahNo),
+      ayahs: ayahs,
+      basmala: basmala,
+      prefixLength: prefixLengths[surahNo],
+      licence: licence,
+      textSha: textSha,
+      metaSha: metaSha,
+      metaVersion: metaVersion,
+      retrievedAt: retrievedAt,
+      crossPath: crossPath,
+      quiet: all,
+    );
+  }
+  if (all) stdout.writeln('OK: wrote surahs 2–114; Al-Fatiha re-verified');
+}
+
+/// The reviewed Al-Fatiha asset must still equal the source, ayah for ayah.
+void _verifyExistingFatiha(
+  List<(int, int, String, String)> ayahs,
+  String textSha,
+) {
+  final f = File('assets/quran/tanzil-uthmani-1.1/surah-001.json');
+  final j = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+  if ((j['source'] as Map)['fileSha256'] != textSha) {
+    _fail('Al-Fatiha asset was made from different source bytes');
+  }
+  final stored = (j['ayahs'] as List).cast<Map<String, dynamic>>();
+  final source = ayahs.where((x) => x.$1 == 1).toList();
+  if (stored.length != source.length) _fail('Al-Fatiha ayah count differs');
+  for (var i = 0; i < stored.length; i++) {
+    if (stored[i]['text'] != source[i].$3) {
+      _fail('Al-Fatiha ayah ${i + 1} differs');
+    }
+  }
+}
+
+void _writeSurah({
+  required int surahNo,
+  required Map<String, String> tag,
+  required List<(int, int, String, String)> ayahs,
+  required String basmala,
+  required int? prefixLength,
+  required List<String> licence,
+  required String textSha,
+  required String metaSha,
+  required String metaVersion,
+  required String retrievedAt,
+  required String? crossPath,
+  required bool quiet,
+}) {
+  final prefixed = prefixLength != null;
+
+  /// Ayah text as it is compared and shown (without the basmala prefix).
+  String shown(int n, String t) =>
+      prefixed && n == 1 ? t.substring(prefixLength) : t;
+
   // ---- Extract the requested surah ------------------------------------------
-  final tag = suraTags.firstWhere((t) => int.parse(t['index']!) == surahNo);
   final selected = ayahs.where((x) => x.$1 == surahNo).toList();
   if (selected.length != int.parse(tag['ayas']!)) {
     _fail('Count mismatch for surah $surahNo');
@@ -167,7 +268,11 @@ void main(List<String> argv) {
     };
     final results = <Map<String, Object?>>[];
     var allSkeletons = true;
-    for (final (s, n, t, _) in selected) {
+    if (verses.length != selected.length) {
+      _fail('Cross-check source has ${verses.length} ayahs for $surahNo');
+    }
+    for (final (s, n, t0, _) in selected) {
+      final t = shown(n, t0);
       final other = byKey['$s:$n'];
       if (other == null) _fail('Cross-check source lacks $s:$n');
       final skeletonMatch = skeleton(t) == skeleton(other);
@@ -180,7 +285,11 @@ void main(List<String> argv) {
       });
     }
     if (!allSkeletons) {
-      _fail('Letter skeleton differs from the cross-check source');
+      final bad = results
+          .where((r) => r['letterSkeletonMatch'] == false)
+          .map((r) => r['ayah'])
+          .join(', ');
+      _fail('Surah $surahNo: letter skeleton differs at ayah(s) $bad');
     }
     cross = {
       'source': 'Quran Foundation Content API v4, text_uthmani (KFGQPC-based)',
@@ -224,6 +333,17 @@ void main(List<String> argv) {
           'Hafs, Kufan count, as in the source: ayah numbers are '
           "Tanzil's own. In Al-Fatiha the basmala is ayah 1 (7 ayahs).",
       'basmalaIsAyahOne': surahNo == 1,
+      if (surahNo != 1)
+        'basmala': prefixed
+            ? {
+                'prefixedToAyahOneInSource': true,
+                'shownAs': 'unnumbered heading before ayah 1',
+                'prefixLength': prefixLength,
+                'identicalToFatihaAyahOne': selected.first.$3.startsWith(
+                  '$basmala ',
+                ),
+              }
+            : {'present': false},
     },
     'surah': {
       'number': surahNo,
@@ -272,6 +392,7 @@ void main(List<String> argv) {
     '${const JsonEncoder.withIndent('  ').convert(manifest)}\n',
   );
 
+  if (quiet) return;
   stdout.writeln('OK: surah $surahNo, ${selected.length} ayahs');
   stdout.writeln('source sha256 $textSha');
   stdout.writeln('wrote ${assetFile.path} and ${manifestFile.path}');
