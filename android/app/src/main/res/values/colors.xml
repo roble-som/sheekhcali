@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home identity page background h.bg (DESIGN_SYSTEM_SPECIFICATION §2.1). -->
+    <color name="splash_background">#EBEBE9</color>
+</resources>

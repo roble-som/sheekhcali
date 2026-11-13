@@ -1,0 +1,81 @@
+import 'package:flutter/foundation.dart';
+
+/// What kind of audio a recording is. Sheikh lessons and Quran recitation are
+/// always labelled differently (DESIGN_SYSTEM_SPECIFICATION §8.11).
+enum RecordingKind { tafsir, recitation }
+
+/// What the rights record allows (C-26).
+enum RecordingRights {
+  /// Development and emulator testing only: never bundled, never in release.
+  testingOnly,
+
+  /// Streaming and offline download allowed.
+  distribution,
+}
+
+/// An original recording, identified by the SHA-256 of its exact bytes. The
+/// filename is not identity: R3 was renamed during development and its
+/// hash did not change.
+@immutable
+class RecordingInfo {
+  const RecordingInfo({
+    required this.id,
+    required this.sha256,
+    required this.bytes,
+    required this.durationMs,
+    required this.surah,
+    required this.kind,
+    required this.rights,
+    required this.id3Title,
+    required this.id3Artist,
+    required this.alignmentAsset,
+  });
+
+  final String id;
+  final String sha256;
+  final int bytes;
+
+  /// Measured from the file itself (Xing frame count × 1152 / 44100 Hz).
+  final int durationMs;
+  final int surah;
+  final RecordingKind kind;
+  final RecordingRights rights;
+
+  /// Tag values as found in the file. Not proof of identity (P-19).
+  final String id3Title;
+  final String id3Artist;
+  final String alignmentAsset;
+}
+
+/// Where the recording stands on this device.
+@immutable
+sealed class RecordingStatus {
+  const RecordingStatus();
+}
+
+/// Rights don't allow it in this build (release build, testing-only rights).
+final class RecordingNotPermitted extends RecordingStatus {
+  const RecordingNotPermitted();
+}
+
+/// Not installed on this device. [expectedPath] says where a tester puts it.
+final class RecordingNotInstalled extends RecordingStatus {
+  const RecordingNotInstalled(this.expectedPath);
+
+  final String expectedPath;
+}
+
+/// A file is present but its bytes are not the original's.
+final class RecordingChecksumMismatch extends RecordingStatus {
+  const RecordingChecksumMismatch(this.actualSha256);
+
+  final String actualSha256;
+}
+
+/// Present and byte-identical to the original.
+final class RecordingReady extends RecordingStatus {
+  const RecordingReady(this.path, this.info);
+
+  final String path;
+  final RecordingInfo info;
+}

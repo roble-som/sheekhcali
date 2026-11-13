@@ -1,0 +1,487 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../app/router.dart';
+import '../../../core/calendar/date_labels.dart';
+import '../../../core/l10n/localized_digits.dart';
+import '../../../core/providers.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_typography.dart';
+import '../../../core/widgets/home_components.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../navigation/presentation/app_drawer.dart';
+import '../../navigation/presentation/drawer_back_scope.dart';
+import '../../settings/application/preferences_controllers.dart';
+import '../../tafsir_audio/application/fatiha_sync.dart';
+import '../../tafsir_audio/application/tafsir_player.dart';
+import '../../tafsir_audio/data/recording_repository.dart';
+import '../../tafsir_audio/domain/recording.dart';
+import '../../tafsir_audio/domain/span_index.dart';
+import '../../tafsir_audio/presentation/tafsir_player_bar.dart';
+import '../data/quran_text_repository.dart';
+import '../domain/quran_text_availability.dart';
+import 'widgets/ayah_action_sheet.dart';
+import 'widgets/mushaf_layout_preview.dart';
+import 'widgets/reader_app_bar.dart';
+import 'widgets/reader_overflow_menu.dart';
+import 'widgets/surah_text_view.dart';
+
+/// Quran reader (references 03–06, DESIGN_SYSTEM_SPECIFICATION §8.4 and §8.12).
+///
+/// Shows Al-Fatiha from the approved, verified source (Tanzil Uthmani 1.1,
+/// C-25) in continuous reading layout (mushaf page layout is blocked on P-24),
+/// with the Sheikh's Tafsir player and verified ayah highlighting. If the text
+/// fails verification, it falls back to the labelled layout preview and never
+/// shows unverified text.
+class QuranReaderScreen extends ConsumerStatefulWidget {
+  const QuranReaderScreen({super.key, this.surah = 1});
+
+  final int surah;
+
+  @override
+  ConsumerState<QuranReaderScreen> createState() => _QuranReaderScreenState();
+}
+
+class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _moreKey = GlobalKey();
+  int? _selectedAyah;
+  bool _chromeVisible = true;
+
+  AppLocalizations get _l10n => AppLocalizations.of(context);
+
+  SpanIndex? get _index => ref.read(fatihaSpanIndexProvider).value;
+
+  /// The ayah the user last asked to hear explained.
+  int? _tappedAyah;
+
+  /// Plays the Sheikh's **explanation** of [ayah] from the start of its
+  /// verified segment (switching segments if something is already playing).
+  /// Never plays unrelated audio: with no verified explanation it says so.
+  Future<bool> _playExplanationFor(int ayah) async {
+    setState(() => _tappedAyah = ayah);
+    final recording = ref.read(fatihaRecordingProvider).value;
+    if (recording is! RecordingReady) {
+      showUnavailable(context, _l10n.unavailableRecording);
+      return false;
+    }
+    final span = _index?.explanationForAyah(ayah);
+    if (span == null) {
+      showUnavailable(
+        context,
+        _l10n.noReviewedExplanation(
+          localizeDigits('$ayah', Localizations.localeOf(context)),
+        ),
+      );
+      return false;
+    }
+    final player = ref.read(tafsirPlayerProvider);
+    if (player.current.phase == TafsirPhase.idle ||
+        player.current.phase == TafsirPhase.error) {
+      await player.load(
+        path: recording.path,
+        title: _l10n.tafsirTitle,
+        artist: _l10n.speakerName,
+      );
+      if (player.current.phase == TafsirPhase.error) return false;
+    }
+    await player.seek(Duration(milliseconds: span.startMs));
+    await player.play();
+    return true;
+  }
+
+  void _onAyahTap(int ayah) => _playExplanationFor(ayah);
+
+  Future<void> _onAyahLongPress(SurahText surah, int ayah) async {
+    HapticFeedback.selectionClick();
+    setState(() => _selectedAyah = ayah);
+    final action = await showAyahActionSheet(context);
+    if (!mounted) return;
+    setState(() => _selectedAyah = null);
+    if (action == null) return;
+    final locale = Localizations.localeOf(context);
+    switch (action) {
+      case AyahAction.copy:
+        final a = surah.ayah(ayah)!;
+        final reference = _l10n.ayahReference(
+          locale.languageCode == 'ar'
+              ? surah.nameArabic
+              : surah.nameTransliterated,
+          localizeDigits('${surah.number}', locale),
+          localizeDigits('$ayah', locale),
+        );
+        // The exact stored text, then its reference: never re-typed text.
+        await Clipboard.setData(ClipboardData(text: '${a.text}\n$reference'));
+        if (mounted) showUnavailable(context, _l10n.copiedAyah(reference));
+      case AyahAction.playTafsir:
+        await _playExplanationFor(ayah);
+      case AyahAction.playToEnd:
+      case AyahAction.playRecitationAndTafsir:
+        showUnavailable(context, _l10n.unavailableRecitation);
+      case AyahAction.tafsir:
+        showUnavailable(context, _l10n.unavailableTafsirText);
+      case AyahAction.addNote:
+      case AyahAction.addItqan:
+      case AyahAction.bookmark:
+      case AyahAction.share:
+        showUnavailable(context, _l10n.unavailableFeature);
+    }
+  }
+
+  Future<void> _onMore() async {
+    final dark = ref.read(readerDarkProvider);
+    final action = await showReaderOverflowMenu(context, dark: dark);
+    if (!mounted || action == null) return;
+    switch (action) {
+      case ReaderMenuAction.toggleTheme:
+        await ref.read(readerDarkProvider.notifier).set(dark: !dark);
+      case ReaderMenuAction.search:
+      case ReaderMenuAction.controls:
+      case ReaderMenuAction.goToPage:
+        showUnavailable(context, _l10n.unavailableFeature);
+    }
+  }
+
+  void _showPendingInfo() {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(_l10n.quranTextPendingTitle),
+        content: Text(_l10n.quranTextPendingBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(MaterialLocalizations.of(context).okButtonLabel),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSource(SurahText surah) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => QuranSourceDialog(surah: surah),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = ref.watch(readerDarkProvider);
+    final text = ref.watch(surahTextProvider(widget.surah));
+    final index = ref.watch(fatihaSpanIndexProvider).value;
+    final playback = ref.watch(tafsirPlaybackProvider).value;
+    final labels = DateLabels.build(
+      now: ref.watch(clockProvider)(),
+      locale: Localizations.localeOf(context),
+      l10n: _l10n,
+      converter: ref.watch(hijriConverterProvider),
+    );
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final chromeDuration = reduceMotion
+        ? Duration.zero
+        : const Duration(milliseconds: 200);
+
+    // Highlight: the user's selection wins; otherwise the verified span playing
+    // now. Derived from the position alone, so seeking can't leave a stale mark.
+    final marks = <int, AyahMark>{};
+    if (playback != null && playback.phase != TafsirPhase.idle) {
+      final span = activeSpanAt(index, playback.position.inMilliseconds);
+      if (span != null) {
+        for (final n in span.ayahs) {
+          marks[n] = markForKind(span.kind);
+        }
+      }
+    }
+    final tapped = _tappedAyah;
+    if (tapped != null && marks.isEmpty) marks[tapped] = AyahMark.selected;
+    if (_selectedAyah != null) marks[_selectedAyah!] = AyahMark.selected;
+
+    final verified = text.value is QuranTextVerified
+        ? (text.value! as QuranTextVerified).surah
+        : null;
+
+    return Theme(
+      data: AppTheme.reader(Theme.of(context), dark: dark),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light.copyWith(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: ReaderColors.bar,
+        ),
+        child: DrawerBackScope(
+          scaffoldKey: _scaffoldKey,
+          builder: (context, onDrawerChanged) => Scaffold(
+            key: _scaffoldKey,
+            onDrawerChanged: onDrawerChanged,
+            drawerScrimColor: kReaderScrim,
+            drawer: const AppDrawer(),
+            body: Column(
+              children: [
+                AnimatedSize(
+                  duration: chromeDuration,
+                  child: _chromeVisible
+                      ? ReaderAppBar(
+                          title: labels.hijriPadded ?? labels.gregorian,
+                          onMenu: () => _scaffoldKey.currentState?.openDrawer(),
+                          onBookmark: () => showUnavailable(
+                            context,
+                            _l10n.unavailableFeature,
+                          ),
+                          onTranslation: () => showUnavailable(
+                            context,
+                            _l10n.unavailableTranslation,
+                          ),
+                          onIndex: () => context.push(AppRoutes.quranIndex),
+                          onAutoScroll: () => showUnavailable(
+                            context,
+                            _l10n.unavailableFeature,
+                          ),
+                          moreButtonKey: _moreKey,
+                          onMore: _onMore,
+                        )
+                      : SizedBox(
+                          width: double.infinity,
+                          height: MediaQuery.paddingOf(context).top,
+                          child: const ColoredBox(color: ReaderColors.bar),
+                        ),
+                ),
+                Expanded(
+                  child: text.when(
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
+                    error: (e, s) => _Preview(
+                      dark: dark,
+                      selected: _selectedAyah,
+                      onInfo: _showPendingInfo,
+                      onToggleChrome: () =>
+                          setState(() => _chromeVisible = !_chromeVisible),
+                      onLongPress: (n) {},
+                    ),
+                    data: (availability) => switch (availability) {
+                      QuranTextVerified(:final surah) => GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () =>
+                            setState(() => _chromeVisible = !_chromeVisible),
+                        child: Center(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 560),
+                              child: SurahTextView(
+                                surah: surah,
+                                dark: dark,
+                                marks: marks,
+                                onAyahTap: _onAyahTap,
+                                onAyahLongPress: (n) =>
+                                    _onAyahLongPress(surah, n),
+                                onSourceTap: () => _showSource(surah),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      QuranTextUnavailable() => _Preview(
+                        dark: dark,
+                        selected: _selectedAyah,
+                        onInfo: _showPendingInfo,
+                        onToggleChrome: () =>
+                            setState(() => _chromeVisible = !_chromeVisible),
+                        onLongPress: (n) async {
+                          setState(() => _selectedAyah = n);
+                          await showAyahActionSheet(context);
+                          if (!mounted) return;
+                          setState(() => _selectedAyah = null);
+                          showUnavailable(
+                            this.context,
+                            _l10n.unavailableQuranText,
+                          );
+                        },
+                      ),
+                    },
+                  ),
+                ),
+                if (verified != null && verified.number == 1)
+                  TafsirPlayerBar(index: index, selectedAyah: _tappedAyah),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The labelled layout preview, used only when no verified text is available.
+class _Preview extends StatelessWidget {
+  const _Preview({
+    required this.dark,
+    required this.selected,
+    required this.onInfo,
+    required this.onToggleChrome,
+    required this.onLongPress,
+  });
+
+  final bool dark;
+  final int? selected;
+  final VoidCallback onInfo;
+  final VoidCallback onToggleChrome;
+  final ValueChanged<int> onLongPress;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onToggleChrome,
+      child: Stack(
+        children: [
+          Align(
+            alignment: const Alignment(0, -0.246),
+            child: MushafLayoutPreview(
+              dark: dark,
+              selectedAyah: selected,
+              onAyahLongPress: onLongPress,
+            ),
+          ),
+          PositionedDirectional(
+            top: 12,
+            start: 0,
+            end: 0,
+            child: Center(
+              child: _PendingTextNotice(dark: dark, onInfo: onInfo),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Provenance and verification details for the Quran text on screen.
+class QuranSourceDialog extends StatelessWidget {
+  const QuranSourceDialog({super.key, required this.surah});
+
+  final SurahText surah;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final styles = context.text;
+    final s = surah.source;
+    Widget row(String label, String value) => Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: styles.listSubtitle.copyWith(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 2),
+          Text(value, style: styles.listTitle.copyWith(fontSize: 14)),
+        ],
+      ),
+    );
+    return AlertDialog(
+      title: Text(l10n.sourceDialogTitle),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            row(
+              l10n.sourceLabel,
+              l10n.sourceValue(s.name, s.script, s.version),
+            ),
+            row(l10n.linkLabel, s.homepage),
+            row(l10n.numberingLabel, l10n.numberingHafsBasmala),
+            row(l10n.checksLabel, l10n.checksText),
+            row(
+              l10n.reviewLabel,
+              surah.reviewerSignedOff
+                  ? l10n.reviewDone(surah.reviewer!, surah.reviewedAt!)
+                  : l10n.reviewPending,
+            ),
+            ExpansionTile(
+              tilePadding: EdgeInsets.zero,
+              title: Text(
+                l10n.licenceLabel,
+                style: styles.listTitle.copyWith(fontSize: 14),
+              ),
+              children: [
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Text(
+                    s.licence,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      height: 1.35,
+                      fontFamily: AppFonts.latin,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            await Clipboard.setData(ClipboardData(text: s.homepage));
+            if (context.mounted) showUnavailable(context, l10n.linkCopied);
+          },
+          child: Text(l10n.copyLink),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+        ),
+      ],
+    );
+  }
+}
+
+/// A persistent, honest label: the preview isn't Quran text.
+class _PendingTextNotice extends StatelessWidget {
+  const _PendingTextNotice({required this.dark, required this.onInfo});
+
+  final bool dark;
+  final VoidCallback onInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final styles = context.text;
+    final fg = dark ? Colors.white : ReaderColors.bar;
+    return Material(
+      color: dark ? const Color(0x2EFFFFFF) : const Color(0x1420474C),
+      shape: const StadiumBorder(),
+      child: InkWell(
+        customBorder: const StadiumBorder(),
+        onTap: onInfo,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 36),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(12, 6, 10, 6),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.info_outline, size: 16, color: fg),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    l10n.quranTextPendingTitle,
+                    style: styles.noticeTitle.copyWith(color: fg),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Al-Fatiha Tafsir Review</title>
+<style>
+:root{--bg:#F4F4F2;--ink:#1A1D1B;--muted:#5F615E;--card:#fff;--teal:#20474C;--green:#173D24;--gold:#B99645;--ok:#2E6B47;--warn:#8A6A1F;--bad:#A63F3F;--line:#E2E2E2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+header{background:var(--teal);color:#fff;padding:18px 20px}
+header h1{margin:0 0 4px;font-size:20px}
+header p{margin:0;opacity:.85;font-size:13px}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.panel{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+label.f{font-size:12px;color:var(--muted);display:block;margin-bottom:2px}
+input[type=text]{font:inherit;padding:6px 8px;border:1px solid #CFD3CE;border-radius:8px}
+input.t{width:92px;font-variant-numeric:tabular-nums}
+button{font:inherit;font-size:13px;border:1px solid #CFD3CE;background:#fff;border-radius:8px;padding:5px 9px;cursor:pointer}
+button.p{background:var(--green);color:#fff;border-color:var(--green)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.status{font-weight:600}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border-radius:99px;padding:3px 10px;font-size:12px;font-weight:600;border:1px solid}
+.chip.ok{background:#E6F2EA}.chip.warn{background:#FBF3E1}.chip.none{color:#777;border-color:#ccc}
+.cand{border-inline-start:5px solid #ccc}
+.cand.approved{border-inline-start-color:var(--ok)}.cand.rejected{border-inline-start-color:var(--bad);opacity:.7}
+.cand h3{margin:0 0 6px;font-size:16px}
+.conf{font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px;margin-inline-start:6px;vertical-align:2px}
+.conf.high{background:#E6F2EA;color:var(--ok)}.conf.medium{background:#FBF3E1;color:var(--warn)}.conf.low{background:#F8E5E5;color:var(--bad)}
+.quran{font-family:'Amiri','Noto Naskh Arabic',serif;font-size:22px;direction:rtl;text-align:right;line-height:1.9;margin:4px 0 8px}
+.ev{font-size:13px;color:#333}
+details{margin-top:6px}summary{cursor:pointer;font-size:13px;color:var(--muted)}
+.draft{font-size:12px;color:#555;direction:rtl;text-align:right;background:#FAFAF7;border:1px dashed #ccc;border-radius:8px;padding:8px;margin-top:4px}
+.controls{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+.now{font-variant-numeric:tabular-nums;font-weight:600}
+code{background:#EEF2F1;padding:2px 6px;border-radius:6px;font-size:12.5px;word-break:break-all}
+.note{font-size:13px;color:var(--muted)}
+@media (max-width:640px){main{padding:10px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Al-Fatiha · Sheikh's Tafsir — review</h1>
+  <p>Candidate segments are AI-assisted guesses. Listen, correct, and approve. Only what you approve and import with <code>--sign-off</code> is used by the app.</p>
+</header>
+<main>
+  <section class="panel">
+    <div class="row">
+      <div><label class="f">1 · Original recording (stays on this computer)</label><input type="file" id="file" accept=".mp3,audio/mpeg"></div>
+      <div class="status" id="hash">No file loaded</div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div><label class="f">2 · Reviewer (your full name)</label><input type="text" id="reviewer" size="28" placeholder="Full name"></div>
+      <div class="note">Your edits are saved in this browser as you work.</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="row" style="justify-content:space-between">
+      <strong>Explanation coverage</strong><span class="note">An ayah is ready when an approved <em>explanation</em> covers it.</span>
+    </div>
+    <div class="chips" id="coverage" style="margin-top:8px"></div>
+  </section>
+
+  <section class="panel">
+    <div class="row">
+      <strong>Player</strong><span class="now" id="now">—</span>
+      <button id="stop" disabled>■ Stop</button>
+      <span class="note" id="playing"></span>
+    </div>
+  </section>
+
+  <div id="list"></div>
+  <div class="panel"><button id="add">+ Add a span</button></div>
+
+  <section class="panel">
+    <strong>3 · Export and sign off</strong>
+    <p class="note" id="issues"></p>
+    <div class="row">
+      <button class="p" id="export">Download approved labels</button>
+      <button id="record">Download full review record (JSON)</button>
+    </div>
+    <p class="note">Then, from the project folder:</p>
+    <p><code id="cmd"></code></p>
+  </section>
+</main>
+<audio id="audio" preload="auto"></audio>
+<script>
+const DATA = {"recordingSha256":"3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f","recordingDurationMs":2912000,"ayahs":["بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ","ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ","ٱلرَّحْمَٰنِ ٱلرَّحِيمِ","مَٰلِكِ يَوْمِ ٱلدِّينِ","إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ","ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ","صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ"],"candidates":[{"id":"intro-opening","kind":"intro","ayahs":[],"startMs":0,"endMs":25000,"confidence":"high","evidence":"Arabic opening du'a: isti'adha, basmala, hamdala, salawat (0:00–0:16), then isti'adha before the recitation (0:21).","transcript":"اعوذ بالله من السيضان الرجيم / اسم الله الرحمن الرحيم الحمد لله رب العالمين / وصلاة والسلام على أشرف المرسلين سيدنا محمد وعلى آله وصحبه أجمعين / اعوذ بالله من السيضان الرجيم","origin":"ai-assisted"},{"id":"recite-1","kind":"reading","ayahs":[1],"startMs":25000,"endMs":29000,"confidence":"high","evidence":"Recitation of the surah: basmala.","transcript":"اسم الله الرحمن الرحيم","origin":"ai-assisted"},{"id":"recite-2","kind":"reading","ayahs":[2],"startMs":29000,"endMs":33000,"confidence":"high","evidence":"Recitation: <bdi dir=\"rtl\">ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ<\/bdi>","transcript":"الحمد لله رب العالمين / الرحمن الرحيم","origin":"ai-assisted"},{"id":"recite-3","kind":"reading","ayahs":[3],"startMs":33000,"endMs":36060,"confidence":"high","evidence":"Recitation: <bdi dir=\"rtl\">ٱلرَّحْمَٰنِ ٱلرَّحِيمِ<\/bdi>","transcript":"","origin":"ai-assisted"},{"id":"recite-4","kind":"reading","ayahs":[4],"startMs":36060,"endMs":38760,"confidence":"high","evidence":"Recitation: <bdi dir=\"rtl\">مَٰلِكِ يَوْمِ ٱلدِّينِ<\/bdi>","transcript":"مالك يوم الجين","origin":"ai-assisted"},{"id":"recite-5","kind":"reading","ayahs":[5],"startMs":38760,"endMs":43640,"confidence":"high","evidence":"Recitation: <bdi dir=\"rtl\">إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ<\/bdi>","transcript":"إياك نعبد وإياك نستعين","origin":"ai-assisted"},{"id":"recite-6","kind":"reading","ayahs":[6],"startMs":43640,"endMs":47600,"confidence":"high","evidence":"Recitation: <bdi dir=\"rtl\">ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ<\/bdi>","transcript":"إهدن الصراط المستفين","origin":"ai-assisted"},{"id":"recite-7","kind":"reading","ayahs":[7],"startMs":47600,"endMs":57740,"confidence":"high","evidence":"Recitation: <bdi dir=\"rtl\">صِرَٰطَ ٱلَّذِينَ … وَلَا ٱلضَّآلِّينَ<\/bdi>","transcript":"الصراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضولين","origin":"ai-assisted"},{"id":"intro-lesson","kind":"intro","ayahs":[],"startMs":57740,"endMs":667900,"confidence":"low","evidence":"Basmala at 0:59, then mostly Somali speech the draft cannot read (\"<bdi dir=\"rtl\">تفسير<\/bdi>…\" at 1:09). Probably the lesson introduction; content not identified.","transcript":"اسم الله الرحمن الرحيم / فهم جده جل إنه إن شاء الله تفسيرك غورانكة كريمكة ها / تفسيرك غورانكة إلا الوحن وحكوفة سيرين والله قد يصوم عالية / والله قد يمك عربك آن آهين / تفسيرك آت عام الأرواية بالمعنى / اوه الولنجره اوه كاله و احاديثة با / نبي عليك و سلام بل ان يعنيه با لمركا ستلافضي نبي اوه الولنجره معنى للجي مادو / اوه الولنجره اوه كاله و يمركا سلقاكا كاله لغو فشرنا / اوه احاديك اوه اعيبه و اطاس اوه كاله / قرآن كمركة اللي في ذيسو مؤجز بوها معنوه هنا دي اللي في يا مؤجز بوه راعة هاي / مركة اللي قد بوليكك عربيري بل ويمركة بقلك وبقل المياه لما هل يكرم ومع ذلك وحا ضرورها / ويحاجدي يباهدنا أي كانتين …","origin":"ai-assisted"},{"id":"intro-surah","kind":"intro","ayahs":[],"startMs":667900,"endMs":1434000,"confidence":"medium","evidence":"\"<bdi dir=\"rtl\">بسم الله الرحمن الرحيم سورة الفاتحة<\/bdi>\" at 11:12, then \"<bdi dir=\"rtl\">السبع المثاني والقرآن العظيم<\/bdi>\" (12:16–12:51), \"<bdi dir=\"rtl\">سورة الحمد<\/bdi>\" (13:35), \"<bdi dir=\"rtl\">الرقية<\/bdi>\" (16:12): names and virtues of the surah, not one ayah.","transcript":"إشعالله إشعالله وانا بيغيلينا بسم الله / بسم الله الرحمن الرحيم صورة الفاتحة / سورة دفاة حالة و سورة ده برآنك يبغل يأفر يطبنك و سورة ده أبوه الرئيسة أح / و سورة ده برآنك كريمك أحاق / أبوه وينك بلن بلام أبوه فاديك أبوه نبي سعدي صلى الله عليه وسلم / وينك أم فاديك أسي سورة ده فاة حالة معها ايه غرانك خد فاديك / اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه اوه…","origin":"ai-assisted"},{"id":"overview","kind":"intro","ayahs":[],"startMs":1434000,"endMs":1558900,"confidence":"medium","evidence":"Ayahs 1–7 quoted in order with short comments (23:54 ayahs 1–4, 24:12 \"<bdi dir=\"rtl\">أنعمت عليهم من النبيين<\/bdi>\", 25:28 ayah 7, 25:36 \"<bdi dir=\"rtl\">مكة<\/bdi>\"): an overview of the whole surah. Reviewer may prefer to class it as a brief explanation of ayahs 1–7.","transcript":"بسم الله الرحمن الرحيم. الحمد لله رب العالمي. الرحمن الرحيم. / مالك يوم الدير. سوصفا سيرا يتمارك. يا الله جل الجلاله ويؤمننا. / سؤالك بالله بتماركي. هيا نبويك كذلك. واقفوي شاركي. شراض / الذين انعمت عليهم. كلول اين حيتك? انعمت عليهم من النبيين / والشديثين والشهداء والصالحين. نبويك. هيا قيامري. / مالك يوم الدين. مالك يوم الدين. وبقى. الان قيامضه إلا كما يسواج مهي. / وانتو منه بعد مكس. مالك أودا بيقيامضه. ديوم الآخر. وقايا دي لبالك يوم / الدين. إذا ذي بادئ إلهي بأنه أبوري وما خلق في الجنة والإسة إلا ليعبدون. / وإلهي انه بغر لها ايه كن عبوزه. سروقي وانا كنا ايه وانا مركز انا دي / إلهي اسكل سرده ود…","origin":"ai-assisted"},{"id":"expl-1","kind":"explanation","ayahs":[1],"startMs":1558900,"endMs":1980000,"confidence":"medium","evidence":"Dense quotations of the basmala with its uses: 26:00 \"<bdi dir=\"rtl\">قولوا … بسم الله<\/bdi>\", 27:08 \"<bdi dir=\"rtl\">باسم الله<\/bdi>\", 29:35 Sulayman's letter (<bdi dir=\"rtl\">إنه من سليمان وإنه بسم الله الرحمن الرحيم<\/bdi>), 30:43 \"<bdi dir=\"rtl\">بسم الله وعلى ملة رسول الله<\/bdi>\", 31:40 \"<bdi dir=\"rtl\">اذكر اسم الله وكل بيمينك<\/bdi>\".","transcript":"اسم الله الرحمن الرحيم / قولو دهان ومينينتي باسم الله الرحمن الرحيم / هذا أعلم ذو قدره / قولو دهان ومينينتي باسم الله / مجعى إلهي بانكو باللهبن / شك سول بيهلا بيهلا بيهلا بيهلا بينكتاب الله / هاي هاي هاي هاي هاي هاي هاي هاي هاي هاي هاي هاي هاي / كان نحريساً هي نحريسي سأخرى ومؤمنين تكوخاسية للمسريكين تكبيري / اسمي جائلا هي بان شر جنان جدا جلا هي أنا جوجر جارساً / أنا جوجه اسلسها حيزين أنا جوجه براكيساً / أيام كبلا بمعنى حساسه بالمكافون نقن / واخرى اللي بيغوه العليسلات والسلام / ملا سؤال كريا ايوانودي لا يوالبق عظم اوه. هدوك الانكيسي باسم الله / الرحمن الرحيم كبلا. هدوك الانكيسي ايوانودي كريا ال…","origin":"ai-assisted"},{"id":"expl-2","kind":"explanation","ayahs":[2],"startMs":1980000,"endMs":2267100,"confidence":"low","evidence":"New basmala at 33:00, then \"<bdi dir=\"rtl\">الحمد لله … رب العالمين … الرحمن … الرحيم … مالك يوم الدين<\/bdi>\" glossed (33:13–33:35), then a long passage on the name <bdi dir=\"rtl\">الله<\/bdi> and other names (<bdi dir=\"rtl\">قاهر، قوي، عزيز، اللطيف، الرحمن<\/bdi>, 33:36–37:20), then \"<bdi dir=\"rtl\">الحمد لله … رب العالمين، العالمين<\/bdi>\" (37:28). The name passage might instead belong to the basmala (ayah 1).","transcript":"هذي الحندره والوثى جسيه / الحندر الله مهدي الله باستراب الالهي / اللي هي رب العالمين / أعلمين تربي بوضعه / اللي هي الرحمن نحري سجود نحري سنهي / اللي هي الرحيم نحري سجار كان نحري سنهي / اللي هي مالكي يوم الدين مالكي يوم الدين / مالكي كتس الروفة هي أمام مالكي يوم الدين / مالكي يوم الدين مالكي يوم الجزاء / بقر شيد آهار / والله استعمل هذا الاسكال. الى ان اكتم واشفات الى الهيوة والصعبة. / اسماض الى الهيوة. الى الهيوة هنقل موضوع. / لبقى قيبوة. تقل اللى فيه معنى هذا. لبقى قيبوة. بيسوء صور الله عبنى / ينقل في الاسق الصراحة الى الهيوة. اسم الى الهيوة اجلين. / ايا اسم الى الهيوة اجمال. لبدا معاوذ كلكين …","origin":"ai-assisted"},{"id":"expl-3","kind":"explanation","ayahs":[3],"startMs":2267100,"endMs":2283100,"confidence":"low","evidence":"Short glosses of \"<bdi dir=\"rtl\">الرحمن<\/bdi>\" / \"<bdi dir=\"rtl\">الرحيم<\/bdi>\" (37:51–38:01). Ar-Rahman and ar-Rahim may also have been explained inside the basmala or name passages; very short candidate.","transcript":"ماليك العالمين / كل اي اضمه وهيه / اللي هي الارضه احماني / نحريس الروض نحريس النهي / اللي هي الارضه احيمي / نحريس او اي جاكن نحريس النهي / وهذا الارضه الرحمن الرحمن الرسوش يأتي بس ملده / وهل لو سأقل لي","origin":"ai-assisted"},{"id":"expl-2-4","kind":"explanation","ayahs":[2,3,4],"startMs":2283100,"endMs":2361500,"confidence":"medium","evidence":"Ayahs 2–4 together: <bdi dir=\"rtl\">رب العالمين / الرحمن الرحيم / مالك يوم الدين<\/bdi> and \"<bdi dir=\"rtl\">الخوف والرجاء<\/bdi>\" (38:03–38:55), then the hadith qudsi \"<bdi dir=\"rtl\">قسمت الصلاة بيني وبين عبدي … الحمد لله رب العالمين … الرحمن الرحيم … مالك يوم الدين<\/bdi>\" (38:55–39:27).","transcript":"رب العالمين / عرشض ايه هي بده قدر ايه / بقى كنا وحالي الوحوضة اللي اشكد بها الهيه / بل الماليك يومي دينا و هدي جدنا / اللي بتكلعنا ويسوصه وتابعي لها. سباركه. اللي انخوي الرحمة / دقيق يرنا حريسته يتريده يجبال كلاهي. اللي بجربة لشيء. شم الله الرحمن الرحي. / يقر الرحمن الرحي. كوي للهي بدقيه اول دي شغلهي. ربي العالمين. / مالكي يوم الجين. هاي يجرى اللي بجربة لشيء. الوضع مكاس. مرضوط / بعضبكتين لغير الحقيق. الخوف والرجاء هاي هجلهي. كجراهي / اين سمعين? حق الجيل الرحمد الهي ويردها الهي. دعفوا الهي رجئ. حق النعصوه يبدى / الهي ويعقافك عادي سكع عصوه. وخيف الموضوع مكاف جرب صلاة. / بر رحمان الرحيم. ولذا صور…","origin":"ai-assisted"},{"id":"expl-4","kind":"explanation","ayahs":[4],"startMs":2361500,"endMs":2471800,"confidence":"high","evidence":"\"<bdi dir=\"rtl\">مالك يوم الدين<\/bdi>\" repeated, \"<bdi dir=\"rtl\">ملك/مالك<\/bdi>\" (39:43), \"<bdi dir=\"rtl\">يوم الجزاء<\/bdi>\" (39:57), \"<bdi dir=\"rtl\">وما أدراك ما يوم الدين … يوم لا تملك نفس لنفس شيئا والأمر يومئذ لله<\/bdi>\" (40:01–40:18), \"<bdi dir=\"rtl\">لمن الملك اليوم<\/bdi>\" (40:26).","transcript":"تشغي سايا. مالك يوم الدين. أما مالك يوم الدين. مالك يوم الدين. / مالي انتقلي يا مضى. بقر كيلها. وقوم كناتها صبقر معها. وهو يهرد باللقين هدى بقر فهدى بقر هدى بقر فهدى بقر فهدى بقر. واشي ملاحوينك / كدى ملاحوينك بين بالشاركة واشي ملاحوينك زنات. ماركة اتشهغل كفت المجهة وياراته. سابدر تيبان ملكي يوم الدين. / ملكي يوم الدين. ليولي هاي بالي. قلتون ملكي يوم الدين. اما ملكي يوم الدين. مجداني عقدي ادون كي بوائي شرطي. / مركز مارك يوم الدين يوم الجزاء / ما فيه لا يوجد / وما أدراك ما يوم الدين / ثم ما أدراك ما يوم الدين / ما قوج يوم الدين وحيثة / تبكي الشجرة يعنى / يوحى ماشا جرأة / يوم اللى تملك نفسه لنفس …","origin":"ai-assisted"},{"id":"recap-2-4","kind":"explanation","ayahs":[2,3,4],"startMs":2471800,"endMs":2510800,"confidence":"low","evidence":"Recap \"<bdi dir=\"rtl\">رب العالمين … الرحمن … الرحيم<\/bdi>\" (41:11) before ayah 5. Could be merged into ayah 5's lead-in or dropped.","transcript":"اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظة اللحظ / عليك الهوطة الى تصوير. مكتب جلوة جسب الدين. مكتب حالنا اي شاء. اي ياك اعدي امبان","origin":"ai-assisted"},{"id":"expl-5","kind":"explanation","ayahs":[5],"startMs":2510800,"endMs":2740700,"confidence":"high","evidence":"\"<bdi dir=\"rtl\">إياك نعبد … وإياك نستعين<\/bdi>\" quoted repeatedly (41:56–42:36, 42:54), hadith \"<bdi dir=\"rtl\">حق الله على العباد أن يعبدوه ولا يشركوا به شيئا<\/bdi>\" (45:23–45:33), \"<bdi dir=\"rtl\">إياك نعبد … وإياك نستعين<\/bdi>\" (45:33).","transcript":"نعبدو. الله يوكو عبوزين. الله تلمامها الله هو. هذي لجوك ايه من / مخنج اي ياك اعدي امبان نعبدو. اعدي امبان كعابوزين. اي ياك / نعبدو. مبذول بيقى لسوه المري. وجه درى لغربه. وحوية كري تخصيص. / وحوية حصري بيقى ليلة. الا تحصري بيقى. اي ياك اعدي امبان. انا / إياك عذيك أمبان نعبد كعان العابدينة / اتكلم العابدينة / اتكلم العابدينة / اتكلم العابدينة / إياك معنى مين فاديسنا دي لورنها / اتكلم العابدينة / اتكلم العابدينة / إياك عذيك أمبان نعبد كعان العابدينة / عليك توكلنا وإليك أنظنا وإليك المسكر / وسع صفنة / عليك عذيك أمكورك / وإليك أدقى كليا حجاز أمبان على بلا أسر وإليك حجاز كلي أمبي ويألم سير وهذه / ألا…","origin":"ai-assisted"},{"id":"expl-6","kind":"explanation","ayahs":[6],"startMs":2740700,"endMs":2827100,"confidence":"low","evidence":"No clear quotation of \"<bdi dir=\"rtl\">اهدنا<\/bdi>\" found, but 46:10–46:32 discusses \"<bdi dir=\"rtl\">الصراط … دين الإسلام … وأن هذا صراطي مستقيما فاتبعوه ولا تتبعوا السبل<\/bdi>\". Start and end are the least certain of all.","transcript":"مكاس يولى إلهي هالا بيني وبين عدى وليعجي ما ساته / إن تقدم بيسوء دعا ليه وقاسي فاتي إلهي أصوشة شاك / وهادن إلهي أسكوب بيهن بيهن ستك / واتي إلهي أذنبانك وعابضي / واتي إلهي أذنبان جرغار كويديسان هاتك ويجرغار كتن مجروء / هلا هونة هنون. الصراحة بجدتي نجو هنون. وجدتوا وضلوا وين اللام يقصل / كاله يوهل لمتها. وضلوا الشارع ويطلوا هي يا صراحة دائرة. دين / اسلام كنا الصراحة صورة. يعني يبقى لما كان يوحى دي هاي اوقوية / لأد اي رهي ويوعدي. وهذا صراحة مستظيما فتبعوظ ولا فتبعوظ / السمونة. يباريك اللي عادينا عادينا عادينا عادينا عادينا عادينا عادينا عادينا عادينا. وشينا موت المنكم بحية حديثك يباريك السنانك. و…","origin":"ai-assisted"},{"id":"expl-7","kind":"explanation","ayahs":[7],"startMs":2827100,"endMs":2912000,"confidence":"medium","evidence":"\"<bdi dir=\"rtl\">غير المغضوب عليهم<\/bdi>\" with \"<bdi dir=\"rtl\">اليهود<\/bdi>\" (47:32–47:57), \"<bdi dir=\"rtl\">ولا الضالين … النصارى<\/bdi>\" (48:05–48:24) until the end. Start uncertain between 47:07 and 47:32 (no draft text in between).","transcript":"قول الهي والله هنوني انا امتاز ان امشى عليهم كرقوضه. غير المغضوب عليهم. / ايه شراب غير المغضوب عليهم. كوي ام او كرقوض الله عراضي. او نلو يهوذ بكوصة / شرى يهوذ اهه. قول انك بحضيه مبتى فباقوا بغضب على غضب. ايه. قول انك / ما لن بلن بغضب يهوذ بلن ما كي انه ليه عراضيه. لوس اروا يبال. ايه فباقوا / بغضب على غبب ويمكن كوي مغضب عليه كهوي يهوده. موضبه ديانهين. / ايه ولا الضالين غير سراب الضالين. كوي بادي يوبي. او النسار احا وضضو ديانهين. / اللي ايه جنب مبتة غضله من قبله. واضله كثيرا. وضمه عن سوي سبيل. / الهي او يدي واذنك النسار. كوي اعبال يسيء النسار انا وضضو ديانهين. / الله ضوضًا عصب إلهي ونغلّي حي ونغ…","origin":"ai-assisted"}]};
+const SR = 44100, SPF = 1152;
+const KEY = 'fatiha-review:' + DATA.recordingSha256;
+let bytes = null, frameOffsets = null, fileOk = false, stopAt = null, segStart = 0, objUrl = null;
+const audio = document.getElementById('audio');
+
+// ---------- state ----------
+let state = (() => {
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.spans) return s; } catch (e) {}
+  return { reviewer: '', spans: DATA.candidates.map(c => ({...c, decision: 'undecided'})) };
+})();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+// ---------- time helpers ----------
+function fmt(ms) { const s = ms / 1000, m = Math.floor(s / 60); return m + ':' + (s - m * 60).toFixed(1).padStart(4, '0'); }
+function parse(t) { const m = String(t).trim().match(/^(\d+):(\d{1,2}(?:\.\d+)?)$/); return m ? Math.round((+m[1] * 60 + +m[2]) * 1000) : NaN; }
+function parseAyahs(t) {
+  const out = []; const s = String(t).trim(); if (!s) return out;
+  for (const part of s.split(/\s*,\s*/)) {
+    const r = part.match(/^(\d)\s*-\s*(\d)$/);
+    if (r) { for (let n = +r[1]; n <= +r[2]; n++) out.push(n); }
+    else if (/^\d$/.test(part)) out.push(+part); else return null;
+  }
+  return out.every(n => n >= 1 && n <= 7) ? out : null;
+}
+function ayahText(list) { return list.map(n => DATA.ayahs[n - 1] + ' ﴿' + '٠١٢٣٤٥٦٧٨٩'[n] + '﴾').join(' '); }
+
+// ---------- MP3 frame index: exact segment playback, independent of browser seeking ----------
+const BR = [0,32,40,48,56,64,80,96,112,128,160,192,224,256,320,0];
+function indexFrames(buf) {
+  const b = new Uint8Array(buf); let p = 0;
+  if (b[0] === 0x49 && b[1] === 0x44 && b[2] === 0x33) p = 10 + ((b[6] << 21) | (b[7] << 14) | (b[8] << 7) | b[9]);
+  const offs = []; let first = true;
+  while (p + 4 <= b.length) {
+    if (b[p] === 0xFF && (b[p + 1] & 0xFE) === 0xFA) {
+      const br = BR[b[p + 2] >> 4], pad = (b[p + 2] >> 1) & 1;
+      if (br && ((b[p + 2] >> 2) & 3) === 0) {
+        const size = Math.floor(144 * br * 1000 / SR) + pad;
+        // Skip the Xing/Info header frame: decoders treat it as metadata.
+        const tag = String.fromCharCode(...b.slice(p + 36, p + 40));
+        if (!(first && (tag === 'Xing' || tag === 'Info'))) offs.push(p);
+        first = false; p += size; continue;
+      }
+    }
+    p++;
+  }
+  offs.push(b.length);
+  return offs;
+}
+function frameAt(ms) { return Math.max(0, Math.min(frameOffsets.length - 2, Math.floor(ms / 1000 * SR / SPF))); }
+function play(startMs, endMs, label) {
+  if (!fileOk) { alert('Load the original recording first (step 1).'); return; }
+  const f0 = frameAt(startMs), f1 = Math.min(frameOffsets.length - 1, frameAt(endMs) + 2);
+  const blob = new Blob([bytes.slice(frameOffsets[f0], frameOffsets[f1])], {type: 'audio/mpeg'});
+  if (objUrl) URL.revokeObjectURL(objUrl);
+  objUrl = URL.createObjectURL(blob);
+  segStart = f0 * SPF / SR * 1000; stopAt = endMs;
+  audio.src = objUrl; audio.play();
+  document.getElementById('stop').disabled = false;
+  document.getElementById('playing').textContent = label + ' · ' + fmt(startMs) + '–' + fmt(endMs);
+}
+function nowMs() { return segStart + audio.currentTime * 1000; }
+audio.addEventListener('timeupdate', () => {
+  document.getElementById('now').textContent = fileOk ? fmt(nowMs()) : '—';
+  if (stopAt !== null && nowMs() >= stopAt) { audio.pause(); stopAt = null; }
+});
+document.getElementById('stop').onclick = () => { audio.pause(); stopAt = null; };
+
+// ---------- file + hash ----------
+document.getElementById('file').onchange = async e => {
+  const file = e.target.files[0]; if (!file) return;
+  const el = document.getElementById('hash');
+  el.textContent = 'Checking SHA-256…'; el.className = 'status';
+  const buf = await file.arrayBuffer();
+  const hex = [...new Uint8Array(await crypto.subtle.digest('SHA-256', buf))].map(x => x.toString(16).padStart(2, '0')).join('');
+  if (hex !== DATA.recordingSha256) {
+    fileOk = false; el.textContent = '✗ Not the original recording (SHA-256 ' + hex.slice(0, 12) + '…). Choose the original file.'; el.className = 'status bad'; return;
+  }
+  bytes = buf; frameOffsets = indexFrames(buf); fileOk = true;
+  el.textContent = '✓ Original recording (SHA-256 ' + hex.slice(0, 12) + '…), ' + fmt((frameOffsets.length - 1) * SPF / SR * 1000);
+  el.className = 'status ok';
+};
+
+// ---------- rendering ----------
+const reviewerEl = document.getElementById('reviewer');
+reviewerEl.value = state.reviewer || '';
+reviewerEl.oninput = () => { state.reviewer = reviewerEl.value; save(); renderExport(); };
+
+function kindLabel(s) {
+  return s.kind === 'reading' ? 'Recitation of ayah ' + s.ayahs.join(', ')
+       : s.kind === 'explanation' ? 'Explanation of ayah' + (s.ayahs.length > 1 ? 's ' : ' ') + s.ayahs.join(', ')
+       : s.kind === 'intro' ? 'Introduction (no ayah)' : 'Questions and answers (no ayah)';
+}
+function render() {
+  const list = document.getElementById('list'); list.innerHTML = '';
+  // Show the ayah explanations first (by ayah), then recitations, then the rest.
+  const rank = s => s.kind === 'explanation' ? 0 : s.kind === 'reading' ? 1 : 2;
+  const ordered = [...state.spans].sort((a, b) => rank(a) - rank(b) ||
+    (Math.min(...(a.ayahs.length ? a.ayahs : [9])) - Math.min(...(b.ayahs.length ? b.ayahs : [9]))) || a.startMs - b.startMs);
+  let lastRank = -1;
+  ordered.forEach((s) => {
+    if (rank(s) !== lastRank) {
+      lastRank = rank(s);
+      const h = document.createElement('h2');
+      h.style.cssText = 'font-size:15px;margin:22px 4px 8px;color:#20474C';
+      h.textContent = ['Explanations of each ayah (what a tap in the app will play)', 'The Sheikh\'s recitation of each ayah (highlight only; never played on tap)', 'Introductions and other parts (highlight nothing)'][lastRank];
+      list.appendChild(h);
+    }
+    const d = document.createElement('section');
+    d.className = 'panel cand ' + s.decision;
+    d.innerHTML = `
+      <h3>${kindLabel(s)} <span class="conf ${s.confidence || 'low'}">${s.confidence ? s.confidence + ' confidence' : 'manual'}</span>
+        <span class="note"> · ${s.decision === 'approved' ? '✓ approved' : s.decision === 'rejected' ? '✗ rejected' : 'undecided'}</span></h3>
+      ${s.ayahs.length ? `<div class="quran">${ayahText(s.ayahs)}</div>` : ''}
+      <div class="ev">${s.evidence || ''}</div>
+      ${s.transcript ? `<details><summary>Machine draft transcript (may be wrong; Somali comes out garbled)</summary><div class="draft">${s.transcript}</div></details>` : ''}
+      <div class="controls">
+        <span><label class="f">Kind</label><select data-k="kind">
+          ${['explanation','reading','intro','qa'].map(k => `<option ${k === s.kind ? 'selected' : ''}>${k}</option>`).join('')}</select></span>
+        <span><label class="f">Ayahs (e.g. 2-4)</label><input type="text" data-k="ayahs" size="6" value="${s.ayahs.join(',')}"></span>
+        <span><label class="f">Start</label><input class="t" type="text" data-k="start" value="${fmt(s.startMs)}"></span>
+        <span><label class="f">End</label><input class="t" type="text" data-k="end" value="${fmt(s.endMs)}"></span>
+      </div>
+      <div class="controls">
+        <button data-a="play">▶ Play segment</button>
+        <button data-a="head">▶ First 15 s</button>
+        <button data-a="tail">▶ Last 15 s</button>
+        <span class="sep"></span>
+        Start <button data-a="s-5">−5</button><button data-a="s-1">−1</button><button data-a="s+1">+1</button><button data-a="s+5">+5</button>
+        <button data-a="s=now">= now</button>
+        <span class="sep"></span>
+        End <button data-a="e-5">−5</button><button data-a="e-1">−1</button><button data-a="e+1">+1</button><button data-a="e+5">+5</button>
+        <button data-a="e=now">= now</button>
+      </div>
+      <div class="controls">
+        <button class="p" data-a="approve">Approve</button>
+        <button data-a="reject">Reject</button>
+        <button data-a="undecided">Undecided</button>
+      </div>`;
+    d.querySelectorAll('[data-k]').forEach(el => el.onchange = () => {
+      const k = el.dataset.k;
+      if (k === 'kind') s.kind = el.value;
+      if (k === 'ayahs') { const a = parseAyahs(el.value); if (a) s.ayahs = a; else alert('Ayahs must be numbers 1–7, e.g. 3 or 2-4 or 3,5'); }
+      if (k === 'start') { const v = parse(el.value); if (!isNaN(v)) s.startMs = v; }
+      if (k === 'end') { const v = parse(el.value); if (!isNaN(v)) s.endMs = v; }
+      s.decision = 'undecided'; save(); render();
+    });
+    d.querySelectorAll('[data-a]').forEach(el => el.onclick = () => {
+      const a = el.dataset.a, label = kindLabel(s);
+      if (a === 'play') return play(s.startMs, s.endMs, label);
+      if (a === 'head') return play(s.startMs, Math.min(s.endMs, s.startMs + 15000), label);
+      if (a === 'tail') return play(Math.max(s.startMs, s.endMs - 15000), s.endMs, label);
+      if (a === 'approve' || a === 'reject' || a === 'undecided') { s.decision = a === 'approve' ? 'approved' : a === 'reject' ? 'rejected' : 'undecided'; save(); render(); return; }
+      const m = a.match(/^([se])([+-]\d|=now)$/); if (!m) return;
+      const key = m[1] === 's' ? 'startMs' : 'endMs';
+      if (m[2] === '=now') { if (!fileOk) return alert('Play something first.'); s[key] = Math.round(nowMs()); }
+      else s[key] = Math.max(0, Math.min(DATA.recordingDurationMs, s[key] + (+m[2]) * 1000));
+      s.decision = 'undecided'; save(); render();
+    });
+    list.appendChild(d);
+  });
+  renderCoverage(); renderExport();
+}
+function renderCoverage() {
+  const c = document.getElementById('coverage'); c.innerHTML = '';
+  for (let n = 1; n <= 7; n++) {
+    const ex = state.spans.filter(s => s.kind === 'explanation' && s.ayahs.includes(n));
+    const ok = ex.some(s => s.decision === 'approved'), pend = ex.some(s => s.decision === 'undecided');
+    const el = document.createElement('span');
+    el.className = 'chip ' + (ok ? 'ok' : pend ? 'warn' : 'none');
+    el.textContent = 'Ayah ' + n + (ok ? ' ✓' : pend ? ' · to review' : ' · none');
+    c.appendChild(el);
+  }
+}
+function issues() {
+  const out = [], ap = state.spans.filter(s => s.decision === 'approved').sort((a, b) => a.startMs - b.startMs);
+  ap.forEach((s, i) => {
+    if (s.endMs <= s.startMs) out.push(kindLabel(s) + ': end is before start');
+    if (s.endMs > DATA.recordingDurationMs) out.push(kindLabel(s) + ': ends after the recording');
+    if ((s.kind === 'explanation' || s.kind === 'reading') && !s.ayahs.length) out.push(kindLabel(s) + ': needs an ayah');
+    if ((s.kind === 'intro' || s.kind === 'qa') && s.ayahs.length) out.push(kindLabel(s) + ': intro/Q&A must not list ayahs');
+    if (i > 0 && s.startMs < ap[i - 1].endMs) out.push(kindLabel(s) + ' overlaps ' + kindLabel(ap[i - 1]));
+  });
+  if (!state.reviewer || !state.reviewer.trim()) out.push('Enter your full name (step 2).');
+  return out;
+}
+function renderExport() {
+  const iss = issues(), el = document.getElementById('issues');
+  const n = state.spans.filter(s => s.decision === 'approved').length;
+  el.innerHTML = iss.length ? '<span class="bad">Fix before export:</span> ' + iss.join(' · ') : '<span class="ok">' + n + ' approved span(s), no problems found.</span>';
+  document.getElementById('export').disabled = iss.length > 0 || n === 0;
+  document.getElementById('cmd').textContent =
+    'dart run tool/alignment/import_labels.dart --labels r3-labels-approved.txt --recording "shiiq_mp3/003-الفاتحة 1-آخرها.mp3" --sign-off --reviewer "' + (state.reviewer || 'Your Full Name') + '"';
+}
+function download(name, text) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type: 'text/plain'})); a.download = name; a.click();
+}
+document.getElementById('export').onclick = () => {
+  const lines = state.spans.filter(s => s.decision === 'approved').sort((a, b) => a.startMs - b.startMs)
+    .map(s => (s.startMs / 1000).toFixed(3) + '\t' + (s.endMs / 1000).toFixed(3) + '\t' + s.kind + (s.ayahs.length ? ' ' + s.ayahs.join(',') : ''));
+  download('r3-labels-approved.txt', lines.join('\n') + '\n');
+};
+document.getElementById('record').onclick = () => download('r3-review-record.json',
+  JSON.stringify({recordingSha256: DATA.recordingSha256, reviewer: state.reviewer, exportedAt: new Date().toISOString(), spans: state.spans}, null, 2));
+document.getElementById('add').onclick = () => {
+  state.spans.push({id: 'manual-' + Date.now(), kind: 'explanation', ayahs: [], startMs: 0, endMs: 1000, confidence: null, evidence: 'Added by the reviewer.', decision: 'undecided', origin: 'human'});
+  save(); render(); window.scrollTo(0, document.body.scrollHeight);
+};
+render();
+</script>
+</body>
+</html>

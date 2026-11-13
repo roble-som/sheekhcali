@@ -1,0 +1,474 @@
+{
+  "@@locale": "en",
+  "appName": "Sheekh Calinuur",
+  "@appName": {
+    "description": "Official product name (C-02). The Arabic form is pending owner confirmation (P-19), so both locales use the Latin form."
+  },
+  "appTagline": "Islamic Digital Learning Platform",
+  "@appTagline": {
+    "description": "Official tagline from the master prompt §2 branding."
+  },
+  "splashPreparing": "Preparing your library…",
+  "hijriDate": "{day} {month} {year} AH",
+  "@hijriDate": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "month": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "gregorianSuffix": "CE",
+  "hijriMonth1": "Muharram",
+  "hijriMonth2": "Safar",
+  "hijriMonth3": "Rabi al-Awwal",
+  "hijriMonth4": "Rabi al-Thani",
+  "hijriMonth5": "Jumada al-Awwal",
+  "hijriMonth6": "Jumada al-Thani",
+  "hijriMonth7": "Rajab",
+  "hijriMonth8": "Shaban",
+  "hijriMonth9": "Ramadan",
+  "hijriMonth10": "Shawwal",
+  "hijriMonth11": "Dhu al-Qadah",
+  "hijriMonth12": "Dhu al-Hijjah",
+  "openMenu": "Open navigation menu",
+  "dhikrOfTheDay": "Dhikr of the Day",
+  "placeholderDhikrArabic": "Verified Arabic dhikr text · source pending (P-12)",
+  "placeholderDhikrTranslation": "Named translation · pending (P-12)",
+  "placeholderDhikrReference": "Reference line: collection and number (DV-03)",
+  "placeholderPhoto": "Photo placeholder · rights needed",
+  "placeholderLogo": "Logo",
+  "placeholderIllustration": "Illustration",
+  "placeholderSemantics": "Placeholder: {label}",
+  "@placeholderSemantics": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "quranCardTitle": "Quran",
+  "quranCardSubtitle": "Read, Listen, Tafsir & Explore",
+  "explore": "Explore",
+  "khatmahTitle": "Khatmah",
+  "khatmahSubtitle": "Complete the Quran · Individual & Team",
+  "prayerTitle": "Prayer Times & Qibla",
+  "prayerSubtitle": "Adhan times · Qibla direction",
+  "libraryTitle": "Library",
+  "librarySubtitle": "Islamic books · Read offline",
+  "lessonsTitle": "Sheikh's Lessons",
+  "lessonsSubtitle": "Original recordings · Listen & follow",
+  "navHome": "Home",
+  "navLibrary": "Library",
+  "navLessons": "Sheikh's Lessons",
+  "navTafsir": "Tafsir",
+  "navDownloads": "Downloads",
+  "navRecentPage": "Recent Page",
+  "navIndexBookmark": "Index & Bookmark",
+  "navMyNotes": "My Notes",
+  "navItqan": "Itqan",
+  "navStatistics": "Statistics",
+  "navRecitationCorrection": "Recitation Correction",
+  "navLearnHowToUse": "Learn How to Use!",
+  "navSettings": "Settings",
+  "navAbout": "About",
+  "navLiveChat": "Live Chat",
+  "drawerBannerPlaceholder": "Drawer banner · purpose pending (G-06)",
+  "readerBookmark": "Bookmark page",
+  "readerTranslation": "Translation",
+  "readerIndex": "Index",
+  "readerAutoScroll": "Auto-scroll",
+  "moreOptions": "More options",
+  "menuSearch": "Search",
+  "menuControls": "Controls",
+  "menuGoToPage": "Go To Page",
+  "menuLightMode": "Light mode",
+  "menuDarkMode": "Dark mode",
+  "ayahPlay": "Play",
+  "ayahToEndOfSura": "to the end of sura",
+  "ayahTafsir": "Tafsir",
+  "ayahRecitationPlusTafsir": "Recitation + Tafsir",
+  "ayahAddNote": "Add Note",
+  "ayahAddItqan": "Add Itqan",
+  "ayahBookmark": "Bookmark",
+  "ayahCopy": "Copy",
+  "ayahShare": "Share",
+  "quranTextPendingTitle": "Layout preview · not Quran text",
+  "quranTextPendingBody": "Sheekh Calinuur shows only verified Quran text. The verified source is still being prepared, so these hatched blocks only mark where the text will go.",
+  "surahHeaderPlaceholder": "Surah header ornament · asset needed",
+  "placeholderAyahSemantics": "Placeholder ayah {index}. Not Quran text. Long press to open ayah actions.",
+  "@placeholderAyahSemantics": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "unavailableQuranText": "Not available yet: verified Quran text hasn't been imported.",
+  "unavailableFeature": "Not available yet: this arrives in a later phase.",
+  "unavailableNoMapping": "Not available: no verified Sheikh recording is linked to this ayah.",
+  "comingSoonTitle": "Coming in a later phase",
+  "comingSoonBody": "This section hasn't been built yet. Nothing is shown here until real, verified content exists.",
+  "settingsLanguage": "Language",
+  "languageSystem": "System default",
+  "languageEnglish": "English",
+  "languageArabic": "العربية",
+  "settingsReaderTheme": "Reading theme",
+  "readerThemeDark": "Dark",
+  "readerThemeLight": "Light",
+  "tabSurah": "Surah",
+  "tabJuz": "Juz",
+  "indexSearchHint": "Search by name or number",
+  "indexUnavailableTitle": "Surah and juz index not available yet",
+  "indexUnavailableBody": "The index lists only verified Quran metadata: surah names, ayah counts and juz boundaries. The verified source is still being prepared, so nothing is listed yet. The rows below only preview the layout.",
+  "layoutPreviewLabel": "Layout preview · not real data",
+  "revelationMakki": "Makki",
+  "revelationMadani": "Madani",
+  "ayahCount": "{count, plural, =1{1 ayah} other{{count} ayahs}}",
+  "@ayahCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "juzTitle": "Juz {number}",
+  "@juzTitle": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "juzStartsAt": "Starts at {surah} {reference}",
+  "@juzStartsAt": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "noSearchResults": "No matches",
+  "surahRowSemantics": "Surah {number}, {name}. {details}",
+  "@surahRowSemantics": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "librarySearchHint": "Search titles and authors",
+  "categoryAll": "All",
+  "categorySheikh": "Sheikh's books",
+  "categoryTafsir": "Tafsir",
+  "categoryHadith": "Hadith",
+  "categoryFiqh": "Fiqh",
+  "categoryAqeedah": "Aqeedah",
+  "categorySeerah": "Seerah",
+  "categoryHistory": "Islamic History",
+  "categoryArabic": "Arabic Language",
+  "categoryQuranSciences": "Quran Sciences",
+  "categoryEducation": "Islamic Education",
+  "categoryOther": "Other",
+  "sectionSheikhBooks": "Sheikh Calinuur's books",
+  "sectionAllBooks": "All books",
+  "libraryEmptyTitle": "No books yet",
+  "libraryEmptyBody": "Books appear here once they've been imported, verified and published. Nothing is shown before that.",
+  "libraryNoResults": "No books match your search",
+  "libraryLoadError": "The library couldn't be loaded.",
+  "retry": "Try again",
+  "previewBanner": "Design preview data · not real books",
+  "previewBadge": "Preview",
+  "badgeAudio": "Audio",
+  "badgeTranscript": "Transcript",
+  "badgeSynced": "Synced",
+  "badgeDownloaded": "Downloaded",
+  "badgeNoTranscript": "No transcript",
+  "badgeNotSynced": "Not synced",
+  "badgeNeedsVerification": "Needs verification",
+  "notRecorded": "Not recorded",
+  "fieldAuthor": "Author",
+  "fieldEdition": "Edition",
+  "fieldPublisher": "Publisher",
+  "fieldLanguage": "Language",
+  "fieldCategory": "Category",
+  "fieldVolumes": "Volumes",
+  "fieldPages": "Pages",
+  "langNameArabic": "Arabic",
+  "langNameSomali": "Somali",
+  "langNameEnglish": "English",
+  "actionRead": "Read",
+  "actionDownload": "Download",
+  "sectionContents": "Volumes & chapters",
+  "volumeTitle": "Volume {number}",
+  "@volumeTitle": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "chapterTitle": "Chapter {number}",
+  "@chapterTitle": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "lessonCount": "{count, plural, =0{No lessons} =1{1 lesson} other{{count} lessons}}",
+  "@lessonCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sectionRights": "Rights & source",
+  "rightsNotRecorded": "No rights evidence recorded yet (P-22). The book stays unpublished until it is.",
+  "bookNotFound": "This book isn't available.",
+  "coverSemantics": "Cover of {title}",
+  "@coverSemantics": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "back": "Back",
+  "settingsSectionGeneral": "General",
+  "settingsSectionHijri": "Hijri date",
+  "hijriMethod": "Calculation method",
+  "hijriMethodUmmAlQura": "Umm al-Qura (provisional)",
+  "hijriAdjustment": "Adjustment",
+  "hijriAdjustmentHint": "Move the date if your local moon sighting differs.",
+  "hijriAdjustmentSemantics": "Adjust the Hijri date by {value} days",
+  "@hijriAdjustmentSemantics": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hijriToday": "Today: {date}",
+  "@hijriToday": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsSectionDownloads": "Downloads",
+  "wifiOnly": "Download on Wi-Fi only",
+  "wifiOnlyHint": "Applies once downloads are available.",
+  "settingsSectionAbout": "About",
+  "contentSources": "Content sources & licences",
+  "aboutApp": "About Sheekh Calinuur",
+  "settingsSectionDeveloper": "Developer · debug builds only",
+  "designPreview": "Design preview data",
+  "designPreviewHint": "Shows clearly labelled placeholder books so the screens can be reviewed. Never available in release builds.",
+  "sourceQuranText": "Quran text",
+  "sourceQuranMetadata": "Surah and juz index",
+  "sourceNotInstalled": "Not installed yet · source awaiting approval",
+  "sourceTranslation": "Translation of meanings",
+  "sourceBooks": "Books, Tafsir and lessons",
+  "sourceBooksStatus": "None published yet",
+  "sourceFonts": "Fonts",
+  "sourceFontsStatus": "Inter, Noto Sans Arabic, Noto Naskh Arabic · SIL Open Font License 1.1",
+  "sourceHijri": "Hijri calendar",
+  "sourceHijriStatus": "Umm al-Qura table (hijri package, BSD-2-Clause) · provisional",
+  "openLicences": "Open-source licences",
+  "rightsRecordedText": "Rights evidence recorded.",
+  "surahMeta": "{revelation} · {ayahs}",
+  "@surahMeta": {
+    "placeholders": {
+      "revelation": {
+        "type": "String"
+      },
+      "ayahs": {
+        "type": "String"
+      }
+    }
+  },
+  "quranSourceLine": "Quran text: Tanzil Uthmani {version} · tanzil.net",
+  "@quranSourceLine": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewPending": "Reviewer check pending",
+  "reviewDone": "Checked by {name} · {date}",
+  "@reviewDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "sourceDialogTitle": "About this Quran text",
+  "sourceLabel": "Source",
+  "sourceValue": "{name}, {script} script, version {version}",
+  "@sourceValue": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "script": {
+        "type": "String"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "linkLabel": "Link",
+  "numberingLabel": "Numbering",
+  "numberingHafsBasmala": "Hafs (Kufan count), as in the source. The basmala is ayah 1 of Al-Fatiha.",
+  "checksLabel": "Checks",
+  "checksText": "Whole source file validated (6,236 ayahs); every ayah checksum re-verified when loaded; letter-for-letter match with an independent source.",
+  "reviewLabel": "Reviewer check",
+  "licenceLabel": "Licence (verbatim)",
+  "copyLink": "Copy link",
+  "linkCopied": "Link copied",
+  "ayahReference": "{surah} {surahNumber}:{ayah}",
+  "@ayahReference": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "surahNumber": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      }
+    }
+  },
+  "copiedAyah": "Copied {reference}",
+  "@copiedAyah": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "quranAyahSemantics": "Ayah {number}",
+  "@quranAyahSemantics": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "unavailableRecitation": "No recitation audio yet.",
+  "unavailableTafsirText": "The written Tafsir for this ayah hasn't been supplied yet.",
+  "unavailableTranslation": "No approved translation yet.",
+  "unavailableRecording": "The Sheikh's recording isn't available on this device.",
+  "tafsirBadge": "Sheikh's Tafsir · original recording",
+  "notRecitation": "Explanation, not Quran recitation",
+  "tafsirTitle": "Tafsir of Al-Fatiha",
+  "speakerName": "Sheikh Calinuur",
+  "testingOnly": "Testing only · not for distribution",
+  "recordingNotInstalled": "The Sheikh's Tafsir recording isn't installed on this device.",
+  "recordingInstallHint": "Testing only: install the original file as described in the review guide.",
+  "recordingMismatch": "This file isn't the original recording, so it won't be played.",
+  "playerPlay": "Play",
+  "playerPause": "Pause",
+  "playerReplay": "Play again",
+  "playerBack10": "Back 10 seconds",
+  "playerForward10": "Forward 10 seconds",
+  "playerPosition": "Playback position",
+  "playerError": "The recording couldn't be played.",
+  "playerLoading": "Loading…",
+  "syncPending": "Ayah highlighting: waiting for review",
+  "syncFollowing": "Ayah {ayahs} · {kind}",
+  "@syncFollowing": {
+    "placeholders": {
+      "ayahs": {
+        "type": "String"
+      },
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "kindReading": "recitation",
+  "kindExplanation": "explaining",
+  "syncGap": "No reviewed passage at this point",
+  "syncMismatch": "The mapping belongs to a different recording",
+  "syncInvalid": "The mapping has errors and is switched off",
+  "sourceQuranTextFatiha": "Al-Fatiha installed · Tanzil Uthmani 1.1, verbatim · reviewer check pending",
+  "noReviewedExplanation": "Ayah {number} has no reviewed explanation yet.",
+  "@noReviewedExplanation": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "syncFollowingRange": "Ayah {ayahs} · {kind} · {range}",
+  "@syncFollowingRange": {
+    "placeholders": {
+      "ayahs": {
+        "type": "String"
+      },
+      "kind": {
+        "type": "String"
+      },
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "syncSelectedNoExplanation": "Ayah {number}: no reviewed explanation yet",
+  "@syncSelectedNoExplanation": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "syncLoadingAyah": "Ayah {number} · starting explanation…",
+  "@syncLoadingAyah": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "syncIntro": "Introduction · {range}",
+  "syncQa": "Questions and answers · {range}",
+  "@syncIntro": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "@syncQa": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  }
+}
