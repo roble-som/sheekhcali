@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'alignment.dart';
+import 'candidates.dart';
 
 /// Why a span index has no usable spans. Shown to the user as a short note.
 enum SyncUnavailableReason {
@@ -97,15 +98,12 @@ class SpanIndex {
   /// earliest verified explanation it shares with other ayahs. Recitation
   /// (`reading`) spans are never used for this: a tap asks for the Sheikh's
   /// explanation, not his recitation. Null if none exists.
-  AlignmentSpan? explanationForAyah(int ayah) {
-    AlignmentSpan? shared;
-    for (final s in _spans) {
-      if (s.kind != SpanKind.explanation || !s.ayahs.contains(ayah)) continue;
-      if (s.ayahs.length == 1) return s;
-      shared ??= s;
-    }
-    return shared;
-  }
+  AlignmentSpan? explanationForAyah(int ayah) => pickExplanation(
+    _spans,
+    ayah,
+    isExplanation: (s) => s.kind == SpanKind.explanation,
+    ayahsOf: (s) => s.ayahs,
+  );
 
   /// Every verified explanation span for [ayah], in time order (an ayah may be
   /// explained more than once).

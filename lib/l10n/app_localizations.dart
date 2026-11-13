@@ -1507,6 +1507,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The Sheikh\'s recording plays only in the Android and iOS app. It is a testing-only file and is not part of the web version.'**
   String get recordingPhoneOnly;
+
+  /// Player line while a tapped ayah plays an AI-suggested segment the reviewer has not approved yet (debug/testing builds only).
+  ///
+  /// In en, this message translates to:
+  /// **'Unreviewed AI candidate · Ayah {ayahs} · {range} · {confidence} confidence · not verified'**
+  String syncCandidate(String ayahs, String range, String confidence);
+
+  /// No description provided for @syncSegmentFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Ayah {number}: end of this segment · tap the ayah to hear it again'**
+  String syncSegmentFinished(String number);
+
+  /// No description provided for @confidenceHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'high'**
+  String get confidenceHigh;
+
+  /// No description provided for @confidenceMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'medium'**
+  String get confidenceMedium;
+
+  /// No description provided for @confidenceLow.
+  ///
+  /// In en, this message translates to:
+  /// **'low'**
+  String get confidenceLow;
 }
 
 class _AppLocalizationsDelegate

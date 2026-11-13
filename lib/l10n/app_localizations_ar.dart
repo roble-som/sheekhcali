@@ -810,4 +810,23 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get recordingPhoneOnly =>
       'تسجيل الشيخ يعمل في تطبيق أندرويد وiOS فقط. إنه ملف للاختبار فقط وليس جزءًا من نسخة الويب.';
+
+  @override
+  String syncCandidate(String ayahs, String range, String confidence) {
+    return 'مقطع مقترح آليًا غير مُراجَع · الآية $ayahs · $range · ثقة $confidence · غير موثَّق';
+  }
+
+  @override
+  String syncSegmentFinished(String number) {
+    return 'الآية $number: انتهى هذا المقطع · اضغط على الآية لسماعه مرة أخرى';
+  }
+
+  @override
+  String get confidenceHigh => 'عالية';
+
+  @override
+  String get confidenceMedium => 'متوسطة';
+
+  @override
+  String get confidenceLow => 'منخفضة';
 }

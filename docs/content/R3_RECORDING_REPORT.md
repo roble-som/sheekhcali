@@ -85,24 +85,15 @@ Uncertain: the lesson introduction (non-Arabic speech the draft can't read), eve
 
 ## On-device playback check (emulator, 2026-11-13)
 
-`integration_test/fatiha_ayah_tafsir_test.dart` runs the real app, the real player and the hash-checked recording on an Android 17 (API 37) emulator.
+The real app on an Android API 37 emulator, with the hash-checked recording and the **bundled candidates** (nothing injected). Tapping ayahs 1–7, then 3 and 1 while playing, every tap played its candidate explanation segment.
 
-- **Acceptance (bundled mapping):** the mapping has 0 approved spans, so every tap on ayahs 1–7 showed "Ayah N has no reviewed explanation yet." and left the audio where it was. Passed.
-- **Mechanics (the candidate times above, injected only inside the test, NOT acceptance):** taps on 1, 2, 3, 4, 5, 6, 7, 3, 1 (including switching while playing):
+The emulator's actual audio output was captured, from the emulator alone, and each 3 s slice was found again in the original MP3:
+- **Position:** every tap within 0.3 s of the expected point (one shared latency of −0.24 s), with 5 or 6 of 6 half-second windows on the expected timeline; deliberately wrong timing fails the check.
+- **Loudness:** about −28 dBFS against −110 dBFS of silence after the stop.
 
-| Tap | Requested (ms) | Time to playing | Player position 2 s later (ms) | Highlighted |
-|---|---|---|---|---|
-| 1 | 1,558,900 | 4,828 ms (first tap: file opened and indexed) | 1,561,770 | 1 |
-| 2 | 1,980,000 | 945 ms | 1,982,429 | 2 |
-| 3 | 2,267,100 | 706 ms | 2,269,695 | 3 |
-| 4 | 2,361,500 | 526 ms | 2,364,165 | 4 |
-| 5 | 2,510,800 | 688 ms | 2,513,375 | 5 |
-| 6 | 2,740,700 | 663 ms | 2,743,164 | 6 |
-| 7 | 2,827,100 | 505 ms | 2,829,537 | 7 |
-| 3 again | 2,267,100 | 560 ms | 2,269,536 | 3 |
-| 1 again | 1,558,900 | 537 ms | 1,561,294 | 1 |
+Full table: `docs/DESIGN_IMPLEMENTATION_REPORT.md` → "Bug fix: Al-Fatiha ayah numbering and audible Tafsir playback". Playback stopped at the segment's end (see the report).
 
-The first positions reported after each seek were within 0.5 s of the requested point. This proves that a tap lands at the right moment of the original recording and plays from there. It does **not** prove that the candidate moment is the right one; only the owner's review can.
+This proves the app plays the candidate moments of the original recording, audibly. It does **not** prove the candidates are right; only the owner's review does (all 7 are still unreviewed).
 
 ## Rights
 

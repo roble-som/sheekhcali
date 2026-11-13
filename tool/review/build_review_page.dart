@@ -11,6 +11,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+const _candidatesAsset =
+    'assets/content/alignments/al-fatiha-tafsir-r3.candidates.json';
+
 void main() {
   final candidates = jsonDecode(
     File('docs/review/candidates/r3-candidates.json').readAsStringSync(),
@@ -47,6 +50,40 @@ void main() {
   final out = template.replaceFirst('/*DATA*/', json);
   File('docs/review/fatiha_review.html').writeAsStringSync(out);
   stdout.writeln('Wrote docs/review/fatiha_review.html');
+
+  // The app's copy: timings only (no transcript or evidence), bound to the
+  // same recording and ayah texts as the production mapping. Played only in
+  // debug builds, always labelled as unreviewed.
+  final mapping = jsonDecode(
+    File('assets/content/alignments/al-fatiha-tafsir-r3.json')
+        .readAsStringSync(),
+  ) as Map<String, dynamic>;
+  final appCopy = {
+    'schema': 1,
+    'status':
+        'UNREVIEWED AI-assisted candidates. Not verified. Never used '
+        'as verified mappings; generated from '
+        'docs/review/candidates/r3-candidates.json.',
+    'recordingSha256': candidates['recordingSha256'],
+    'recordingDurationMs': candidates['recordingDurationMs'],
+    'ayahSha256': mapping['ayahSha256'],
+    'spans': [
+      for (final s
+          in (candidates['spans'] as List).cast<Map<String, dynamic>>())
+        {
+          'id': s['id'],
+          'kind': s['kind'],
+          'ayahs': s['ayahs'],
+          'startMs': s['startMs'],
+          'endMs': s['endMs'],
+          'confidence': s['confidence'],
+        },
+    ],
+  };
+  File(_candidatesAsset).writeAsStringSync(
+    '${const JsonEncoder.withIndent('  ').convert(appCopy)}\n',
+  );
+  stdout.writeln('Wrote $_candidatesAsset');
 }
 
 /// Wraps Arabic runs so quotations keep their order inside English sentences.

@@ -18,6 +18,7 @@ import '../../settings/application/preferences_controllers.dart';
 import '../../tafsir_audio/application/fatiha_sync.dart';
 import '../../tafsir_audio/application/tafsir_player.dart';
 import '../../tafsir_audio/data/recording_repository.dart';
+import '../../tafsir_audio/domain/candidates.dart';
 import '../../tafsir_audio/domain/recording.dart';
 import '../../tafsir_audio/domain/span_index.dart';
 import '../../tafsir_audio/presentation/tafsir_player_bar.dart';
@@ -58,9 +59,18 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
   /// The ayah the user last asked to hear explained.
   int? _tappedAyah;
 
+  /// The segment playing because of that tap (reviewed, or an unreviewed
+  /// candidate in review mode). Null once the user seeks elsewhere.
+  AyahSegment? _segment;
+
   /// Plays the Sheikh's **explanation** of [ayah] from the start of its
-  /// verified segment (switching segments if something is already playing).
-  /// Never plays unrelated audio: with no verified explanation it says so.
+  /// segment, switching segments if something is already playing, and stops at
+  /// the segment's end.
+  ///
+  /// A reviewed span always wins. Without one, debug/testing builds play the
+  /// AI-assisted candidate, labelled "unreviewed" in the player. With neither,
+  /// nothing plays and the reader says so; never unrelated audio, never the
+  /// opening recitation.
   Future<bool> _playExplanationFor(int ayah) async {
     setState(() => _tappedAyah = ayah);
     final recording = ref.read(fatihaRecordingProvider).value;
@@ -73,8 +83,19 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
       );
       return false;
     }
-    final span = _index?.explanationForAyah(ayah);
-    if (span == null) {
+    final reviewed = _index?.explanationForAyah(ayah);
+    final candidates = await ref.read(fatihaCandidatesProvider.future);
+    if (!mounted) return false;
+    final candidate = reviewed == null
+        ? candidates?.explanationForAyah(ayah)
+        : null;
+    final segment = reviewed != null
+        ? AyahSegment.reviewed(ayah, reviewed)
+        : candidate != null
+        ? AyahSegment.candidate(ayah, candidate)
+        : null;
+    setState(() => _segment = segment);
+    if (segment == null) {
       showUnavailable(
         context,
         _l10n.noReviewedExplanation(
@@ -93,9 +114,60 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
       );
       if (player.current.phase == TafsirPhase.error) return false;
     }
-    await player.seek(Duration(milliseconds: span.startMs));
+    await player.seek(Duration(milliseconds: segment.startMs));
     await player.play();
     return true;
+  }
+
+  /// Stops at the end of the tapped ayah's segment, so a tap plays that
+  /// explanation and not the rest of the lesson.
+  void _onPlayback(TafsirPlaybackState? previous, TafsirPlaybackState next) {
+    final segment = _segment;
+    if (segment == null || !next.isPlaying) return;
+    if (segment.finished) {
+      // Play pressed after the segment ended: carry on through the lesson.
+      setState(() {
+        _segment = null;
+        _tappedAyah = null;
+      });
+      return;
+    }
+    final pos = next.position.inMilliseconds;
+    if (pos >= segment.endMs && pos < segment.endMs + 5000) {
+      ref.read(tafsirPlayerProvider).pause();
+      setState(() => _segment = segment.asFinished());
+    }
+  }
+
+  /// The user moved the playhead (slider or skip). Outside the tapped ayah's
+  /// segment, the bar no longer plays "that ayah's explanation", so the
+  /// highlight goes back to following reviewed spans only.
+  void _onManualSeek(int targetMs) {
+    final segment = _segment;
+    if (segment != null &&
+        targetMs >= segment.startMs &&
+        targetMs < segment.endMs) {
+      if (segment.finished) {
+        setState(
+          () => _segment = AyahSegment(
+            ayah: segment.ayah,
+            ayahs: segment.ayahs,
+            startMs: segment.startMs,
+            endMs: segment.endMs,
+            reviewed: segment.reviewed,
+            sourceId: segment.sourceId,
+            confidence: segment.confidence,
+          ),
+        );
+      }
+      return;
+    }
+    if (_segment != null || _tappedAyah != null) {
+      setState(() {
+        _segment = null;
+        _tappedAyah = null;
+      });
+    }
   }
 
   void _onAyahTap(int ayah) => _playExplanationFor(ayah);
@@ -179,6 +251,10 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
     final text = ref.watch(surahTextProvider(widget.surah));
     final index = ref.watch(fatihaSpanIndexProvider).value;
     final playback = ref.watch(tafsirPlaybackProvider).value;
+    ref.listen(tafsirPlaybackProvider, (previous, next) {
+      final value = next.value;
+      if (value != null) _onPlayback(previous?.value, value);
+    });
     final labels = DateLabels.build(
       now: ref.watch(clockProvider)(),
       locale: Localizations.localeOf(context),
@@ -309,7 +385,12 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
                   ),
                 ),
                 if (verified != null && verified.number == 1)
-                  TafsirPlayerBar(index: index, selectedAyah: _tappedAyah),
+                  TafsirPlayerBar(
+                    index: index,
+                    selectedAyah: _tappedAyah,
+                    segment: _segment,
+                    onManualSeek: _onManualSeek,
+                  ),
               ],
             ),
           ),

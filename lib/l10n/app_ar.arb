@@ -234,5 +234,10 @@
   "syncLoadingAyah": "الآية {number} · بدء الشرح…",
   "syncIntro": "مقدمة · {range}",
   "syncQa": "أسئلة وأجوبة · {range}",
-  "recordingPhoneOnly": "تسجيل الشيخ يعمل في تطبيق أندرويد وiOS فقط. إنه ملف للاختبار فقط وليس جزءًا من نسخة الويب."
+  "recordingPhoneOnly": "تسجيل الشيخ يعمل في تطبيق أندرويد وiOS فقط. إنه ملف للاختبار فقط وليس جزءًا من نسخة الويب.",
+  "syncCandidate": "مقطع مقترح آليًا غير مُراجَع · الآية {ayahs} · {range} · ثقة {confidence} · غير موثَّق",
+  "syncSegmentFinished": "الآية {number}: انتهى هذا المقطع · اضغط على الآية لسماعه مرة أخرى",
+  "confidenceHigh": "عالية",
+  "confidenceMedium": "متوسطة",
+  "confidenceLow": "منخفضة"
 }

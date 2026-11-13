@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sheekhcali/features/quran/data/quran_text_repository.dart';
+import 'package:sheekhcali/features/quran/presentation/widgets/surah_text_view.dart';
 import 'package:sheekhcali/features/tafsir_audio/domain/alignment.dart';
 import 'package:sheekhcali/features/tafsir_audio/domain/recording.dart';
 
@@ -81,12 +81,17 @@ RenderParagraph quranParagraph(WidgetTester tester) => tester.renderObject(
       .first, // ayah markers contain their own (inner) RichText widgets
 );
 
+bool _isMarker(String t) => RegExp(r'^[\u2007\u0660-\u0669]+$').hasMatch(t);
+
 /// All the text spans handed to the renderer, in order (excluding spaces and
 /// widget spans), with their background colour.
 List<(String, Color?)> renderedAyahSpans(WidgetTester tester) {
   final out = <(String, Color?)>[];
   quranParagraph(tester).text.visitChildren((span) {
-    if (span is TextSpan && span.text != null && span.text!.trim().isNotEmpty) {
+    if (span is TextSpan &&
+        span.text != null &&
+        span.text!.trim().isNotEmpty &&
+        !_isMarker(span.text!)) {
       out.add((span.text!, span.style?.backgroundColor));
     }
     return true;
@@ -97,19 +102,12 @@ List<(String, Color?)> renderedAyahSpans(WidgetTester tester) {
 /// Global centre of the first glyph run of [ayah] (for long press / tap).
 Offset ayahCentre(WidgetTester tester, int ayah) {
   final paragraph = quranParagraph(tester);
-  final raw = File(BundledQuranTextRepository.assetPath(1)).readAsStringSync();
-  final ayahs = (jsonDecode(raw)['ayahs'] as List).cast<Map<String, dynamic>>();
-  var start = 0;
-  for (final a in ayahs) {
-    final len = (a['text'] as String).length;
-    if (a['number'] == ayah) {
-      final boxes = paragraph.getBoxesForSelection(
-        TextSelection(baseOffset: start, extentOffset: start + len),
-      );
-      final box = boxes.first.toRect();
-      return paragraph.localToGlobal(box.center);
-    }
-    start += len + 3; // text, space, marker placeholder, space
-  }
-  throw StateError('ayah $ayah not found');
+  final surah = parseSurahAsset(
+    File(BundledQuranTextRepository.assetPath(1)).readAsStringSync(),
+  )!;
+  final slot = AyahLayout(surah).slots.firstWhere((s) => s.number == ayah);
+  final boxes = paragraph.getBoxesForSelection(
+    TextSelection(baseOffset: slot.text.start, extentOffset: slot.text.end),
+  );
+  return paragraph.localToGlobal(boxes.first.toRect().center);
 }

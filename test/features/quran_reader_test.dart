@@ -62,8 +62,12 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester, location: AppRoutes.quran);
+      // The numbers are part of the Quran paragraph (see
+      // test/quran/ayah_numbering_test.dart for where each one is drawn).
+      final text = quranParagraph(tester).text
+          .toPlainText(includeSemanticsLabels: false);
       for (final d in ['١', '٢', '٣', '٤', '٥', '٦', '٧']) {
-        expect(find.text(d), findsOneWidget, reason: d);
+        expect(RegExp('\u2007$d\u2007').allMatches(text).length, 1, reason: d);
       }
     });
 
@@ -77,9 +81,10 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Reviewer check pending'), findsOneWidget);
-      await tester.tap(
-        find.text('Quran text: Tanzil Uthmani 1.1 · tanzil.net'),
-      );
+      final source = find.text('Quran text: Tanzil Uthmani 1.1 · tanzil.net');
+      await tester.ensureVisible(source);
+      await tester.pumpAndSettle();
+      await tester.tap(source);
       await tester.pumpAndSettle();
       expect(find.byType(QuranSourceDialog), findsOneWidget);
       expect(find.text('https://tanzil.net/'), findsOneWidget);

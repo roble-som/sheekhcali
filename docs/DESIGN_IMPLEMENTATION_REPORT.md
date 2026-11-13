@@ -141,7 +141,7 @@ Owner decisions: C-25 (Tanzil Uthmani 1.1 approved), C-26 (R3 is the Sheikh's Ta
 | Reader | Continuous Uthmani text (Amiri, 28 sp, line height 2.15, RTL, centred), surah header from the metadata name, ayah-end rings with Arabic-Indic numbers, meta line, Tanzil attribution and link, reviewer-status chip, source dialog with the verbatim licence. Copy = exact stored text + reference. Identical text in the EN and AR interfaces | Display-path test: the spans handed to the renderer equal the stored strings byte for byte, in both languages |
 | Recording handling | Identified by SHA-256, **not bundled** (C-26). Debug builds play a locally installed copy only after re-hashing it on the device; release builds can't play it (`RecordingNotPermitted`) | Tests + emulator (copy hash on device = original) |
 | Player | just_audio + audio_service: play/pause, seek bar, ±10 s, position/duration, loading/buffering/completed/error states, background playback, notification and lock-screen controls. MP3 **index seeking** for this VBR file. Labelled "Sheikh's Tafsir · original recording" / "Explanation, not Quran recitation" / "Testing only" | Widget tests with a fake player; emulator (below) |
-| Synchronisation | Spans bound to the recording SHA-256 and to each ayah's text SHA-256; kinds reading/explanation/intro/qa; many ayahs per span; validator (overlap, range, end, ayah bounds, signed); binary-search lookup; tap an ayah → its first reading span. **Only verified, signed, valid, fresh spans highlight** | `span_index_test` (10), synthetic-mapping widget tests: playing, gaps, draft, seek back and forth, tap-to-seek, Arabic |
+| Synchronisation | Spans bound to the recording SHA-256 and to each ayah's text SHA-256; kinds reading/explanation/intro/qa; many ayahs per span; validator (overlap, range, end, ayah bounds, signed); binary-search lookup; tap an ayah → its **explanation** segment (never a recitation span; a dedicated segment wins over a shared one), stopping at the segment's end. **Only verified, signed, valid, fresh spans highlight or count as reviewed** | `span_index_test` (10), synthetic-mapping widget tests: playing, gaps, draft, seek back and forth, tap-to-seek, Arabic |
 | Review workflow | Audacity labels → `tool/alignment/import_labels.dart` (hash-checked, validated, `--sign-off --reviewer`), `tool/quran/sign_off_text.dart`, machine draft labels `tool/alignment/asr_draft_labels.dart`, guide `docs/review/AL_FATIHA_TAFSIR_REVIEW.md` | `labels_test` (6) |
 
 **Live R3 highlighting: none yet, by design.** The bundled R3 alignment has **zero verified spans** until the owner reviews (C-27). The app shows "Ayah highlighting: waiting for review". Highlighting itself is proven with a clearly synthetic test mapping bound to a fake recording hash (goldens `fatiha_sync_SYNTHETIC_*`), which can never apply to R3.
@@ -160,7 +160,7 @@ Screenshots: `docs/design/screenshots/emulator/fatiha/` (01–08). Screen record
 | Notification and lock-screen controls | **Bug found:** hidden, because POST_NOTIFICATIONS (Android 13+) was never requested. **Fixed:** asked once on first play via a small platform channel. Re-tested from a revoked state: the dialog appears, playback isn't blocked, and after Allow the media card shows "تفسير سورة الفاتحة · Sheikh Calinuur" with controls | VERIFIED |
 | Arabic UI on the device | Mirrored chrome, identical Quran text, LTR media controls | VERIFIED |
 | Duration | ExoPlayer reports 48:31; the Xing header gives 2,912.0 s (48:32.0). The difference is under 1 s (encoder padding); alignment times use the original timeline | NOTED |
-| Seek accuracy in milliseconds (QURAN_AND_AUDIO_ACCURACY §5) | Index seeking is enabled; measuring the error needs audio capture with known markers | NOT TESTED |
+| Seek accuracy (QURAN_AND_AUDIO_ACCURACY §5) | Measured from captured emulator audio: what was heard matched the original recording within 0.01–0.21 s of the requested point on all 9 taps (see the bug-fix section below) | VERIFIED |
 
 ## Deviations
 
@@ -168,3 +168,62 @@ Screenshots: `docs/design/screenshots/emulator/fatiha/` (01–08). Screen record
 |---|---|---|
 | DV-10 | Continuous reading layout instead of the mushaf page of reference 03 | Mushaf page fonts and layout are blocked on licensing (P-24); continuous mode is the approved fallback (concept 4b) |
 | DV-11 | Quran text font is Amiri (OFL), not the KFGQPC font of the references | Same licence block; Amiri covers every code point (tested) |
+
+
+# Bug fix: Al-Fatiha ayah numbering and audible Tafsir playback (2026-11-13)
+
+## 1. Ayah numbering
+
+**Problem (VERIFIED on Android and web):** on any line holding two or more ayah numbers, the numbers were drawn in reverse order. With the reference phone width, line 2 read "ٱلْعَٰلَمِينَ ③ … ٱلرَّحِيمِ ②" and line 3 read "ٱلدِّينِ ⑤ … نَسْتَعِينُ ④". Lines with a single number were right.
+
+**Not a data problem.** The source numbering, the ayah IDs, the tap targets, the highlight and the ayah passed to the player were all correct. Tanzil's numbering (basmala = ayah 1) is unchanged.
+
+**Cause:** each ring was an inline widget (`WidgetSpan`) inside the right-to-left paragraph. Flutter positions inline widgets in left-to-right order within each line, so in RTL lines with several of them, each widget lands in another one's place. The old tests located ayahs by text position, never by where a number is drawn; the old golden images showed the bug and it was missed.
+
+**Fix:** the number is now text in the same paragraph (Arabic-Indic digits, padded with non-breaking figure spaces, and a no-break space before it so it never starts a line on its own). The ring, highlight and gold "explaining" bar are painted behind the number where the paragraph actually laid it out (`_AyahRingPainter`). One layout description (`AyahLayout`) is shared by the renderer, the long-press lookup and the tests. The look is unchanged.
+
+**Tests:** `test/quran/ayah_numbering_test.dart`. For each n = 1–7, the number n must be drawn on the line where ayah n ends, immediately after it (less than 24 px gap), in English and Arabic, at 320, 384 and 600 dp. Tapping number n must select ayah n. Before the fix it failed at 384 and 600 dp; now it passes. Emulator: `docs/design/screenshots/emulator/fatiha_tap/00_before…` and `01_numbers_fixed_android.png`.
+
+## 2. Why tapping an ayah played nothing
+
+| # | Cause | Where | Fix |
+|---|---|---|---|
+| 1 | The production mapping has **0 reviewed segments**, so every tap ended in "no reviewed explanation". The AI-assisted candidates existed only in `docs/`, so the app could not play them. | `assets/content/alignments/al-fatiha-tafsir-r3.json`, `quran_reader_screen.dart` | **Review mode (debug/testing builds):** with no reviewed segment, a tap plays the bundled candidate for that ayah, labelled in amber "Unreviewed AI candidate · Ayah n · range · confidence · not verified". Reviewed segments always win. Release builds can't play R3 at all (C-26). |
+| 2 | Web build: the recording lookup threw (no `dart:io` files on web) and the player bar hid the error, so the tap only highlighted. | `recording_repository.dart`, `tafsir_player_bar.dart` | `RecordingPlatformUnsupported`: a visible notice says the recording plays only in the Android/iOS app; errors are shown, not hidden. |
+| 3 | `flutter test` uninstalls the app after each run, deleting the installed recording; any later run said "not installed". | Tooling | `tool/device/install_r3.sh` (hash-checked install). |
+| 4 | The emulator's media volume was 5 of 15: playback measured −49 dBFS, 32 dB below the file (−16.5 dBFS). Audible, but faint. | Device setting | The check raises it to 11 for the test and restores it. Raise the volume when listening. |
+| 5 | A tap kept playing past the ayah's segment into the rest of the lesson. | `quran_reader_screen.dart` | Playback stops at the segment's end: "Ayah n: end of this segment · tap the ayah to hear it again". |
+| 6 | The first tap waits while ExoPlayer indexes the VBR file up to the seek point (measured 5.6 s on the emulator for 26:00; later taps 0.7–1.3 s). | Player | The line shows "Ayah n · starting explanation…". |
+
+The player, file path, seek and mapping code were checked and had no further faults: the integration test reads just_audio's own position seconds after each tap, and the audio capture confirms what was heard.
+
+## 3. Evidence on the Android emulator (API 37), real recording, real bundled candidates
+
+`tool/device/fatiha_audio_check.sh`:
+- installs the recording and checks its hash;
+- records **only the emulator's audio output**, through a private PipeWire sink whose links are verified before recording;
+- raises the emulator's media volume to 11 (restored afterwards);
+- runs `integration_test/fatiha_ayah_tafsir_test.dart`;
+- analyses the capture with `tool/device/verify_fatiha_audio.py`.
+
+The analysis cuts each tap's 3 s of captured audio into six 0.5 s windows and finds each one independently in the original MP3. A tap passes when at least 4 of 6 land on the expected timeline (±0.3 s, after one latency shared by all taps, capped at ±0.5 s) and the audio is at least 30 dB above the silence after the stop.
+
+| Tap | Segment (unreviewed) | Time to playing | Player position (ms) at playing → 6 s later | Level | Heard from the recording at | Expected | Windows on timeline |
+|---|---|---|---|---|---|---|---|
+| 1 | expl-1, 25:58.90–33:00.00 | 5.5 s (first tap: file opened and indexed) | 1,558,901 → 1,564,822 | -27.4 dBFS | 25:59.61 | 25:59.90 | 6 of 6 |
+| 2 | expl-2, 33:00.00–37:47.10 | 1.1 s | 1,980,002 → 1,985,886 | -28.9 dBFS | 33:00.75 | 33:01.00 | 6 of 6 |
+| 3 | expl-3, 37:47.10–38:03.10 | 0.6 s | 2,267,117 → 2,273,160 | -27.7 dBFS | 37:47.83 | 37:48.12 | 6 of 6 |
+| 4 | expl-4, 39:21.50–41:11.80 | 0.8 s | 2,361,505 → 2,367,520 | -28.3 dBFS | 39:22.43 | 39:22.51 | 5 of 6 |
+| 5 | expl-5, 41:50.80–45:40.70 | 0.8 s | 2,510,823 → 2,516,649 | -27.7 dBFS | 41:51.58 | 41:51.82 | 6 of 6 |
+| 6 | expl-6, 45:40.70–47:07.10 | 0.9 s | 2,740,711 → 2,746,635 | -27.7 dBFS | 45:41.40 | 45:41.71 | 5 of 6 |
+| 7 | expl-7, 47:07.10–48:32.00 | 0.8 s | 2,827,107 → 2,833,087 | -27.5 dBFS | 47:08.00 | 47:08.11 | 5 of 6 |
+| 3 again (switch while playing) | expl-3, 37:47.10–38:03.10 | 0.8 s | 2,267,154 → 2,273,239 | -27.6 dBFS | 37:47.93 | 37:48.15 | 6 of 6 |
+| 1 again (switch while playing) | expl-1, 25:58.90–33:00.00 | 0.7 s | 1,558,907 → 1,565,012 | -27.6 dBFS | 25:59.71 | 25:59.91 | 6 of 6 |
+
+Final run. Silence after the stop: -180.0 dBFS. The shared output latency and clock offset, estimated from all taps and capped at ±0.5 s, was -0.24 s. **Negative controls:** the same capture analysed with the timing deliberately wrong by 7 s, and by 2 s, FAILS (0–1 of 6 windows), so the check does catch audio from the wrong place. Stop at end: ayah 3 paused at 38:03.21 against a segment end of 38:03.10, then showed "Ayah 3: end of this segment · tap the ayah to hear it again". The highlight was the tapped ayah in every case, and the player line was the amber "Unreviewed AI candidate …". An earlier run, before the shared-latency step, also passed, with all taps within 0.01–0.21 s.
+
+Acceptance with reviewed spans only (production rule): 0 reviewed segments, so all 7 taps showed "Ayah n has no reviewed explanation yet." and did not move the audio. This becomes real acceptance once the owner signs off segments.
+
+## 4. Privacy note
+
+The first capture attempt targeted a stale PipeWire node ID, and `pw-record` silently fell back to the **computer's microphone**. The low level and the room noise exposed it. That recording, and an earlier 3 s probe, were deleted at once, with nothing kept from them. The script now records only from a private sink linked solely to the emulator, checks the links first, and aborts and deletes the file otherwise.

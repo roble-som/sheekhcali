@@ -472,5 +472,33 @@
     }
   },
   "recordingPhoneOnly": "The Sheikh's recording plays only in the Android and iOS app. It is a testing-only file and is not part of the web version.",
-  "@recordingPhoneOnly": {"description": "Shown in the web build, where the testing-only recording is not available."}
+  "@recordingPhoneOnly": {
+    "description": "Shown in the web build, where the testing-only recording is not available."
+  },
+  "syncCandidate": "Unreviewed AI candidate · Ayah {ayahs} · {range} · {confidence} confidence · not verified",
+  "@syncCandidate": {
+    "description": "Player line while a tapped ayah plays an AI-suggested segment the reviewer has not approved yet (debug/testing builds only).",
+    "placeholders": {
+      "ayahs": {
+        "type": "String"
+      },
+      "range": {
+        "type": "String"
+      },
+      "confidence": {
+        "type": "String"
+      }
+    }
+  },
+  "syncSegmentFinished": "Ayah {number}: end of this segment · tap the ayah to hear it again",
+  "@syncSegmentFinished": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "confidenceHigh": "high",
+  "confidenceMedium": "medium",
+  "confidenceLow": "low"
 }

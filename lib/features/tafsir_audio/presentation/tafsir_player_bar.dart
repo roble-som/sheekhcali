@@ -8,6 +8,7 @@ import '../../../l10n/app_localizations.dart';
 import '../application/tafsir_player.dart';
 import '../data/recording_repository.dart';
 import '../domain/alignment.dart';
+import '../domain/candidates.dart';
 import '../domain/recording.dart';
 import '../domain/span_index.dart';
 
@@ -22,12 +23,24 @@ String formatPlaybackTime(Duration d) {
 /// The Sheikh's Tafsir player docked under the Quran text (concept 11/12).
 /// Hidden entirely when the recording's rights don't allow this build (C-26).
 class TafsirPlayerBar extends ConsumerWidget {
-  const TafsirPlayerBar({super.key, required this.index, this.selectedAyah});
+  const TafsirPlayerBar({
+    super.key,
+    required this.index,
+    this.selectedAyah,
+    this.segment,
+    this.onManualSeek,
+  });
 
   final SpanIndex? index;
 
   /// The ayah the user last tapped, if any.
   final int? selectedAyah;
+
+  /// The segment playing because of the last ayah tap, if any.
+  final AyahSegment? segment;
+
+  /// Called with the target time when the user seeks or skips.
+  final ValueChanged<int>? onManualSeek;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -67,6 +80,8 @@ class TafsirPlayerBar extends ConsumerWidget {
             info: info,
             index: index,
             selectedAyah: selectedAyah,
+            segment: segment,
+            onManualSeek: onManualSeek,
           ),
         ),
       },
@@ -132,16 +147,24 @@ class _Player extends ConsumerStatefulWidget {
     required this.info,
     required this.index,
     this.selectedAyah,
+    this.segment,
+    this.onManualSeek,
   });
 
   final String path;
   final RecordingInfo info;
   final SpanIndex? index;
   final int? selectedAyah;
+  final AyahSegment? segment;
+  final ValueChanged<int>? onManualSeek;
 
   @override
   ConsumerState<_Player> createState() => _PlayerState();
 }
+
+/// Amber for "unreviewed AI candidate": readable on the teal bar (contrast
+/// ≥ 4.5:1) and distinct from the gold "reviewed" accents.
+const _unreviewedColour = Color(0xFFFFC46B);
 
 class _PlayerState extends ConsumerState<_Player> {
   double? _dragMs;
@@ -172,6 +195,7 @@ class _PlayerState extends ConsumerState<_Player> {
     final max = (s.duration ?? Duration(milliseconds: widget.info.durationMs))
         .inMilliseconds;
     final target = (s.position.inMilliseconds + seconds * 1000).clamp(0, max);
+    widget.onManualSeek?.call(target);
     await player.seek(Duration(milliseconds: target));
   }
 
@@ -180,6 +204,25 @@ class _PlayerState extends ConsumerState<_Player> {
     String d(int n) => localizeDigits('$n', locale);
     final index = widget.index;
     final selected = widget.selectedAyah;
+    final segment = widget.segment;
+    if (segment != null) {
+      final ayahs = segment.ayahs.map(d).join('–');
+      final range =
+          '${formatPlaybackTime(Duration(milliseconds: segment.startMs))}–'
+          '${formatPlaybackTime(Duration(milliseconds: segment.endMs))}';
+      if (segment.finished) return l10n.syncSegmentFinished(d(segment.ayah));
+      if (s.phase == TafsirPhase.loading || s.phase == TafsirPhase.buffering) {
+        return l10n.syncLoadingAyah(d(segment.ayah));
+      }
+      if (!segment.reviewed) {
+        return l10n.syncCandidate(ayahs, range, switch (segment.confidence) {
+          'high' => l10n.confidenceHigh,
+          'medium' => l10n.confidenceMedium,
+          _ => l10n.confidenceLow,
+        });
+      }
+      return l10n.syncFollowingRange(ayahs, l10n.kindExplanation, range);
+    }
     if (index == null || !index.isUsable) {
       if (selected != null &&
           index?.unavailableReason != SyncUnavailableReason.recordingMismatch) {
@@ -233,6 +276,7 @@ class _PlayerState extends ConsumerState<_Player> {
         s.phase == TafsirPhase.loading || s.phase == TafsirPhase.buffering;
     final completed = s.phase == TafsirPhase.completed;
     final white70 = Colors.white.withValues(alpha: 0.75);
+    final unreviewed = widget.segment != null && !widget.segment!.reviewed;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -319,6 +363,7 @@ class _PlayerState extends ConsumerState<_Player> {
                     : (v) => setState(() => _dragMs = v),
                 onChangeEnd: (v) async {
                   setState(() => _dragMs = null);
+                  widget.onManualSeek?.call(v.round());
                   await player.seek(Duration(milliseconds: v.round()));
                 },
               ),
@@ -388,18 +433,23 @@ class _PlayerState extends ConsumerState<_Player> {
         Row(
           children: [
             Icon(
-              widget.index?.isUsable == true
+              unreviewed
+                  ? Icons.warning_amber_rounded
+                  : widget.index?.isUsable == true || widget.segment != null
                   ? Icons.sync
                   : Icons.pending_outlined,
               size: 15,
-              color: white70,
+              color: unreviewed ? _unreviewedColour : white70,
             ),
             const SizedBox(width: 6),
             Expanded(
               child: Text(
                 _syncLine(l10n, s),
                 key: const ValueKey('tafsir-sync'),
-                style: styles.noticeBody.copyWith(color: white70),
+                style: styles.noticeBody.copyWith(
+                  color: unreviewed ? _unreviewedColour : white70,
+                  fontWeight: unreviewed ? FontWeight.w600 : null,
+                ),
               ),
             ),
           ],

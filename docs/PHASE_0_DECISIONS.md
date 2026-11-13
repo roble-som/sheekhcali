@@ -70,6 +70,7 @@ Source: the owner's Phase 0 specification (2026-11-13) and the master prompt.
 | P-22 | Rights evidence for each book and recording (public, offline, audio) | A rights record per title | Publishing |
 | P-23 | The English translation of meanings to license | Choose in Phase 6 after a licence review | Translation feature |
 | P-24 | Mushaf page mode licence: KFGQPC permission, or Quran Foundation font and image terms | Ask KFGQPC in writing; Quran Foundation as a fallback | Page mode (screenshot 03) |
+| P-25 | Review mode: in debug/testing builds, may a tap on an ayah with no reviewed segment play its AI-assisted **candidate**, labelled "Unreviewed AI candidate · … · not verified"? (Built this way on 2026-11-13 so the owner can hear and judge each segment; release builds can't play R3 at all) | Keep it for review; never in release; remove once all seven are reviewed | Owner review of R3 |
 
 ## 3. Missing content
 

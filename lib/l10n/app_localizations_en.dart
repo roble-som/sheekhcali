@@ -806,4 +806,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get recordingPhoneOnly =>
       'The Sheikh\'s recording plays only in the Android and iOS app. It is a testing-only file and is not part of the web version.';
+
+  @override
+  String syncCandidate(String ayahs, String range, String confidence) {
+    return 'Unreviewed AI candidate · Ayah $ayahs · $range · $confidence confidence · not verified';
+  }
+
+  @override
+  String syncSegmentFinished(String number) {
+    return 'Ayah $number: end of this segment · tap the ayah to hear it again';
+  }
+
+  @override
+  String get confidenceHigh => 'high';
+
+  @override
+  String get confidenceMedium => 'medium';
+
+  @override
+  String get confidenceLow => 'low';
 }
