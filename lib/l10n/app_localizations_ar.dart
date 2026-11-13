@@ -806,4 +806,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String syncQa(String range) {
     return 'أسئلة وأجوبة · $range';
   }
+
+  @override
+  String get recordingPhoneOnly =>
+      'تسجيل الشيخ يعمل في تطبيق أندرويد وiOS فقط. إنه ملف للاختبار فقط وليس جزءًا من نسخة الويب.';
 }

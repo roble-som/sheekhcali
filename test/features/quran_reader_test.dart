@@ -176,6 +176,24 @@ void main() {
       expect(find.byKey(const ValueKey('tafsir-play')), findsNothing);
     });
 
+    testWidgets('web build: says the recording plays in the phone app only', (
+      tester,
+    ) async {
+      await pumpApp(
+        tester,
+        location: AppRoutes.quran,
+        recording: const RecordingPlatformUnsupported(),
+      );
+      const msg =
+          "The Sheikh's recording plays only in the Android and iOS app. "
+          'It is a testing-only file and is not part of the web version.';
+      expect(find.text(msg), findsOneWidget);
+      await tester.tapAt(ayahCentre(tester, 2));
+      await tester.pumpAndSettle();
+      expect(find.text(msg), findsNWidgets(2)); // bar + tap message
+      expect(find.byKey(const ValueKey('tafsir-play')), findsNothing);
+    });
+
     testWidgets('checksum mismatch: refuses to play', (tester) async {
       await pumpApp(
         tester,

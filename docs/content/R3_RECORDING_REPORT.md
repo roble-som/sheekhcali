@@ -60,6 +60,50 @@ Limits: Whisper's Somali is weak, so explanation passages come out as meaningles
 
 The draft transcript itself stays outside the repository (`scratchpad`); only the hints file is kept, for the reviewer.
 
+## Candidate ayah-to-explanation map (AI-assisted, NOT VERIFIED)
+
+Built on 2026-11-13 from the full draft transcript, the 71 draft labels (checked against each other rather than trusted; many are false matches of the basmala and of "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ") and the recording's structure. Stored in `docs/review/candidates/r3-candidates.json` with `status: candidate` and the evidence for each span. **Not used by the app.** The owner approves or corrects these in `docs/review/fatiha_review.html`.
+
+| Part | Candidate time (m:ss.s) | Confidence | Evidence (machine transcript times) |
+|---|---|---|---|
+| Opening du'a | 0:00.0–0:25.0 | high | Arabic opening du'a: isti'adha, basmala, hamdala, salawat (0:00–0:16), then isti'adha before the recitation (0:21). |
+| Recitation of ayahs 1–7 (Quran, **not Tafsir**; 7 separate spans) | 0:25.0–0:57.7 | high | Each ayah quoted in order |
+| Lesson introduction | 0:57.7–11:07.9 | low | Basmala at 0:59, then mostly Somali speech the draft cannot read ("تفسير…" at 1:09). Probably the lesson introduction; content not identified. |
+| Names and virtues of the surah | 11:07.9–23:54.0 | medium | "بسم الله الرحمن الرحيم سورة الفاتحة" at 11:12, then "السبع المثاني والقرآن العظيم" (12:16–12:51), "سورة الحمد" (13:35), "الرقية" (16:12): names and virtues of the surah, not one ayah. |
+| Overview of all seven ayahs | 23:54.0–25:58.9 | medium | Ayahs 1–7 quoted in order with short comments (23:54 ayahs 1–4, 24:12 "أنعمت عليهم من النبيين", 25:28 ayah 7, 25:36 "مكة"): an overview of the whole surah. Reviewer may prefer to class it as a brief explanation of ayahs 1–7. |
+| Ayah 1 explained | 25:58.9–33:00.0 | medium | Dense quotations of the basmala with its uses: 26:00 "قولوا … بسم الله", 27:08 "باسم الله", 29:35 Sulayman's letter (إنه من سليمان وإنه بسم الله الرحمن الرحيم), 30:43 "بسم الله وعلى ملة رسول الله", 31:40 "اذكر اسم الله وكل بيمينك". |
+| Ayah 2 explained | 33:00.0–37:47.1 | low | New basmala at 33:00, then "الحمد لله … رب العالمين … الرحمن … الرحيم … مالك يوم الدين" glossed (33:13–33:35), then a long passage on the name الله and other names (قاهر، قوي، عزيز، اللطيف، الرحمن, 33:36–37:20), then "الحمد لله … رب العالمين، العالمين" (37:28). The name passage might instead belong to the basmala (ayah 1). |
+| Ayah 3 explained | 37:47.1–38:03.1 | low | Short glosses of "الرحمن" / "الرحيم" (37:51–38:01). Ar-Rahman and ar-Rahim may also have been explained inside the basmala or name passages; very short candidate. |
+| Ayahs 2–4 explained together | 38:03.1–39:21.5 | medium | Ayahs 2–4 together: رب العالمين / الرحمن الرحيم / مالك يوم الدين and "الخوف والرجاء" (38:03–38:55), then the hadith qudsi "قسمت الصلاة بيني وبين عبدي … الحمد لله رب العالمين … الرحمن الرحيم … مالك يوم الدين" (38:55–39:27). |
+| Ayah 4 explained | 39:21.5–41:11.8 | high | "مالك يوم الدين" repeated, "ملك/مالك" (39:43), "يوم الجزاء" (39:57), "وما أدراك ما يوم الدين … يوم لا تملك نفس لنفس شيئا والأمر يومئذ لله" (40:01–40:18), "لمن الملك اليوم" (40:26). |
+| Recap of ayahs 2–4 (explanation) | 41:11.8–41:50.8 | low | Recap "رب العالمين … الرحمن … الرحيم" (41:11) before ayah 5. Could be merged into ayah 5's lead-in or dropped. |
+| Ayah 5 explained | 41:50.8–45:40.7 | high | "إياك نعبد … وإياك نستعين" quoted repeatedly (41:56–42:36, 42:54), hadith "حق الله على العباد أن يعبدوه ولا يشركوا به شيئا" (45:23–45:33), "إياك نعبد … وإياك نستعين" (45:33). |
+| Ayah 6 explained | 45:40.7–47:07.1 | low | No clear quotation of "اهدنا" found, but 46:10–46:32 discusses "الصراط … دين الإسلام … وأن هذا صراطي مستقيما فاتبعوه ولا تتبعوا السبل". Start and end are the least certain of all. |
+| Ayah 7 explained | 47:07.1–48:32.0 | medium | "غير المغضوب عليهم" with "اليهود" (47:32–47:57), "ولا الضالين … النصارى" (48:05–48:24) until the end. Start uncertain between 47:07 and 47:32 (no draft text in between). |
+
+Uncertain: the lesson introduction (non-Arabic speech the draft can't read), every boundary to within a few seconds, and ayahs 2, 3 and 6. Only listening can settle them.
+
+## On-device playback check (emulator, 2026-11-13)
+
+`integration_test/fatiha_ayah_tafsir_test.dart` runs the real app, the real player and the hash-checked recording on an Android 17 (API 37) emulator.
+
+- **Acceptance (bundled mapping):** the mapping has 0 approved spans, so every tap on ayahs 1–7 showed "Ayah N has no reviewed explanation yet." and left the audio where it was. Passed.
+- **Mechanics (the candidate times above, injected only inside the test, NOT acceptance):** taps on 1, 2, 3, 4, 5, 6, 7, 3, 1 (including switching while playing):
+
+| Tap | Requested (ms) | Time to playing | Player position 2 s later (ms) | Highlighted |
+|---|---|---|---|---|
+| 1 | 1,558,900 | 4,828 ms (first tap: file opened and indexed) | 1,561,770 | 1 |
+| 2 | 1,980,000 | 945 ms | 1,982,429 | 2 |
+| 3 | 2,267,100 | 706 ms | 2,269,695 | 3 |
+| 4 | 2,361,500 | 526 ms | 2,364,165 | 4 |
+| 5 | 2,510,800 | 688 ms | 2,513,375 | 5 |
+| 6 | 2,740,700 | 663 ms | 2,743,164 | 6 |
+| 7 | 2,827,100 | 505 ms | 2,829,537 | 7 |
+| 3 again | 2,267,100 | 560 ms | 2,269,536 | 3 |
+| 1 again | 1,558,900 | 537 ms | 1,561,294 | 1 |
+
+The first positions reported after each seek were within 0.5 s of the requested point. This proves that a tap lands at the right moment of the original recording and plays from there. It does **not** prove that the candidate moment is the right one; only the owner's review can.
+
 ## Rights
 
 | Question | Answer | Label |

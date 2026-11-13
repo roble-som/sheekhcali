@@ -65,7 +65,12 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
     setState(() => _tappedAyah = ayah);
     final recording = ref.read(fatihaRecordingProvider).value;
     if (recording is! RecordingReady) {
-      showUnavailable(context, _l10n.unavailableRecording);
+      showUnavailable(
+        context,
+        recording is RecordingPlatformUnsupported
+            ? _l10n.recordingPhoneOnly
+            : _l10n.unavailableRecording,
+      );
       return false;
     }
     final span = _index?.explanationForAyah(ayah);

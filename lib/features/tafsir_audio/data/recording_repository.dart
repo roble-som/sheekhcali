@@ -45,6 +45,7 @@ class LocalRecordingRepository implements RecordingRepository {
 
   @override
   Future<RecordingStatus> locate(RecordingInfo info) async {
+    if (kIsWeb) return const RecordingPlatformUnsupported();
     if (info.rights == RecordingRights.testingOnly && !allowTestingOnly) {
       return const RecordingNotPermitted();
     }

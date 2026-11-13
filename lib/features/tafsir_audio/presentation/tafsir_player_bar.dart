@@ -34,9 +34,20 @@ class TafsirPlayerBar extends ConsumerWidget {
     final status = ref.watch(fatihaRecordingProvider);
     return status.when(
       loading: () => const _Shell(child: LinearProgressIndicator(minHeight: 2)),
-      error: (e, s) => const SizedBox.shrink(),
+      error: (e, s) => _Shell(
+        child: _Notice(
+          icon: Icons.error_outline,
+          text: AppLocalizations.of(context).unavailableRecording,
+        ),
+      ),
       data: (s) => switch (s) {
         RecordingNotPermitted() => const SizedBox.shrink(),
+        RecordingPlatformUnsupported() => _Shell(
+          child: _Notice(
+            icon: Icons.phone_android,
+            text: AppLocalizations.of(context).recordingPhoneOnly,
+          ),
+        ),
         RecordingNotInstalled() => _Shell(
           child: _Notice(
             icon: Icons.headphones,

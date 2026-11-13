@@ -58,6 +58,12 @@ final class RecordingNotPermitted extends RecordingStatus {
   const RecordingNotPermitted();
 }
 
+/// This platform can't play locally installed recordings (the web build: the
+/// testing-only recording is never part of a web bundle, C-26).
+final class RecordingPlatformUnsupported extends RecordingStatus {
+  const RecordingPlatformUnsupported();
+}
+
 /// Not installed on this device. [expectedPath] says where a tester puts it.
 final class RecordingNotInstalled extends RecordingStatus {
   const RecordingNotInstalled(this.expectedPath);

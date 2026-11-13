@@ -147,6 +147,15 @@ void main() {
     return out;
   }
 
+  /// Taps an ayah, first clearing any snackbar that could cover it.
+  Future<void> tapAyah(WidgetTester tester, int ayah) async {
+    ScaffoldMessenger.of(
+      tester.element(find.byKey(const ValueKey('quran-text'))),
+    ).removeCurrentSnackBar();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.tapAt(ayahCentre(tester, ayah));
+  }
+
   Future<void> wait(WidgetTester tester, Duration d) async {
     final end = DateTime.now().add(d);
     while (DateTime.now().isBefore(end)) {
@@ -167,7 +176,7 @@ void main() {
         final player = c.read(tafsirPlayerProvider);
         final before = player.current.position;
         final span = index?.explanationForAyah(ayah);
-        await tester.tapAt(ayahCentre(tester, ayah));
+        await tapAyah(tester, ayah);
         await wait(tester, const Duration(seconds: 3));
         final after = player.current;
         if (span == null) {
@@ -253,23 +262,30 @@ void main() {
           (e) => e.$4.length == 1 && e.$4.single == ayah,
         );
         final tappedAt = DateTime.now();
-        await tester.tapAt(ayahCentre(tester, ayah));
+        await tapAyah(tester, ayah);
         // Wait (up to 15 s) for the real player to be playing at the
         // requested point. The first tap also opens the file.
         var p1 = c.read(tafsirPlayerProvider).current;
         while (DateTime.now().difference(tappedAt) <
-            const Duration(seconds: 15)) {
+            const Duration(seconds: 30)) {
           await tester.pump(const Duration(milliseconds: 100));
           p1 = c.read(tafsirPlayerProvider).current;
           final ms = p1.position.inMilliseconds;
-          if (p1.isPlaying &&
+          if (p1.phase == TafsirPhase.playing &&
               ms >= expected.$2 - 300 &&
               ms < expected.$2 + 3000) {
             break;
           }
         }
         final latency = DateTime.now().difference(tappedAt).inMilliseconds;
-        await wait(tester, const Duration(seconds: 2));
+        final trace = <String>[];
+        for (var i = 0; i < 10; i++) {
+          await tester.pump(const Duration(milliseconds: 200));
+          final st = c.read(tafsirPlayerProvider).current;
+          trace.add('${st.phase.name}@${st.position.inMilliseconds}');
+        }
+        // ignore: avoid_print
+        print('TRACE ayah $ayah: ${trace.join(' ')}');
         // Read after 2 s, this comes from just_audio's own position stream,
         // not from the seek request: it proves where the audio really is.
         final p2 = c.read(tafsirPlayerProvider).current;

@@ -1501,6 +1501,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Questions and answers · {range}'**
   String syncQa(String range);
+
+  /// Shown in the web build, where the testing-only recording is not available.
+  ///
+  /// In en, this message translates to:
+  /// **'The Sheikh\'s recording plays only in the Android and iOS app. It is a testing-only file and is not part of the web version.'**
+  String get recordingPhoneOnly;
 }
 
 class _AppLocalizationsDelegate

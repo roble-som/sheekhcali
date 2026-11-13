@@ -802,4 +802,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String syncQa(String range) {
     return 'Questions and answers · $range';
   }
+
+  @override
+  String get recordingPhoneOnly =>
+      'The Sheikh\'s recording plays only in the Android and iOS app. It is a testing-only file and is not part of the web version.';
 }

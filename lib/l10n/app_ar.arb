@@ -233,5 +233,6 @@
   "syncSelectedNoExplanation": "الآية {number}: لا يوجد شرح مُراجَع بعد",
   "syncLoadingAyah": "الآية {number} · بدء الشرح…",
   "syncIntro": "مقدمة · {range}",
-  "syncQa": "أسئلة وأجوبة · {range}"
+  "syncQa": "أسئلة وأجوبة · {range}",
+  "recordingPhoneOnly": "تسجيل الشيخ يعمل في تطبيق أندرويد وiOS فقط. إنه ملف للاختبار فقط وليس جزءًا من نسخة الويب."
 }

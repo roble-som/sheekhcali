@@ -470,5 +470,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "recordingPhoneOnly": "The Sheikh's recording plays only in the Android and iOS app. It is a testing-only file and is not part of the web version.",
+  "@recordingPhoneOnly": {"description": "Shown in the web build, where the testing-only recording is not available."}
 }
