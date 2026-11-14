@@ -99,17 +99,13 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('an ayah with only a candidate plays it, labelled UNREVIEWED', (
+  testWidgets('an ayah with only a candidate plays it: timing not reviewed', (
     tester,
   ) async {
     final player = await start(tester);
     await tap(tester, 7);
     expect(player.commands, containsAllInOrder(['seek:100000', 'play']));
-    expect(
-      syncLine(tester),
-      'Unreviewed AI candidate · Ayah 7 · 1:40–1:50 · low confidence · '
-      'not verified',
-    );
+    expect(syncLine(tester), 'Ayah 7 · 1:40–1:50 · timing not yet reviewed');
     // Never the recitation candidate (r7 at 0:01).
     expect(player.commands, isNot(contains('seek:1000')));
   });
@@ -163,6 +159,80 @@ void main() {
     );
   });
 
+  testWidgets('the stop happens on time, between position updates', (
+    tester,
+  ) async {
+    final player = await start(tester);
+    await tap(tester, 7);
+    // One update 1 s before the end (c7 ends at 110 000 ms); none after.
+    player.setPosition(const Duration(milliseconds: 109000));
+    await tester.pump(const Duration(milliseconds: 900));
+    expect(player.commands.last, 'play');
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(player.commands.last, 'pause'); // at 109 960 ms, by the timer
+  });
+
+  testWidgets('Play Recitation + Tafsir: the reading, then the explanation', (
+    tester,
+  ) async {
+    final player = await start(tester);
+    await tester.longPressAt(ayahCentre(tester, 7));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.playlist_play));
+    await tester.pumpAndSettle();
+    // Starts at the Sheikh's reading of ayah 7 (r7: 1 000–2 000 ms).
+    expect(player.commands, containsAllInOrder(['seek:1000', 'play']));
+    expect(syncLine(tester), startsWith('The Sheikh reads ayah 7'));
+    // Near the reading's end, a timer jumps 80 ms early: pause, seek, play,
+    // so nothing after the reading is heard.
+    final before = player.commands.length;
+    player.setPosition(const Duration(milliseconds: 1800));
+    await tester.pump(const Duration(milliseconds: 119));
+    expect(player.commands.length, before);
+    await tester.pump(const Duration(milliseconds: 2));
+    await tester.pumpAndSettle();
+    expect(player.commands.sublist(before), ['pause', 'seek:100000', 'play']);
+    expect(syncLine(tester), 'Ayah 7 · 1:40–1:50 · timing not yet reviewed');
+    // ...and still stops at the explanation's end.
+    player.setPosition(const Duration(milliseconds: 110100));
+    await tester.pump();
+    expect(player.commands.last, 'pause');
+  });
+
+  testWidgets('without a reading span, Recitation + Tafsir plays the '
+      'explanation', (tester) async {
+    final player = await start(tester);
+    await tester.longPressAt(ayahCentre(tester, 6));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.playlist_play));
+    await tester.pumpAndSettle();
+    // No reading span for ayah 6: its (shared) explanation plays.
+    expect(player.commands, containsAllInOrder(['seek:92000', 'play']));
+  });
+
+  testWidgets('a reviewed reading span is used first (ayah 2)', (tester) async {
+    final player = await start(tester);
+    await tester.longPressAt(ayahCentre(tester, 2));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.playlist_play));
+    await tester.pumpAndSettle();
+    // Reviewed r2 (30 000–40 000 ms), then reviewed e2 from 40 000 ms.
+    expect(player.commands, containsAllInOrder(['seek:30000', 'play']));
+    player.setPosition(const Duration(milliseconds: 39950));
+    await tester.pump();
+    await tester.pumpAndSettle();
+    expect(player.commands, containsAllInOrder(['pause', 'seek:40000']));
+  });
+
+  testWidgets('the player is prepared once when Al-Fatiha opens', (
+    tester,
+  ) async {
+    final player = await start(tester);
+    expect(player.preloads, ['/fake/synthetic.mp3']);
+    await tap(tester, 7);
+    expect(player.preloads, hasLength(1));
+  });
+
   testWidgets('outside review mode, a candidate is never played', (
     tester,
   ) async {
@@ -179,7 +249,7 @@ void main() {
   testWidgets('Arabic UI: unreviewed label in Arabic', (tester) async {
     await start(tester, locale: 'ar');
     await tap(tester, 7);
-    expect(syncLine(tester), contains('غير مُراجَع'));
+    expect(syncLine(tester), contains('التوقيت لم يُراجَع بعد'));
     expect(syncLine(tester), contains('الآية ٧'));
   });
 }

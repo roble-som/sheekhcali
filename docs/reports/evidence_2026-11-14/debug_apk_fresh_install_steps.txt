@@ -1,0 +1,41 @@
+[11:43:33] original R3 sha256 before: 3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f
+[11:43:34] APK: build/app/outputs/flutter-apk/app-debug.apk (220142628 bytes, sha256 5d411e69542d95133f9a97ad2c656aa4575d1f41b93a27455740823dbf62f0f8)
+[11:43:35] uninstalled: no app, no app data
+[11:43:39] offline: airplane mode on, Wi-Fi and data off, ping fails (Active default network: none)
+[11:43:40] installed with adb install (nothing else copied to the device)
+[11:43:40] before first launch: no recording in app storage
+[11:43:42] recording only: sheekh_emulator_capture:monitor_FL sheekh_emulator_capture:monitor_FR 
+[11:43:48] opened the Quran card
+[11:43:51] player ready (recording unpacked and verified by the app)
+total 12300
+-rw------- 1 u0_a257 u0_a257 12587299 2026-11-14 11:43:45.764000000 +0300 3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f.mp3
+[11:43:51] device copy sha256: 3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f (equal to the original)
+[11:44:11] ayah markers at: 1=(433 703) 2=(795 861) 3=(334 861) 4=(824 1018) 5=(121 1018) 6=(423 1176) 7=(441 1491) 
+[11:44:11] tapped ayah 1 (first launch, cold) at 1794645851296
+[11:44:28] tapped ayah 2 (first launch) at 1794645868216
+[11:44:37] tapped ayah 3 (segment end) at 1794645877262
+[11:45:06] Play Recitation + Tafsir on ayah 4 at 1794645906819
+[11:45:18] tapped ayah 4 (first launch) at 1794645918879
+[11:45:27] tapped ayah 5 (first launch) at 1794645927862
+[11:45:36] tapped ayah 6 (first launch) at 1794645936909
+[11:45:45] tapped ayah 7 (first launch) at 1794645945810
+[11:45:55] rapid: ayah 2 at 1794645955797, ayah 6 at 1794645955840
+[11:46:06] force-stopped
+[11:46:15] restarted offline: player ready
+[11:46:32] ayah markers at: 1=(433 510) 2=(795 667) 3=(334 667) 4=(824 825) 5=(121 825) 6=(423 982) 7=(441 1297) 
+[11:46:32] tapped ayah 5 (after restart, cold) at 1794645992513
+[11:46:49] after restart: same file reused (mtime 1794645825), no partial files (0)
+Idle output level: -115.0 dBFS
+ayah | label                | sound after tap | analysed at | level dBFS | heard from | segment starts | match / best anywhere | agree | stop check | result
+   1 | first launch, cold   |            0.5s |        2.0s |      -16.4 |   26:00.43 |       25:58.90 | 0.874 / 0.874 @26:00.43 | 6 of 6 | - | PASS
+   2 | first launch         |              -s |        2.0s |      -16.0 |   33:01.71 |       33:00.00 | 0.131 / 0.131 @33:01.71 | 6 of 6 | - | PASS
+   3 | segment end          |              -s |        2.0s |      -17.3 |   37:48.76 |       37:47.10 | 0.972 / 0.972 @37:48.76 | 6 of 6 | stopped (-15.6→-240.0) | PASS
+   4 | recitation + tafsir  |           0.25s |       0.45s |      -17.7 |    0:36.24 |        0:36.06 | 0.254 / 0.254 @0:36.24 | 4 of 4 | - | then explanation from 39:22.29 (starts 39:21.50, 5 of 6) | PASS
+   4 | first launch         |              -s |        2.0s |      -16.7 |   39:23.16 |       39:21.50 | 0.625 / 0.625 @39:23.16 | 6 of 6 | - | PASS
+   5 | first launch         |              -s |        2.0s |      -16.5 |   41:52.59 |       41:50.80 | 0.203 / 0.203 @41:52.59 | 6 of 6 | - | PASS
+   6 | first launch         |              -s |        2.0s |      -16.4 |   45:42.48 |       45:40.70 | 0.107 / 0.107 @45:42.48 | 5 of 6 | - | PASS
+   7 | first launch         |              -s |        2.0s |      -15.9 |   47:08.85 |       47:07.10 | 0.214 / 0.214 @47:08.85 | 6 of 6 | - | PASS
+   6 | rapid 2 then 6       |              -s |        2.0s |      -16.3 |   45:42.35 |       45:40.70 | 0.509 / 0.509 @45:42.35 | 6 of 6 | - | PASS
+   5 | after restart, cold  |            0.4s |        2.0s |      -16.6 |   41:52.42 |       41:50.80 | 0.784 / 0.784 @41:52.42 | 6 of 6 | - | PASS
+HEARD-SEGMENT CHECK: PASSED
+[11:47:31] original R3 sha256 after: 3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f (unchanged)

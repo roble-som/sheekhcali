@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fresh-install, OFFLINE acceptance check of a testing APK on an Android
+# Fresh-install, OFFLINE acceptance check of an APK on an Android
 # EMULATOR (Linux host with PipeWire), as a user would get it:
 #
 #   1. the app is uninstalled (no app data left) and the emulator goes
@@ -60,6 +60,9 @@ if "${A[@]}" shell ping -c 1 -W 3 8.8.8.8 >/dev/null 2>&1; then
 fi
 active=$("${A[@]}" shell dumpsys connectivity | grep -m1 'Active default network' | tr -d '\r')
 log "offline: airplane mode on, Wi-Fi and data off, ping fails ($active)"
+# Android's Live Caption overlay can cover the ayahs while audio plays and
+# swallow taps (seen on the emulator): keep it off during the test.
+"${A[@]}" shell settings put secure odi_captions_enabled 0 2>/dev/null || true
 
 # ---- 2. plain install ----------------------------------------------------------
 "${A[@]}" install "$APK" >/dev/null
@@ -67,10 +70,19 @@ log "installed with adb install (nothing else copied to the device)"
 # Android 13+ asks for notification permission on first playback; granting it
 # here only keeps that dialog from covering the screen. Playback works without.
 "${A[@]}" shell pm grant "$PKG" android.permission.POST_NOTIFICATIONS 2>/dev/null || true
-if "${A[@]}" shell run-as "$PKG" ls files/dev-media >/dev/null 2>&1; then
-  echo "unexpected: recording present before first launch" >&2; exit 1
+# App storage can be inspected only in a debuggable (debug) build. A release
+# build is checked by what it plays; the app itself refuses any copy whose
+# SHA-256 differs from the original.
+DEBUGGABLE=false
+"${A[@]}" shell run-as "$PKG" true >/dev/null 2>&1 && DEBUGGABLE=true
+if $DEBUGGABLE; then
+  if "${A[@]}" shell run-as "$PKG" ls files/dev-media >/dev/null 2>&1; then
+    echo "unexpected: recording present before first launch" >&2; exit 1
+  fi
+  log "before first launch: no recording in app storage"
+else
+  log "release build: app storage not readable (run-as needs a debuggable app); checked by audio"
 fi
-log "before first launch: no recording in app storage"
 
 # ---- capture of the emulator's own output only ----------------------------------
 SINK=sheekh_emulator_capture
@@ -123,11 +135,13 @@ log "opened the Quran card"
 "${UI[@]}" wait 'Tafsir of Al-Fatiha · Sheikh Calinuur' 60
 log "player ready (recording unpacked and verified by the app)"
 "${UI[@]}" shot "$OUT/01_page1_ready.png"
-"${A[@]}" shell run-as "$PKG" ls -l --full-time files/dev-media | tee -a "$OUT/steps.txt"
-device_sha=$("${A[@]}" shell run-as "$PKG" sha256sum "files/dev-media/$SHA.mp3" | cut -d' ' -f1)
-[[ "$device_sha" == "$SHA" ]] || { echo "device copy differs: $device_sha" >&2; exit 1; }
-log "device copy sha256: $device_sha (equal to the original)"
-mtime_before=$("${A[@]}" shell run-as "$PKG" stat -c %Y "files/dev-media/$SHA.mp3" | tr -d '\r')
+if $DEBUGGABLE; then
+  "${A[@]}" shell run-as "$PKG" ls -l --full-time files/dev-media | tee -a "$OUT/steps.txt"
+  device_sha=$("${A[@]}" shell run-as "$PKG" sha256sum "files/dev-media/$SHA.mp3" | cut -d' ' -f1)
+  [[ "$device_sha" == "$SHA" ]] || { echo "device copy differs: $device_sha" >&2; exit 1; }
+  log "device copy sha256: $device_sha (equal to the original)"
+  mtime_before=$("${A[@]}" shell run-as "$PKG" stat -c %Y "files/dev-media/$SHA.mp3" | tr -d '\r')
+fi
 
 silence_from=$(date +%s%3N); sleep 3; silence_to=$(date +%s%3N)
 taps="["
@@ -157,6 +171,15 @@ tap_ayah() {  # ayah, listen seconds, label, extra json
 tap_ayah 1 16 "first launch, cold"
 tap_ayah 2 8 "first launch"
 tap_ayah 3 24 "segment end" ', "expectStop": true'
+# "Play Recitation + Tafsir" on ayah 4 (player paused after ayah 3): long
+# press, then the sheet row. The Sheikh's reading of ayah 4, then his
+# explanation of it.
+"${A[@]}" shell input swipe ${at[4]} ${at[4]} 900
+sleep 1.5
+t=$("${UI[@]}" tap 'Play.?Recitation \+ Tafsir' 15)
+log "Play Recitation + Tafsir on ayah 4 at $t"
+sleep 12
+taps+="{\"ayah\": 4, \"tapMs\": $t, \"label\": \"recitation + tafsir\", \"withReading\": true},"
 for n in 4 5 6 7; do tap_ayah "$n" 8 "first launch"; done
 # Rapid switching: ayah 2, then ayah 6 at once. Ayah 6 must win.
 t2=$(tap_at 2)
@@ -175,10 +198,12 @@ log "force-stopped"
 log "restarted offline: player ready"
 locate_ayahs
 tap_ayah 5 16 "after restart, cold"
-mtime_after=$("${A[@]}" shell run-as "$PKG" stat -c %Y "files/dev-media/$SHA.mp3" | tr -d '\r')
-[[ "$mtime_before" == "$mtime_after" ]] || { echo "recording was copied again" >&2; exit 1; }
-leftovers=$("${A[@]}" shell run-as "$PKG" ls files/dev-media | grep -c '\.part' || true)
-log "after restart: same file reused (mtime $mtime_after), no partial files ($leftovers)"
+if $DEBUGGABLE; then
+  mtime_after=$("${A[@]}" shell run-as "$PKG" stat -c %Y "files/dev-media/$SHA.mp3" | tr -d '\r')
+  [[ "$mtime_before" == "$mtime_after" ]] || { echo "recording was copied again" >&2; exit 1; }
+  leftovers=$("${A[@]}" shell run-as "$PKG" ls files/dev-media | grep -c '\.part' || true)
+  log "after restart: same file reused (mtime $mtime_after), no partial files ($leftovers)"
+fi
 "${A[@]}" shell am force-stop "$PKG"
 sleep 1
 

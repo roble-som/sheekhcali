@@ -719,8 +719,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'تسجيل تفسير الشيخ غير مثبت على هذا الجهاز.';
 
   @override
-  String get recordingInstallHint =>
-      'للاختبار فقط: ثبّت الملف الأصلي كما في دليل المراجعة.';
+  String get recordingInstallHint => 'أعد تثبيت التطبيق لاستعادته.';
 
   @override
   String get recordingMismatch =>
@@ -808,12 +807,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get recordingPhoneOnly =>
-      'تسجيل الشيخ يعمل في تطبيق أندرويد وiOS فقط. إنه ملف للاختبار فقط وليس جزءًا من نسخة الويب.';
+  String get recordingPhoneOnly => 'تسجيل الشيخ يعمل في تطبيق أندرويد وiOS.';
 
   @override
   String syncCandidate(String ayahs, String range, String confidence) {
-    return 'مقطع مقترح آليًا غير مُراجَع · الآية $ayahs · $range · ثقة $confidence · غير موثَّق';
+    return 'الآية $ayahs · $range · التوقيت لم يُراجَع بعد';
   }
 
   @override
@@ -935,7 +933,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get aboutTafsirBody =>
-      'تفسير الشيخ المسجّل لسورة الفاتحة، لنسخ الاختبار فقط حتى تتأكد حقوق النشر. مقاطع الآيات قيد المراجعة، وما لم يُراجع منها موسوم بوضوح.';
+      'تفسير الشيخ المسجَّل لسورة الفاتحة، مضمَّن في التطبيق ويعمل دون اتصال. اضغط على آية لتسمع شرحه لها. توقيتات المقاطع ما زالت قيد المراجعة.';
 
   @override
   String get aboutPrivacyTitle => 'الخصوصية';
@@ -1014,13 +1012,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get recordingUnpackFailed =>
-      'تعذّر تجهيز التسجيل المرفق بنسخة الاختبار هذه على هذا الجهاز. وفّر بعض المساحة ثم أعد فتح التطبيق.';
+      'تعذّر تجهيز تسجيل الشيخ على هذا الجهاز. وفّر بعض المساحة ثم أعد فتح التطبيق.';
 
   @override
   String get recordingNotInThisBuild =>
-      'هذه النسخة لا تتضمن تسجيل الشيخ بعد: حقوق التوزيع ما زالت قيد التأكيد.';
+      'بُنيت هذه النسخة من التطبيق دون تسجيل الشيخ.';
 
   @override
-  String get testingBuildBanner =>
-      'نسخة اختبار · تتضمن تسجيل الشيخ · ليست للتوزيع';
+  String syncReadingThenExplanation(String number, String range) {
+    return 'يقرأ الشيخ الآية $number ثم يشرحها · $range';
+  }
 }

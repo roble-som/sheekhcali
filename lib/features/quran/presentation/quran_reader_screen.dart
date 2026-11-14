@@ -94,9 +94,21 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
   /// Long-pressed ayah (while its action sheet is open).
   AyahRef? _selected;
 
+  /// The player was asked to prepare the recording (once per reader).
+  bool _preloadRequested = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Verify (and on first use unpack) the Sheikh's recording in the
+    // background now, not at the first tap. The provider runs it once.
+    ref.read(fatihaRecordingProvider);
+  }
+
   @override
   void dispose() {
     _autoScroll?.cancel();
+    _boundary?.cancel();
     _scroll.dispose();
     _pageController?.dispose();
     super.dispose();
@@ -237,13 +249,16 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
 
   /// Plays the Sheikh's **explanation** of Al-Fatiha's [ayah] from the start
   /// of its segment, switching segments if something is already playing, and
-  /// stops at the segment's end.
+  /// stops at the segment's end. With [withReading] ("Play Recitation +
+  /// Tafsir"), the Sheikh's own reading of the ayah plays first, then the
+  /// explanation.
   ///
-  /// A reviewed span always wins. Without one, debug and testing builds play
-  /// the AI-assisted candidate, labelled "unreviewed" in the player. With
-  /// neither, nothing plays and the reader says so; never unrelated audio,
-  /// never the opening recitation.
-  Future<bool> _playExplanationFor(int ayah) async {
+  /// A reviewed span always wins over an AI-assisted candidate; candidates
+  /// play in every build (owner decision C-31) and the player says their
+  /// timing is not reviewed yet. With neither, nothing plays and the reader
+  /// says so; never unrelated audio.
+  Future<bool> _playExplanationFor(int ayah, {bool withReading = false}) async {
+    _cancelBoundary();
     setState(() => _tapped = AyahRef(1, ayah));
     final recording = await ref.read(fatihaRecordingProvider.future);
     if (!mounted) return false;
@@ -262,11 +277,23 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
     final candidate = reviewed == null
         ? candidates?.explanationForAyah(ayah)
         : null;
-    final segment = reviewed != null
+    var segment = reviewed != null
         ? AyahSegment.reviewed(ayah, reviewed)
         : candidate != null
         ? AyahSegment.candidate(ayah, candidate)
         : null;
+    if (segment != null && withReading) {
+      final reading = _index?.readingForAyah(ayah);
+      final candidateReading = candidates?.readingForAyah(ayah);
+      if (reading != null) {
+        segment = segment.withReading(reading.startMs, reading.endMs);
+      } else if (candidateReading != null) {
+        segment = segment.withReading(
+          candidateReading.startMs,
+          candidateReading.endMs,
+        );
+      }
+    }
     setState(() => _segment = segment);
     if (segment == null) {
       showUnavailable(
@@ -287,16 +314,64 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
       );
       if (player.current.phase == TafsirPhase.error) return false;
     }
-    await player.seek(Duration(milliseconds: segment.startMs));
+    await player.seek(Duration(milliseconds: segment.playFromMs));
     await player.play();
     return true;
   }
 
+  /// Fires at a segment boundary (end of the reading, end of the segment).
+  /// Position updates arrive only every ~200 ms, so near a boundary a timer
+  /// is set for the exact moment; the position checks are the fallback.
+  Timer? _boundary;
+
+  /// Jump this much before the reading ends, so the next ayah's first
+  /// syllable is never heard.
+  static const _jumpLeadMs = 80;
+
+  /// Stop this much before the segment ends.
+  static const _stopLeadMs = 40;
+
+  void _cancelBoundary() {
+    _boundary?.cancel();
+    _boundary = null;
+  }
+
+  void _scheduleBoundary(int inMs, VoidCallback action) {
+    _boundary?.cancel();
+    _boundary = Timer(Duration(milliseconds: inMs < 0 ? 0 : inMs), () {
+      _boundary = null;
+      if (mounted) action();
+    });
+  }
+
+  /// Reading done: pause, seek to the explanation, resume (no bleed).
+  Future<void> _jumpToExplanation(AyahSegment segment) async {
+    if (!identical(_segment, segment) || !segment.inReading) return;
+    _cancelBoundary();
+    final next = segment.readingDone();
+    setState(() => _segment = next);
+    final player = ref.read(tafsirPlayerProvider);
+    await player.pause();
+    await player.seek(Duration(milliseconds: next.startMs));
+    if (identical(_segment, next)) await player.play();
+  }
+
+  void _finishSegment(AyahSegment segment) {
+    if (!identical(_segment, segment) || segment.finished) return;
+    _cancelBoundary();
+    ref.read(tafsirPlayerProvider).pause();
+    setState(() => _segment = segment.asFinished());
+  }
+
   /// Stops at the end of the tapped ayah's segment, so a tap plays that
-  /// explanation and not the rest of the lesson.
+  /// explanation and not the rest of the lesson; after a reading, jumps to
+  /// the explanation.
   void _onPlayback(TafsirPlaybackState? previous, TafsirPlaybackState next) {
     final segment = _segment;
-    if (segment == null || !next.isPlaying) return;
+    if (segment == null || !next.isPlaying) {
+      if (!next.isPlaying) _cancelBoundary();
+      return;
+    }
     if (segment.finished) {
       // Play pressed after the segment ended: carry on through the lesson.
       setState(() {
@@ -306,9 +381,20 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
       return;
     }
     final pos = next.position.inMilliseconds;
-    if (pos >= segment.endMs && pos < segment.endMs + 5000) {
-      ref.read(tafsirPlayerProvider).pause();
-      setState(() => _segment = segment.asFinished());
+    if (segment.inReading) {
+      final cut = segment.readingEndMs! - _jumpLeadMs;
+      if (pos >= cut && pos < segment.readingEndMs! + 5000) {
+        _jumpToExplanation(segment);
+      } else if (pos >= segment.readingStartMs! && cut - pos <= 1500) {
+        _scheduleBoundary(cut - pos, () => _jumpToExplanation(segment));
+      }
+      return;
+    }
+    final stopAt = segment.endMs - _stopLeadMs;
+    if (pos >= stopAt && pos < segment.endMs + 5000) {
+      _finishSegment(segment);
+    } else if (pos >= segment.startMs && stopAt - pos <= 1500) {
+      _scheduleBoundary(stopAt - pos, () => _finishSegment(segment));
     }
   }
 
@@ -316,22 +402,13 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
   /// segment, the bar no longer plays "that ayah's explanation", so the
   /// highlight goes back to following reviewed spans only.
   void _onManualSeek(int targetMs) {
+    _cancelBoundary();
     final segment = _segment;
     if (segment != null &&
         targetMs >= segment.startMs &&
         targetMs < segment.endMs) {
-      if (segment.finished) {
-        setState(
-          () => _segment = AyahSegment(
-            ayah: segment.ayah,
-            ayahs: segment.ayahs,
-            startMs: segment.startMs,
-            endMs: segment.endMs,
-            reviewed: segment.reviewed,
-            sourceId: segment.sourceId,
-            confidence: segment.confidence,
-          ),
-        );
+      if (segment.finished || segment.inReading) {
+        setState(() => _segment = segment.restarted());
       }
       return;
     }
@@ -400,8 +477,13 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
             added ? _l10n.bookmarkAdded : _l10n.bookmarkRemoved,
           );
         }
-      case AyahAction.playToEnd:
       case AyahAction.playRecitationAndTafsir:
+        if (surah.number == 1) {
+          await _playExplanationFor(ayah, withReading: true);
+        } else {
+          showUnavailable(context, _l10n.noTafsirForSurah);
+        }
+      case AyahAction.playToEnd:
         showUnavailable(context, _l10n.unavailableRecitation);
       case AyahAction.tafsir:
         showUnavailable(context, _l10n.unavailableTafsirText);
@@ -577,6 +659,23 @@ class _QuranReaderScreenState extends ConsumerState<QuranReaderScreen> {
       }
       body = _buildSurah(text, target.surah, marks, dark, fontSize, meta);
       fatihaShown = verified != null && verified.number == 1;
+    }
+
+    // On Al-Fatiha's page, prepare the player as soon as the recording is
+    // verified, so the first tap plays at once.
+    final recording = ref.watch(fatihaRecordingProvider).value;
+    if (fatihaShown && !_preloadRequested && recording is RecordingReady) {
+      _preloadRequested = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ref
+            .read(tafsirPlayerProvider)
+            .preload(
+              path: recording.path,
+              title: _l10n.tafsirTitle,
+              artist: _l10n.speakerName,
+            );
+      });
     }
 
     return Theme(

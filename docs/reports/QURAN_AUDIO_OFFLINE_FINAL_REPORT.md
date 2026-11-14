@@ -181,3 +181,62 @@ The audio check captured only the emulator's own output stream through a private
 - **Public release: not ready.** It is blocked by signing, R3 distribution rights and Tafsir review.
 
 Nothing was committed, pushed or merged.
+
+---
+
+# Addendum, 2026-11-14: the recording ships in every build
+
+After testing on a physical phone, the owner decided (**C-31**) that every standard APK bundles the Sheikh's Al-Fatiha recording and that it plays with no review or rights gate. This supersedes the "testing APK only" arrangement above (C-29) and the related blockers in §15.
+
+## What changed
+
+| Area | Change |
+|---|---|
+| Bundling | `pubspec.yaml` lists `assets/audio/al-fatiha-tafsir-r3.mp3`, a byte-identical copy made by `tool/audio/bundle_r3.sh`, which checks the size and SHA-256 before and after copying. The copy is git-ignored like all media (the repository has a GitHub remote). The testing-build switch, its Gradle code, the About banner and `tool/build_testing_apk.sh` are removed. `tool/check_apk_audio.sh` checks any APK |
+| First use on the device | Unchanged, tested path: verify, then copy atomically into private storage while hashing, then verify again. On Android the asset is streamed out of the APK (`FlutterInjector … getLookupKeyForAsset`); other platforms read it through the asset bundle |
+| No gates | R3's rights are `distribution`, so no build refuses it. AI-assisted candidates play in every build when no reviewed segment exists; reviewed segments still win. The player line is now "Ayah 4 · 39:21–41:11 · timing not yet reviewed" instead of the "Unreviewed AI candidate" warning |
+| "Play Recitation + Tafsir" | Plays the Sheikh's own reading of the ayah (from the start of the lesson), then jumps to his explanation and stops at its end. A timer jumps 80 ms before the reading ends (pause, seek, resume) and stops 40 ms before the segment ends. Both happen between position updates, so the next ayah is not heard |
+| First tap | The recording is verified and unpacked in the background at app start and when the reader opens. On Al-Fatiha's page the player loads it and silently builds its seek index (a seek to the end and back), so a tap starts at once. The notification permission is asked at the first real playback |
+| Release signing | `build.gradle.kts` uses `android/key.properties` when present (git-ignored), else the debug key. `flutter build apk --release` always builds |
+| Unchanged | The 604-page Mushaf reader, the Quran text and the "Reviewer check pending" pill (that is the Quran-text check P-07; it never blocked audio) |
+
+## Evidence
+
+- **Tests:** `flutter analyze` showed no issues; `dart format` changed 0 files; `flutter test` passed **267 of 267**. New tests cover:
+  - the bundled file being the original;
+  - the reading-then-explanation jump;
+  - the exact stop by timer;
+  - a single preload;
+  - the "timing not yet reviewed" line;
+  - a reviewed reading span winning.
+- **APKs (standard builds, package ID unchanged):**
+
+| APK | Size | Signed with | R3 inside |
+|---|---|---|---|
+| `build/app/outputs/flutter-apk/app-debug.apk` | 220,142,628 bytes | Debug key | Byte-identical, stored uncompressed |
+| `build/app/outputs/flutter-apk/app-release.apk` | 76,465,749 bytes | **Debug key (no `key.properties`): not for publishing** | Byte-identical, stored uncompressed |
+
+- **Fresh install, offline (wiped emulator, airplane mode, plain `adb install`)**, both APKs; [evidence](evidence_2026-11-14/):
+
+| Check (release APK) | Result |
+|---|---|
+| First tap after install: sound after the tap | **0.10 s** (debug build: 0.5 s). It was 7–10 s before |
+| First tap after force-stop and restart | **0.15 s** (debug: 0.4 s) |
+| Ayahs 1–7: audible, heard from that ayah's segment start | 10 of 10 passed |
+| Ayah 3: stopped at the segment end | -15.6 dBFS before, -117 dBFS after |
+| "Play Recitation + Tafsir" on ayah 4 | Reading heard from 0:36.22 (it starts at 0:36.06), then the explanation from 39:22.44 (it starts at 39:21.50) |
+| Rapid tap: ayah 2, then ayah 6 | Ayah 6 played |
+| Debug APK only (debuggable) | The device copy's SHA-256 equals the original; after a restart it was reused (same mtime) with no partial files |
+| Original after all runs | `3300e364…834f`, unchanged |
+
+- **Test-environment finding.** Two earlier runs each lost one tap on ayah 6. The screenshot shows Android's **Live Caption** overlay (it captions playing audio) covering that line, so the tap landed on the overlay ([screenshot](evidence_2026-11-14/live_caption_overlay_blocking_tap.png)). It was not an app fault: with Live Caption off (now set by `fresh_install_check.sh`), both full runs passed, and three targeted repeats of the double tap all played ayah 6. On a phone with Live Caption on, the overlay can cover part of the page the same way.
+
+## Remaining
+
+- **Owner's review** of the segment timings: the candidates play now, but they are AI-assisted and unreviewed.
+- **Production keystore** before publishing.
+- **On-device check of the Quran text** by a qualified reader (P-07).
+- **iOS** is untested.
+- **Fresh clone** (CI or another computer): run `tool/audio/bundle_r3.sh` before building. A clone that only has the Git repository cannot build until the recording is added; this is on purpose, so that no APK ships silently without it.
+
+Nothing was committed, pushed or merged.

@@ -1361,7 +1361,7 @@ abstract class AppLocalizations {
   /// No description provided for @recordingInstallHint.
   ///
   /// In en, this message translates to:
-  /// **'Testing only: install the original file as described in the review guide.'**
+  /// **'Reinstall the app to restore it.'**
   String get recordingInstallHint;
 
   /// No description provided for @recordingMismatch.
@@ -1502,16 +1502,16 @@ abstract class AppLocalizations {
   /// **'Questions and answers · {range}'**
   String syncQa(String range);
 
-  /// Shown in the web build, where the testing-only recording is not available.
+  /// Shown in the web build, which does not play the recording.
   ///
   /// In en, this message translates to:
-  /// **'The Sheikh\'s recording plays only in the Android and iOS app. It is a testing-only file and is not part of the web version.'**
+  /// **'The Sheikh\'s recording plays in the Android and iOS app.'**
   String get recordingPhoneOnly;
 
-  /// Player line while a tapped ayah plays an AI-suggested segment the reviewer has not approved yet (debug/testing builds only).
+  /// Player line while a tapped ayah plays a segment whose timing (AI-assisted) the owner has not reviewed yet. confidence is kept for tests and other locales.
   ///
   /// In en, this message translates to:
-  /// **'Unreviewed AI candidate · Ayah {ayahs} · {range} · {confidence} confidence · not verified'**
+  /// **'Ayah {ayahs} · {range} · timing not yet reviewed'**
   String syncCandidate(String ayahs, String range, String confidence);
 
   /// No description provided for @syncSegmentFinished.
@@ -1715,7 +1715,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutTafsirBody.
   ///
   /// In en, this message translates to:
-  /// **'The Sheikh\'s recorded Tafsir of Al-Fatiha, for testing builds only until distribution rights are confirmed. Ayah segments are being reviewed; unreviewed ones are clearly labelled.'**
+  /// **'The Sheikh\'s recorded Tafsir of Al-Fatiha, included in the app and playable offline. Tap an ayah to hear his explanation of it. The segment timings are still being reviewed.'**
   String get aboutTafsirBody;
 
   /// No description provided for @aboutPrivacyTitle.
@@ -1847,20 +1847,20 @@ abstract class AppLocalizations {
   /// No description provided for @recordingUnpackFailed.
   ///
   /// In en, this message translates to:
-  /// **'The recording in this testing build couldn\'t be prepared on this device. Free some storage, then reopen the app.'**
+  /// **'The Sheikh\'s recording couldn\'t be prepared on this device. Free some storage, then reopen the app.'**
   String get recordingUnpackFailed;
 
   /// No description provided for @recordingNotInThisBuild.
   ///
   /// In en, this message translates to:
-  /// **'This version doesn\'t include the Sheikh\'s recording yet: distribution rights are still being confirmed.'**
+  /// **'This copy of the app was built without the Sheikh\'s recording.'**
   String get recordingNotInThisBuild;
 
-  /// No description provided for @testingBuildBanner.
+  /// No description provided for @syncReadingThenExplanation.
   ///
   /// In en, this message translates to:
-  /// **'Testing build · includes the Sheikh\'s recording · not for distribution'**
-  String get testingBuildBanner;
+  /// **'The Sheikh reads ayah {number}, then explains it · {range}'**
+  String syncReadingThenExplanation(String number, String range);
 }
 
 class _AppLocalizationsDelegate

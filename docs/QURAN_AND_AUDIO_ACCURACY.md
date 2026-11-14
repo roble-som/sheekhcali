@@ -194,7 +194,7 @@ Open Al-Fatiha → read the verified Arabic text → open the matching Tafsir �
 | Mushaf page 1 layout | **BLOCKED** on the font and layout licence (§2.1) | — |
 | Tafsir text for Al-Fatiha | **NOT FOUND.** Which Tafsir does the Sheikh teach from, and which edition? | `CONTENT_INVENTORY.md` |
 | The Sheikh's Al-Fatiha recording | **FOUND, unconfirmed.** `shiiq_mp3/003-الفاتحة 1-آخرها.mp3.mpeg`: 48:32.0, SHA-256 `3300e364…`, ID3 artist "الشيخ علي نور". The link to Al-Fatiha rests on its filename and title; nobody has listened to it yet | `CONTENT_INVENTORY.md` R3 |
-| Rights for the recording and the Tafsir | Recording: **testing only** (C-26): packed only into labelled testing APKs for the owner's devices (C-29), never in the default build, never distributed. Tafsir text: not supplied | `docs/content/R3_RECORDING_REPORT.md` |
+| Rights for the recording and the Tafsir | Recording: **shipped in every build** by the owner's decision C-31 (2026-11-14), byte-identical to the original. Tafsir text: not supplied | `docs/content/R3_RECORDING_REPORT.md` |
 | A qualified reviewer for the mapping | **The owner** (C-27). Workflow ready; no spans reviewed yet | `docs/review/AL_FATIHA_TAFSIR_REVIEW.md` |
 | Transcript | Machine draft only (C-28), evidence for the reviewer; not published | `docs/content/R3_RECORDING_REPORT.md` |
 

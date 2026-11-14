@@ -56,8 +56,9 @@ def main():
             at = None  # no dump while the app starts or redraws: retry
         if at:
             if cmd == "tap":
+                sent = int(time.time() * 1000)  # just before the tap is sent
                 adb(serial, "shell", "input", "tap", str(at[0]), str(at[1]))
-                print(int(time.time() * 1000))
+                print(sent)
             elif cmd == "find":
                 print(at[0], at[1])
             return 0

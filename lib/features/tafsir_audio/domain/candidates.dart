@@ -5,11 +5,12 @@ import 'alignment.dart';
 /// AI-assisted **candidate** segments for a recording (C-28): where the
 /// analysis of the recording suggests the Sheikh explains each ayah.
 ///
-/// Candidates are never verified facts. They exist so that the reviewer can
-/// hear a proposed segment by tapping its ayah (debug/testing builds only,
-/// always labelled "unreviewed") and approve or correct it through the review
-/// workflow (docs/review/AL_FATIHA_TAFSIR_REVIEW.md). Only reviewed spans in
-/// the production mapping ([TafsirAlignment]) count as verified.
+/// Candidates are not verified facts. Since the owner's decision C-31 they
+/// play in every build when an ayah has no reviewed segment, and the player
+/// says their timing is not reviewed yet; the reviewer approves or corrects
+/// them through the review workflow (docs/review/AL_FATIHA_TAFSIR_REVIEW.md).
+/// Only reviewed spans in the production mapping ([TafsirAlignment]) count as
+/// verified, and a reviewed span always wins.
 @immutable
 class CandidateSet {
   const CandidateSet({
@@ -67,6 +68,13 @@ class CandidateSet {
     isExplanation: (s) => s.kind == SpanKind.explanation,
     ayahsOf: (s) => s.ayahs,
   );
+
+  /// The candidate span where the Sheikh **reads** [ayah] alone (his reading
+  /// at the start of the lesson). Null if none.
+  CandidateSpan? readingForAyah(int ayah) => spans
+      .where((s) => s.kind == SpanKind.reading && s.ayahs.length == 1)
+      .where((s) => s.ayahs.single == ayah)
+      .firstOrNull;
 }
 
 @immutable
@@ -128,6 +136,8 @@ class AyahSegment {
     required this.sourceId,
     this.confidence,
     this.finished = false,
+    this.readingStartMs,
+    this.readingEndMs,
   });
 
   factory AyahSegment.reviewed(int ayah, AlignmentSpan s) => AyahSegment(
@@ -165,7 +175,35 @@ class AyahSegment {
   /// Playback reached [endMs] and stopped there.
   final bool finished;
 
-  AyahSegment asFinished() => AyahSegment(
+  /// "Play Recitation + Tafsir": the Sheikh's reading of the ayah plays
+  /// first ([readingStartMs]–[readingEndMs]), then playback jumps to the
+  /// explanation ([startMs]–[endMs]). Null once the reading is done, or for
+  /// a plain explanation.
+  final int? readingStartMs;
+  final int? readingEndMs;
+
+  /// Still in the reading part.
+  bool get inReading => readingStartMs != null && readingEndMs != null;
+
+  /// Where playback of this segment begins.
+  int get playFromMs => readingStartMs ?? startMs;
+
+  AyahSegment withReading(int startMs, int endMs) =>
+      _copy(readingStartMs: startMs, readingEndMs: endMs);
+
+  /// The reading part is over: the explanation plays now.
+  AyahSegment readingDone() => _copy();
+
+  AyahSegment asFinished() => _copy(finished: true);
+
+  /// A copy that plays again (after "finished").
+  AyahSegment restarted() => _copy();
+
+  AyahSegment _copy({
+    bool finished = false,
+    int? readingStartMs,
+    int? readingEndMs,
+  }) => AyahSegment(
     ayah: ayah,
     ayahs: ayahs,
     startMs: startMs,
@@ -173,6 +211,8 @@ class AyahSegment {
     reviewed: reviewed,
     sourceId: sourceId,
     confidence: confidence,
-    finished: true,
+    finished: finished,
+    readingStartMs: readingStartMs,
+    readingEndMs: readingEndMs,
   );
 }

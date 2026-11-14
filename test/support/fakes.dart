@@ -57,6 +57,18 @@ class FakeTafsirPlayer implements TafsirPlayer {
     );
   }
 
+  /// Paths passed to [preload] (kept apart from [commands]).
+  final preloads = <String>[];
+
+  @override
+  Future<void> preload({
+    required String path,
+    required String title,
+    required String artist,
+  }) async {
+    preloads.add(path);
+  }
+
   @override
   Future<void> play() async {
     commands.add('play');

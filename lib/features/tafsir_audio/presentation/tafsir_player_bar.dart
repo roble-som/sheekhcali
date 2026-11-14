@@ -186,10 +186,6 @@ class _Player extends ConsumerStatefulWidget {
   ConsumerState<_Player> createState() => _PlayerState();
 }
 
-/// Amber for "unreviewed AI candidate": readable on the teal bar (contrast
-/// ≥ 4.5:1) and distinct from the gold "reviewed" accents.
-const _unreviewedColour = Color(0xFFFFC46B);
-
 class _PlayerState extends ConsumerState<_Player> {
   double? _dragMs;
 
@@ -237,6 +233,13 @@ class _PlayerState extends ConsumerState<_Player> {
       if (segment.finished) return l10n.syncSegmentFinished(d(segment.ayah));
       if (s.phase == TafsirPhase.loading || s.phase == TafsirPhase.buffering) {
         return l10n.syncLoadingAyah(d(segment.ayah));
+      }
+      if (segment.inReading) {
+        return l10n.syncReadingThenExplanation(
+          d(segment.ayah),
+          '${formatPlaybackTime(Duration(milliseconds: segment.readingStartMs!))}–'
+          '${formatPlaybackTime(Duration(milliseconds: segment.readingEndMs!))}',
+        );
       }
       if (!segment.reviewed) {
         return l10n.syncCandidate(ayahs, range, switch (segment.confidence) {
@@ -300,7 +303,6 @@ class _PlayerState extends ConsumerState<_Player> {
         s.phase == TafsirPhase.loading || s.phase == TafsirPhase.buffering;
     final completed = s.phase == TafsirPhase.completed;
     final white70 = Colors.white.withValues(alpha: 0.75);
-    final unreviewed = widget.segment != null && !widget.segment!.reviewed;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -331,20 +333,22 @@ class _PlayerState extends ConsumerState<_Player> {
                 ),
               ],
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(99),
-                border: Border.all(color: Colors.white38),
-              ),
-              child: Text(
-                l10n.testingOnly,
-                style: styles.placeholderLabel.copyWith(
-                  color: Colors.white70,
-                  fontSize: 10,
+            // Only a testing-only recording carries this label (C-26).
+            if (widget.info.rights == RecordingRights.testingOnly)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(99),
+                  border: Border.all(color: Colors.white38),
+                ),
+                child: Text(
+                  l10n.testingOnly,
+                  style: styles.placeholderLabel.copyWith(
+                    color: Colors.white70,
+                    fontSize: 10,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         const SizedBox(height: 4),
@@ -457,23 +461,18 @@ class _PlayerState extends ConsumerState<_Player> {
         Row(
           children: [
             Icon(
-              unreviewed
-                  ? Icons.warning_amber_rounded
-                  : widget.index?.isUsable == true || widget.segment != null
+              widget.index?.isUsable == true || widget.segment != null
                   ? Icons.sync
                   : Icons.pending_outlined,
               size: 15,
-              color: unreviewed ? _unreviewedColour : white70,
+              color: white70,
             ),
             const SizedBox(width: 6),
             Expanded(
               child: Text(
                 _syncLine(l10n, s),
                 key: const ValueKey('tafsir-sync'),
-                style: styles.noticeBody.copyWith(
-                  color: unreviewed ? _unreviewedColour : white70,
-                  fontWeight: unreviewed ? FontWeight.w600 : null,
-                ),
+                style: styles.noticeBody.copyWith(color: white70),
               ),
             ),
           ],

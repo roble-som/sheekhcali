@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
 import '../../../core/app_info.dart';
-import '../../../core/build_flags.dart';
 import '../../../core/l10n/localized_digits.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
@@ -64,30 +63,6 @@ class AboutScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               style: styles.listSubtitle,
             ),
-            if (kTestingAudioBuild) ...[
-              const SizedBox(height: 12),
-              Center(
-                child: Container(
-                  key: const ValueKey('testing-build-banner'),
-                  margin: const EdgeInsets.symmetric(horizontal: 24),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: SemanticColors.draft),
-                  ),
-                  child: Text(
-                    l10n.testingBuildBanner,
-                    textAlign: TextAlign.center,
-                    style: styles.listSubtitle.copyWith(
-                      color: SemanticColors.draft,
-                    ),
-                  ),
-                ),
-              ),
-            ],
             const SizedBox(height: 20),
             Material(
               color: ReaderColors.surface,

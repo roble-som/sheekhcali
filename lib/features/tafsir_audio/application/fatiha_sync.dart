@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/build_flags.dart';
 import '../../quran/data/quran_text_repository.dart';
 import '../../quran/domain/quran_text_availability.dart';
 import '../data/recording_repository.dart';
@@ -37,13 +35,13 @@ final fatihaSpanIndexProvider = FutureProvider<SpanIndex?>((ref) async {
 AlignmentSpan? activeSpanAt(SpanIndex? index, int positionMs) =>
     index?.activeAt(positionMs);
 
-/// Whether unreviewed AI-assisted candidate segments may be played, clearly
-/// labelled, when an ayah has no reviewed segment yet (P-25). Debug and
-/// testing builds only: other builds can't play the testing-only recording
-/// at all (C-26), and production uses reviewed spans only.
-final reviewModeProvider = Provider<bool>(
-  (ref) => kDebugMode || kTestingAudioBuild,
-);
+/// Whether AI-assisted candidate segments play when an ayah has no reviewed
+/// segment yet. On in every build since the owner's decision C-31
+/// (2026-11-14): tapping any Al-Fatiha ayah plays its segment at once. A
+/// reviewed span always wins, and the player line says when a segment's
+/// timing is not reviewed yet. Tests override it to check the reviewed-only
+/// path.
+final reviewModeProvider = Provider<bool>((ref) => true);
 
 /// Bundled candidates file for R3 (generated from
 /// docs/review/candidates/r3-candidates.json by

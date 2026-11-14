@@ -75,6 +75,10 @@ flutter:
     # Logo medallion, derived from assets/images/logosheekh.jpeg
     # (tool/branding/make_logo_assets.py). The original is not bundled.
     - assets/images/logo_portrait_512.jpg
+    # The Sheikh's Tafsir of Al-Fatiha (R3), byte-identical to the original
+    # (SHA-256 3300e364…). Shipped in every build (owner decision C-31).
+    # Git-ignored like all media: create it with tool/audio/bundle_r3.sh.
+    - assets/audio/al-fatiha-tafsir-r3.mp3
 
   # All fonts are bundled (offline-first). Licences: assets/fonts/licenses/.
   # Mushaf page fonts (KFGQPC) are not bundled: licensing pending (P-24).

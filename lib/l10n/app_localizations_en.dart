@@ -715,8 +715,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'The Sheikh\'s Tafsir recording isn\'t installed on this device.';
 
   @override
-  String get recordingInstallHint =>
-      'Testing only: install the original file as described in the review guide.';
+  String get recordingInstallHint => 'Reinstall the app to restore it.';
 
   @override
   String get recordingMismatch =>
@@ -805,11 +804,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recordingPhoneOnly =>
-      'The Sheikh\'s recording plays only in the Android and iOS app. It is a testing-only file and is not part of the web version.';
+      'The Sheikh\'s recording plays in the Android and iOS app.';
 
   @override
   String syncCandidate(String ayahs, String range, String confidence) {
-    return 'Unreviewed AI candidate · Ayah $ayahs · $range · $confidence confidence · not verified';
+    return 'Ayah $ayahs · $range · timing not yet reviewed';
   }
 
   @override
@@ -931,7 +930,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutTafsirBody =>
-      'The Sheikh\'s recorded Tafsir of Al-Fatiha, for testing builds only until distribution rights are confirmed. Ayah segments are being reviewed; unreviewed ones are clearly labelled.';
+      'The Sheikh\'s recorded Tafsir of Al-Fatiha, included in the app and playable offline. Tap an ayah to hear his explanation of it. The segment timings are still being reviewed.';
 
   @override
   String get aboutPrivacyTitle => 'Privacy';
@@ -1010,13 +1009,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recordingUnpackFailed =>
-      'The recording in this testing build couldn\'t be prepared on this device. Free some storage, then reopen the app.';
+      'The Sheikh\'s recording couldn\'t be prepared on this device. Free some storage, then reopen the app.';
 
   @override
   String get recordingNotInThisBuild =>
-      'This version doesn\'t include the Sheikh\'s recording yet: distribution rights are still being confirmed.';
+      'This copy of the app was built without the Sheikh\'s recording.';
 
   @override
-  String get testingBuildBanner =>
-      'Testing build · includes the Sheikh\'s recording · not for distribution';
+  String syncReadingThenExplanation(String number, String range) {
+    return 'The Sheikh reads ayah $number, then explains it · $range';
+  }
 }

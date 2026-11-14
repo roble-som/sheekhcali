@@ -60,17 +60,17 @@ If you prefer Audacity, label time ranges as `explanation 3`, `explanation 2-4`,
 
 ### Checking it in the app (testing only)
 
-The recording is approved for testing only (C-26). The default app does **not** contain it.
-
-**On your own phone, with no cable or network needed (C-29):** build the testing APK and copy it to the phone like any file:
+**The app ships the recording (C-31, 2026-11-14).** Every `flutter build apk`, debug or release, contains a byte-identical copy. Once per machine that builds the app, put it in place with:
 
 ```
-tool/build_testing_apk.sh
+tool/audio/bundle_r3.sh
 ```
 
-It refuses to build unless the source file is the original (SHA-256), packs it unchanged, and checks the result. Output: `build/app/outputs/flutter-apk/sheekhcali-1.0.0-debug-TESTING-with-R3-NOT-FOR-DISTRIBUTION.apk`. On first use the app copies the recording into its private storage and checks its SHA-256 before playing. Never share this APK.
+It refuses to copy unless the source is the original (size and SHA-256) and checks the copy. The copy is git-ignored like all media. On first launch the app copies the recording into its private storage and checks its SHA-256 before playing, with no cable or network needed. Check any APK with `tool/check_apk_audio.sh <apk>`.
 
-**For developers, a debug build over adb** (developer utility, not needed with the testing APK), from the repo folder:
+Tapping an ayah, "Play Tafsir" and "Play Recitation + Tafsir" play at once in every build. Segments still waiting for your review are marked "timing not yet reviewed" in the player; a reviewed segment always replaces its candidate.
+
+**For developers, a debug build over adb** (developer utility, no longer needed), from the repo folder:
 
 ```
 tool/device/install_r3.sh
@@ -90,11 +90,11 @@ PYTHON=/path/to/python-with-numpy-and-miniaudio tool/device/fatiha_audio_check.s
 
 It records only the emulator's audio output, never a microphone, and fails if any tap is silent or comes from the wrong place in the recording. `flutter test` uninstalls the app afterwards, so run `tool/device/install_r3.sh` again before using the app.
 
-The same check for an **installed testing APK**, as a user gets it (app uninstalled first, emulator offline, plain `adb install`, then taps, a force-stop and a restart; network restored at the end):
+The same check for an **installed APK**, as a user gets it (app uninstalled first, emulator offline, plain `adb install`, then taps, "Play Recitation + Tafsir", a rapid double tap, a force-stop and a restart; network restored at the end):
 
 ```
 PYTHON=/path/to/python-with-numpy-and-miniaudio tool/device/fresh_install_check.sh \
-  build/app/outputs/flutter-apk/sheekhcali-1.0.0-debug-TESTING-with-R3-NOT-FOR-DISTRIBUTION.apk
+  build/app/outputs/flutter-apk/app-release.apk
 ```
 
 ## What the app guarantees

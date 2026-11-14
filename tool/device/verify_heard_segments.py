@@ -19,6 +19,12 @@ For every tap:
     segment start and no later than the time elapsed since the tap plus
     0.75 s (capture start and output latency): playback began at that
     ayah's segment start, after the tap;
+  * if the tap is marked `withReading` ("Play Recitation + Tafsir"), the
+    first check uses the Sheikh's reading of the ayah (from 0.2 s after the
+    sound starts, within the reading's length: all but one 0.5 s window must
+    agree), and 1 s after the reading's end the audio must come from the
+    start of the explanation;
+  * "sound after tap" is reported when the output was silent at the tap;
   * if the tap is marked `expectStop`, the capture must be audible just
     before the segment's end and at least 40 dB quieter (and below
     -70 dBFS) from 1 s after it: playback stopped at the segment end.
@@ -126,6 +132,14 @@ class Locator:
         return i / RATE, float(ncc[i])
 
 
+def reading_for(spans, ayah):
+    """The Sheikh's reading of the ayah alone ("Play Recitation + Tafsir")."""
+    for s in spans:
+        if s["kind"] == "reading" and s["ayahs"] == [ayah]:
+            return s
+    return None
+
+
 def segment_for(spans, ayah):
     """As the app's pickExplanation: the first explanation of the ayah
     alone, else the first one shared with other ayahs."""
@@ -163,7 +177,9 @@ def main():
     taps = plan["taps"]
     rows, ok_all = [], True
     for k, t in enumerate(taps):
-        seg = segment_for(spans, t["ayah"])
+        explanation = segment_for(spans, t["ayah"])
+        reading = reading_for(spans, t["ayah"]) if t.get("withReading") else None
+        seg = reading or explanation
         tap = idx(t["tapMs"])
         end = idx(taps[k + 1]["tapMs"]) if k + 1 < len(taps) else len(cap)
         threshold = max(silence + 25, AUDIBLE_FLOOR)
@@ -172,7 +188,11 @@ def main():
             if dbfs(cap[f:f + frame]) > threshold:
                 onset = f
                 break
+        # Sound latency: only meaningful when the output was silent at the tap.
+        was_silent = dbfs(cap[max(tap - RATE // 5, 0):tap]) <= threshold
         row = {"ayah": t["ayah"], "label": t.get("label", ""),
+               "soundAfterTapS": (round((onset - tap) / RATE, 2)
+                                  if onset is not None and was_silent else None),
                "segment": seg and seg["id"], "segmentStartS": seg and seg["startMs"] / 1000,
                "segmentEndS": seg and seg["endMs"] / 1000}
         if onset is None or seg is None:
@@ -180,16 +200,25 @@ def main():
             rows.append(row)
             ok_all = False
             continue
-        start = max(tap + int(t.get("skipS", SKIP_S) * RATE), onset)
+        if reading is not None:
+            # The reading lasts only a few seconds before the jump: analyse
+            # it from just after the sound starts, within the reading.
+            start = onset + RATE // 5
+            span_s = min(COARSE_S, (reading["endMs"] - reading["startMs"]) / 1000 - 0.6)
+        else:
+            start = max(tap + int(t.get("skipS", SKIP_S) * RATE), onset)
+            span_s = COARSE_S
+        windows = max(int(span_s / WINDOW_S), 1)
+        need = 4 if windows >= 6 else max(windows - 1, 1)
         elapsed = (start - tap) / RATE
-        coarse = cap[start:start + int(COARSE_S * RATE)]
+        coarse = cap[start:start + int(span_s * RATE)]
         seg_start = seg["startMs"] / 1000
         best_any, best_any_ncc = loc.locate(coarse)
         lo_s, hi_s = seg_start - 1.0, seg_start + elapsed + 1.0
         heard, heard_ncc = loc.locate_near(coarse, (lo_s + hi_s) / 2, (hi_s - lo_s) / 2)
         win = int(WINDOW_S * RATE)
         agree, nccs = 0, []
-        for j in range(WINDOWS):
+        for j in range(windows):
             w = cap[start + j * win:start + (j + 1) * win]
             at, ncc = loc.locate_near(w, heard + j * WINDOW_S, LOCAL_S) if heard is not None else (None, 0.0)
             nccs.append(round(ncc, 2))
@@ -200,7 +229,7 @@ def main():
         in_place = (heard is not None
                     and seg_start - 0.7 <= heard <= seg_start + elapsed + LATENCY_S)
         strongest = heard is not None and heard_ncc >= 0.85 * best_any_ncc
-        ok = audible and agree >= 4 and in_place and strongest
+        ok = audible and agree >= need and in_place and strongest
         row.update(
             analysedAfterTapS=round(elapsed, 2),
             levelDbfs=round(level, 1),
@@ -209,6 +238,7 @@ def main():
             bestAnywhereS=round(best_any, 2),
             bestAnywhereNcc=round(best_any_ncc, 3),
             windowsAgree=agree,
+            windowsChecked=windows,
             windowNcc=nccs,
             audible=bool(audible),
             inSegmentStart=bool(in_place),
@@ -225,6 +255,25 @@ def main():
                        levelBeforeEndDbfs=round(before, 1),
                        levelAfterEndDbfs=round(after, 1), stoppedAtEnd=bool(stopped))
             ok = ok and stopped
+        if reading is not None and heard is not None:
+            # After the reading, the explanation must follow: 1 s after the
+            # reading's end, the audio comes from the explanation's start.
+            after_reading = start + int((reading["endMs"] / 1000 - heard + 1.0) * RATE)
+            snippet = cap[after_reading:after_reading + int(COARSE_S * RATE)]
+            e0 = explanation["startMs"] / 1000
+            at, at_ncc = loc.locate_near(snippet, e0 + 1.0, 2.5)
+            agree2 = 0
+            for j in range(WINDOWS):
+                w = snippet[j * win:(j + 1) * win]
+                p_, _ = loc.locate_near(w, (at or 0) + j * WINDOW_S, LOCAL_S)
+                if at is not None and p_ is not None and abs(p_ - (at + j * WINDOW_S)) <= AGREE_S:
+                    agree2 += 1
+            followed = (at is not None and e0 - 0.7 <= at <= e0 + 1.0 + LATENCY_S + 0.5
+                        and agree2 >= 4 and dbfs(snippet) > AUDIBLE_FLOOR)
+            row.update(explanationHeardFromS=None if at is None else round(at, 2),
+                       explanationStartS=e0, explanationWindowsAgree=agree2,
+                       explanationFollowed=bool(followed))
+            ok = ok and followed
         row["ok"] = bool(ok)
         ok_all &= ok
         rows.append(row)
@@ -233,15 +282,18 @@ def main():
         return "-" if s is None else f"{int(s // 60)}:{s % 60:05.2f}"
 
     print(f"Idle output level: {silence:.1f} dBFS")
-    print("ayah | label                | after tap | level dBFS | heard from | segment starts | match / best anywhere | agree | stop check | result")
+    print("ayah | label                | sound after tap | analysed at | level dBFS | heard from | segment starts | match / best anywhere | agree | stop check | result")
     for r in rows:
         stop = "-" if "stoppedAtEnd" not in r else (
             f"{'stopped' if r['stoppedAtEnd'] else 'NOT stopped'} "
             f"({r['levelBeforeEndDbfs']}→{r['levelAfterEndDbfs']})")
-        print(f"{r['ayah']:>4} | {r['label'][:20]:<20} | {r.get('analysedAfterTapS', '-'):>8}s | {r.get('levelDbfs', '-'):>10} | "
+        then = "" if "explanationFollowed" not in r else (
+            f" | then explanation from {mmss(r['explanationHeardFromS'])} "
+            f"(starts {mmss(r['explanationStartS'])}, {r['explanationWindowsAgree']} of 6)")
+        print(f"{r['ayah']:>4} | {r['label'][:20]:<20} | {str(r.get('soundAfterTapS') or '-'):>14}s | {r.get('analysedAfterTapS', '-'):>10}s | {r.get('levelDbfs', '-'):>10} | "
               f"{mmss(r.get('heardFromS')):>10} | {mmss(r['segmentStartS']):>14} | "
               f"{r.get('matchNcc', '-')} / {r.get('bestAnywhereNcc', '-')} @{mmss(r.get('bestAnywhereS'))} | "
-              f"{r.get('windowsAgree', 0)} of 6 | {stop} | {'PASS' if r['ok'] else 'FAIL'}")
+              f"{r.get('windowsAgree', 0)} of {r.get('windowsChecked', 6)} | {stop}{then} | {'PASS' if r['ok'] else 'FAIL'}")
     if a.json_out:
         with open(a.json_out, "w", encoding="utf-8") as f:
             json.dump({"silenceDbfs": round(silence, 1), "taps": rows}, f, indent=2,

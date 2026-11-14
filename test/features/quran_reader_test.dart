@@ -203,9 +203,7 @@ void main() {
         location: AppRoutes.quran,
         recording: const RecordingPlatformUnsupported(),
       );
-      const msg =
-          "The Sheikh's recording plays only in the Android and iOS app. "
-          'It is a testing-only file and is not part of the web version.';
+      const msg = "The Sheikh's recording plays in the Android and iOS app.";
       expect(find.text(msg), findsOneWidget);
       await tester.tapAt(ayahCentre(tester, 2));
       await tester.pumpAndSettle();
@@ -228,18 +226,31 @@ void main() {
       expect(find.byKey(const ValueKey('tafsir-play')), findsNothing);
     });
 
-    testWidgets('release builds: no player at all (testing-only rights)', (
+    test('R3 ships in every build: distribution rights, bundled asset', () {
+      // Owner decision C-31: no build may refuse it for rights reasons.
+      expect(fatihaTafsirR3.rights, RecordingRights.distribution);
+      expect(
+        fatihaTafsirR3.bundledAsset,
+        'assets/audio/al-fatiha-tafsir-r3.mp3',
+      );
+    });
+
+    testWidgets('a build without the recording says so; no player', (
       tester,
     ) async {
-      final repo = LocalRecordingRepository(allowTestingOnly: false);
-      expect(await repo.locate(fatihaTafsirR3), isA<RecordingNotPermitted>());
+      // What a testing-only recording reports outside debug builds.
       await pumpApp(
         tester,
         location: AppRoutes.quran,
         recording: const RecordingNotPermitted(),
       );
       expect(find.byKey(const ValueKey('tafsir-play')), findsNothing);
-      expect(find.textContaining('recording isn'), findsNothing);
+      expect(
+        find.text(
+          "This copy of the app was built without the Sheikh's recording.",
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('ready: labelled as Tafsir, plays, pauses, shows times', (
@@ -254,7 +265,8 @@ void main() {
       );
       expect(find.text("Sheikh's Tafsir · original recording"), findsOneWidget);
       expect(find.text('Explanation, not Quran recitation'), findsOneWidget);
-      expect(find.text('Testing only · not for distribution'), findsOneWidget);
+      // R3 ships in every build (C-31): no "testing only" label.
+      expect(find.text('Testing only · not for distribution'), findsNothing);
       expect(find.text('48:32'), findsOneWidget);
       // R3's real alignment has no reviewed spans yet (C-27).
       expect(

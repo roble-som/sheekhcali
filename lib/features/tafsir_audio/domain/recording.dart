@@ -9,7 +9,7 @@ enum RecordingRights {
   /// Development and emulator testing only: never bundled, never in release.
   testingOnly,
 
-  /// Streaming and offline download allowed.
+  /// May ship inside the app and play in every build (R3 since C-31).
   distribution,
 }
 
@@ -29,6 +29,7 @@ class RecordingInfo {
     required this.id3Title,
     required this.id3Artist,
     required this.alignmentAsset,
+    this.bundledAsset,
   });
 
   final String id;
@@ -45,6 +46,10 @@ class RecordingInfo {
   final String id3Title;
   final String id3Artist;
   final String alignmentAsset;
+
+  /// The app asset holding a byte-identical copy of the recording, if the
+  /// app ships it (pubspec.yaml). Copied to app storage on first use.
+  final String? bundledAsset;
 }
 
 /// Where the recording stands on this device.

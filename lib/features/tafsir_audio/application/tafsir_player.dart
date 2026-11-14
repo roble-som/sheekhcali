@@ -56,6 +56,14 @@ abstract interface class TafsirPlayer {
     required String title,
     required String artist,
   });
+
+  /// Loads the recording and prepares it so that the first seek is instant,
+  /// without playing anything. Does nothing if something is already loaded.
+  Future<void> preload({
+    required String path,
+    required String title,
+    required String artist,
+  });
   Future<void> play();
   Future<void> pause();
   Future<void> seek(Duration position);
@@ -87,6 +95,24 @@ class ServiceTafsirPlayer implements TafsirPlayer {
   void _emit(TafsirPlaybackState s) {
     _current = s;
     if (!_states.isClosed) _states.add(s);
+  }
+
+  /// Player updates while [preload] warms up are not shown (the playhead
+  /// jumps to the end and back); a user action ends the warm-up at once.
+  bool _warming = false;
+
+  /// Counts user seeks and plays, so a warm-up never undoes one.
+  int _userActions = 0;
+
+  /// The load in progress, if any: play and seek wait for it.
+  Future<void>? _loading;
+
+  void _emitFromPlayer(TafsirPlaybackState s) {
+    if (_warming) {
+      _current = s;
+      return;
+    }
+    _emit(s);
   }
 
   static const _permissions = MethodChannel('sheekhcalinuur/permissions');
@@ -124,10 +150,78 @@ class ServiceTafsirPlayer implements TafsirPlayer {
     required String path,
     required String title,
     required String artist,
+  }) {
+    final loading = _load(path: path, title: title, artist: artist);
+    _loading = loading;
+    return loading.whenComplete(() {
+      if (identical(_loading, loading)) _loading = null;
+    });
+  }
+
+  /// The MP3 is variable-bitrate and played with exact (index) seeking, so
+  /// ExoPlayer builds its seek index by reading the file up to the first
+  /// seek target. On a phone that took 7–10 s for a tap late in the lesson.
+  /// Seeking to the end once, silently, builds the whole index while the
+  /// page is open; every later seek is then immediate.
+  @override
+  Future<void> preload({
+    required String path,
+    required String title,
+    required String artist,
   }) async {
-    _emit(_current.copyWith(phase: TafsirPhase.loading));
+    if (_current.phase != TafsirPhase.idle) return;
+    final before = _userActions;
+    _warming = true;
     try {
-      await _askForNotificationsOnce();
+      await load(path: path, title: title, artist: artist);
+      final h = _handler;
+      final d = h?.player.duration;
+      if (h == null || d == null || before != _userActions) return;
+      final target = d - const Duration(seconds: 2);
+      await h.player.seek(target);
+      final deadline = DateTime.now().add(const Duration(seconds: 30));
+      while (before == _userActions && DateTime.now().isBefore(deadline)) {
+        final p = h.player;
+        if (p.processingState == ProcessingState.ready &&
+            p.bufferedPosition >= target) {
+          break;
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+      }
+      if (before == _userActions) await h.player.seek(Duration.zero);
+    } on Object {
+      // A failed warm-up only means the first seek is slower.
+    } finally {
+      if (before == _userActions && _warming) {
+        _warming = false;
+        if (_current.phase != TafsirPhase.error) {
+          _emit(
+            _current.copyWith(
+              phase: TafsirPhase.ready,
+              position: Duration.zero,
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  /// A user seek or play: ends any warm-up and waits for a load in progress.
+  Future<_TafsirAudioHandler?> _userAction() async {
+    _userActions++;
+    _warming = false;
+    final loading = _loading;
+    if (loading != null) await loading;
+    return _handler;
+  }
+
+  Future<void> _load({
+    required String path,
+    required String title,
+    required String artist,
+  }) async {
+    _emitFromPlayer(_current.copyWith(phase: TafsirPhase.loading));
+    try {
       final handler = _handler = await _ensureHandler();
       final player = handler.player;
       for (final s in _subs) {
@@ -135,15 +229,23 @@ class ServiceTafsirPlayer implements TafsirPlayer {
       }
       _subs
         ..clear()
-        ..add(player.playerStateStream.listen((ps) => _emit(_map(ps, player))))
+        ..add(
+          player.playerStateStream.listen(
+            (ps) => _emitFromPlayer(_map(ps, player)),
+          ),
+        )
         ..add(
           player.positionStream.listen(
-            (p) => _emit(_current.copyWith(position: p, phase: _current.phase)),
+            (p) => _emitFromPlayer(
+              _current.copyWith(position: p, phase: _current.phase),
+            ),
           ),
         )
         ..add(
           player.durationStream.listen(
-            (d) => _emit(_current.copyWith(duration: d, phase: _current.phase)),
+            (d) => _emitFromPlayer(
+              _current.copyWith(duration: d, phase: _current.phase),
+            ),
           ),
         );
       final duration = await handler.open(
@@ -151,8 +253,11 @@ class ServiceTafsirPlayer implements TafsirPlayer {
         title: title,
         artist: artist,
       );
-      _emit(_current.copyWith(duration: duration, phase: TafsirPhase.ready));
+      _emitFromPlayer(
+        _current.copyWith(duration: duration, phase: TafsirPhase.ready),
+      );
     } on Object catch (e) {
+      _warming = false;
       _emit(_current.copyWith(phase: TafsirPhase.error, error: '$e'));
     }
   }
@@ -171,8 +276,10 @@ class ServiceTafsirPlayer implements TafsirPlayer {
 
   @override
   Future<void> play() async {
-    final h = _handler;
+    final h = await _userAction();
     if (h == null) return;
+    // Android 13+: asked once, at the first real playback (not on preload).
+    await _askForNotificationsOnce();
     if (_current.phase == TafsirPhase.completed) await h.seek(Duration.zero);
     await h.play();
   }
@@ -182,7 +289,7 @@ class ServiceTafsirPlayer implements TafsirPlayer {
 
   @override
   Future<void> seek(Duration position) async {
-    final h = _handler;
+    final h = await _userAction();
     if (h == null) return;
     // Emit at once so the highlight follows the seek without waiting for the
     // next position tick.

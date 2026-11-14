@@ -105,6 +105,13 @@ class SpanIndex {
     ayahsOf: (s) => s.ayahs,
   );
 
+  /// The verified span where the Sheikh **reads** [ayah] alone (used by
+  /// "Play Recitation + Tafsir" before his explanation). Null if none.
+  AlignmentSpan? readingForAyah(int ayah) => _spans
+      .where((s) => s.kind == SpanKind.reading && s.ayahs.length == 1)
+      .where((s) => s.ayahs.single == ayah)
+      .firstOrNull;
+
   /// Every verified explanation span for [ayah], in time order (an ayah may be
   /// explained more than once).
   List<AlignmentSpan> explanationsForAyah(int ayah) => [

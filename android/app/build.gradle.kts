@@ -1,5 +1,4 @@
-import java.security.MessageDigest
-import java.util.Base64
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -7,63 +6,17 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-// ---- Testing-only recording (C-26 as extended on 2026-11-13) -----------------
-// Only when the Dart define SHEEKH_TESTING_AUDIO=true is passed
-// (tool/build_testing_apk.sh). The original R3 file is verified by SHA-256 and
-// copied byte for byte into an Android asset, stored uncompressed. Without the
-// define, nothing is packed and the build is the ordinary one.
-val dartDefines: Map<String, String> =
-    (project.findProperty("dart-defines") as String?)
-        ?.split(",")
-        ?.mapNotNull { encoded ->
-            runCatching { String(Base64.getDecoder().decode(encoded)) }.getOrNull()
-        }
-        ?.mapNotNull { entry ->
-            val i = entry.indexOf('=')
-            if (i > 0) entry.substring(0, i) to entry.substring(i + 1) else null
-        }
-        ?.toMap()
-        ?: emptyMap()
-val bundleTestingAudio = dartDefines["SHEEKH_TESTING_AUDIO"] == "true"
-val r3Sha256 = "3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f"
-val r3Bytes = 12587299L
-val testingAudioDir = layout.buildDirectory.dir("generated/testing_audio").get().asFile
-
-fun sha256Of(file: File): String {
-    val digest = MessageDigest.getInstance("SHA-256")
-    file.inputStream().use { input ->
-        val buffer = ByteArray(1 shl 16)
-        while (true) {
-            val n = input.read(buffer)
-            if (n < 0) break
-            digest.update(buffer, 0, n)
-        }
-    }
-    return digest.digest().joinToString("") { "%02x".format(it) }
+// ---- Release signing ---------------------------------------------------------
+// A release keystore is used only if android/key.properties exists (git-
+// ignored; never created by tooling). Without it, release builds are signed
+// with the debug key so `flutter build apk --release` always works; such an
+// APK is for testing, not for publishing.
+val keystoreProperties = Properties().apply {
+    val file = rootProject.file("key.properties")
+    if (file.isFile) file.inputStream().use { load(it) }
 }
-
-if (bundleTestingAudio) {
-    val source = rootProject.projectDir.parentFile.resolve("shiiq_mp3/003-الفاتحة 1-آخرها.mp3")
-    if (!source.isFile) {
-        throw GradleException("SHEEKH_TESTING_AUDIO: the original recording is missing at $source")
-    }
-    val actual = sha256Of(source)
-    if (source.length() != r3Bytes || actual != r3Sha256) {
-        throw GradleException("SHEEKH_TESTING_AUDIO: $source is not the original R3 (sha256 $actual)")
-    }
-    val staged = testingAudioDir.resolve("testing-audio/$r3Sha256.mp3")
-    if (!staged.isFile || sha256Of(staged) != r3Sha256) {
-        staged.parentFile.mkdirs()
-        source.copyTo(staged, overwrite = true)
-        if (sha256Of(staged) != r3Sha256) {
-            throw GradleException("SHEEKH_TESTING_AUDIO: the staged copy does not match")
-        }
-    }
-    logger.lifecycle("SHEEKH_TESTING_AUDIO: packing the original R3 ($r3Sha256) for a testing build")
-} else {
-    // An earlier testing build must not leak into this one.
-    testingAudioDir.deleteRecursively()
-}
+val hasReleaseKeystore = listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
+    .all { !keystoreProperties.getProperty(it).isNullOrBlank() }
 
 android {
     namespace = "com.example.sheekhcali"
@@ -95,15 +48,22 @@ android {
         noCompress += "mp3"
     }
 
-    if (bundleTestingAudio) {
-        sourceSets.getByName("main").assets.srcDir(testingAudioDir)
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName(
+                if (hasReleaseKeystore) "release" else "debug",
+            )
         }
     }
 }

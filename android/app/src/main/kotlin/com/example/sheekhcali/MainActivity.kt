@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import com.ryanheise.audioservice.AudioServiceActivity
+import io.flutter.FlutterInjector
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
@@ -36,9 +37,10 @@ class MainActivity : AudioServiceActivity() {
                     else -> result.notImplemented()
                 }
             }
-        // Testing builds carry the original recording as an APK asset
-        // (android/app/build.gradle.kts, SHEEKH_TESTING_AUDIO). The player
-        // needs a file, so it is copied once into app-private storage:
+        // The app ships the Sheikh's recording as a Flutter asset
+        // (pubspec.yaml, owner decision C-31). The player needs a file, so
+        // it is copied once into app-private storage, streamed out of the
+        // APK:
         // hashed while copying, written to a temporary name, flushed to disk,
         // then renamed into place only if its SHA-256 and size are the
         // original's. Dart re-verifies the result before playing it.
@@ -48,7 +50,9 @@ class MainActivity : AudioServiceActivity() {
                     result.notImplemented()
                     return@setMethodCallHandler
                 }
-                val asset = call.argument<String>("asset")!!
+                // The Flutter asset key, resolved to its path in the APK.
+                val asset = FlutterInjector.instance().flutterLoader()
+                    .getLookupKeyForAsset(call.argument<String>("asset")!!)
                 val dest = File(call.argument<String>("dest")!!)
                 val sha256 = call.argument<String>("sha256")!!
                 val bytes = (call.argument<Number>("bytes")!!).toLong()
@@ -73,7 +77,7 @@ class MainActivity : AudioServiceActivity() {
             val stream = try {
                 assets.open(asset)
             } catch (e: FileNotFoundException) {
-                // Not a testing build (or packed without the recording).
+                // Not shipped in this build.
                 return mapOf("status" to "missing", "detail" to asset)
             }
             val digest = MessageDigest.getInstance("SHA-256")

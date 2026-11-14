@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/theme/app_theme.dart';
 import '../features/settings/application/preferences_controllers.dart';
+import '../features/tafsir_audio/data/recording_repository.dart';
 import '../l10n/app_localizations.dart';
 import 'router.dart';
 
@@ -13,6 +14,9 @@ class SheekhCalinuurApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    // Start verifying (and on first launch unpacking) the Sheikh's recording
+    // in the background at app start; the reader finds it ready.
+    ref.listen(fatihaRecordingProvider, (_, _) {});
     final chosen = ref.watch(localeControllerProvider);
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appName,

@@ -389,7 +389,7 @@
   "speakerName": "Sheikh Calinuur",
   "testingOnly": "Testing only · not for distribution",
   "recordingNotInstalled": "The Sheikh's Tafsir recording isn't installed on this device.",
-  "recordingInstallHint": "Testing only: install the original file as described in the review guide.",
+  "recordingInstallHint": "Reinstall the app to restore it.",
   "recordingMismatch": "This file isn't the original recording, so it won't be played.",
   "playerPlay": "Play",
   "playerPause": "Pause",
@@ -471,13 +471,13 @@
       }
     }
   },
-  "recordingPhoneOnly": "The Sheikh's recording plays only in the Android and iOS app. It is a testing-only file and is not part of the web version.",
+  "recordingPhoneOnly": "The Sheikh's recording plays in the Android and iOS app.",
   "@recordingPhoneOnly": {
-    "description": "Shown in the web build, where the testing-only recording is not available."
+    "description": "Shown in the web build, which does not play the recording."
   },
-  "syncCandidate": "Unreviewed AI candidate · Ayah {ayahs} · {range} · {confidence} confidence · not verified",
+  "syncCandidate": "Ayah {ayahs} · {range} · timing not yet reviewed",
   "@syncCandidate": {
-    "description": "Player line while a tapped ayah plays an AI-suggested segment the reviewer has not approved yet (debug/testing builds only).",
+    "description": "Player line while a tapped ayah plays a segment whose timing (AI-assisted) the owner has not reviewed yet. confidence is kept for tests and other locales.",
     "placeholders": {
       "ayahs": {
         "type": "String"
@@ -572,7 +572,7 @@
   },
   "aboutQuranBody": "All 114 surahs from Tanzil Uthmani 1.1, shown verbatim. Every ayah is checked against its recorded checksum when it loads and was cross-checked letter by letter against a second source. A reader's on-device check is still pending.",
   "aboutTafsirTitle": "Sheikh Calinuur's Tafsir",
-  "aboutTafsirBody": "The Sheikh's recorded Tafsir of Al-Fatiha, for testing builds only until distribution rights are confirmed. Ayah segments are being reviewed; unreviewed ones are clearly labelled.",
+  "aboutTafsirBody": "The Sheikh's recorded Tafsir of Al-Fatiha, included in the app and playable offline. Tap an ayah to hear his explanation of it. The segment timings are still being reviewed.",
   "aboutPrivacyTitle": "Privacy",
   "aboutPrivacyBody": "No account and no tracking. Settings, bookmarks and your reading place stay on this device.",
   "openSourceLicences": "Open-source licences",
@@ -621,7 +621,17 @@
   "pagesSourceValue": "Madinah Mushaf page boundaries, 604 pages, from the Tanzil metadata. The page of every ayah was cross-checked with Quran Foundation. The line layout is the app's own, not the printed Mushaf's.",
   "pageTextUnverified": "This page's text could not be verified, so it isn't shown.",
   "recordingPreparing": "Preparing the Sheikh's recording…",
-  "recordingUnpackFailed": "The recording in this testing build couldn't be prepared on this device. Free some storage, then reopen the app.",
-  "recordingNotInThisBuild": "This version doesn't include the Sheikh's recording yet: distribution rights are still being confirmed.",
-  "testingBuildBanner": "Testing build · includes the Sheikh's recording · not for distribution"
+  "recordingUnpackFailed": "The Sheikh's recording couldn't be prepared on this device. Free some storage, then reopen the app.",
+  "recordingNotInThisBuild": "This copy of the app was built without the Sheikh's recording.",
+  "syncReadingThenExplanation": "The Sheikh reads ayah {number}, then explains it · {range}",
+  "@syncReadingThenExplanation": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      },
+      "range": {
+        "type": "String"
+      }
+    }
+  }
 }
