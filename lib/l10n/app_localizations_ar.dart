@@ -953,8 +953,74 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sourceQuranMetadataStatus =>
-      'بيانات تنزيل ١٫٠ · ١١٤ سورة و٣٠ جزءًا · قورنت بمصدر ثانٍ';
+      'بيانات تنزيل ١٫٠ · ١١٤ سورة و٣٠ جزءًا و٦٠٤ صفحات لمصحف المدينة · قورنت بمصدر ثانٍ';
 
   @override
   String get logoSemantics => 'شعار الشيخ علي نور';
+
+  @override
+  String pageLabel(String page) {
+    return 'صفحة $page';
+  }
+
+  @override
+  String get nextPage => 'الصفحة التالية';
+
+  @override
+  String get previousPage => 'الصفحة السابقة';
+
+  @override
+  String get goToPageTitle => 'الانتقال إلى صفحة';
+
+  @override
+  String goToPageHint(String first, String last) {
+    return 'رقم الصفحة، $first–$last';
+  }
+
+  @override
+  String goToPageInvalid(String first, String last) {
+    return 'أدخل رقم صفحة من $first إلى $last.';
+  }
+
+  @override
+  String get goToPageAction => 'انتقال';
+
+  @override
+  String get readingLayout => 'طريقة العرض';
+
+  @override
+  String get layoutPages => 'صفحات';
+
+  @override
+  String get layoutSurah => 'السورة كاملة';
+
+  @override
+  String get layoutPagesNote =>
+      'حدود صفحات مصحف المدينة (٦٠٤ صفحات). الأسطر من ترتيب التطبيق، وليست كما في المصحف المطبوع.';
+
+  @override
+  String get pagesLabel => 'الصفحات';
+
+  @override
+  String get pagesSourceValue =>
+      'حدود صفحات مصحف المدينة، ٦٠٤ صفحات، من بيانات تنزيل. قورنت صفحة كل آية بمصدر Quran Foundation. ترتيب الأسطر من التطبيق وليس كالمصحف المطبوع.';
+
+  @override
+  String get pageTextUnverified =>
+      'تعذّر التحقق من نص هذه الصفحة، لذلك لا يُعرض.';
+
+  @override
+  String get recordingPreparing => 'جارٍ تجهيز تسجيل الشيخ…';
+
+  @override
+  String get recordingUnpackFailed =>
+      'تعذّر تجهيز التسجيل المرفق بنسخة الاختبار هذه على هذا الجهاز. وفّر بعض المساحة ثم أعد فتح التطبيق.';
+
+  @override
+  String get recordingNotInThisBuild =>
+      'هذه النسخة لا تتضمن تسجيل الشيخ بعد: حقوق التوزيع ما زالت قيد التأكيد.';
+
+  @override
+  String get testingBuildBanner =>
+      'نسخة اختبار · تتضمن تسجيل الشيخ · ليست للتوزيع';
 }

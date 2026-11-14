@@ -29,6 +29,9 @@ abstract final class AppRoutes {
   static String quranAt(int surah, [int? ayah]) =>
       '/quran?surah=$surah${ayah == null ? '' : '&ayah=$ayah'}';
 
+  /// The reader at Madinah Mushaf page [page].
+  static String quranPage(int page) => '/quran?page=$page';
+
   /// The index opened on a tab: 'surah', 'juz' or 'bookmarks'.
   static String quranIndexTab(String tab) => '/quran/index?tab=$tab';
   static const library = '/library';
@@ -58,10 +61,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           final q = state.uri.queryParameters;
           final surah = (int.tryParse(q['surah'] ?? '') ?? 1).clamp(1, 114);
           final ayah = int.tryParse(q['ayah'] ?? '');
+          final page = int.tryParse(q['page'] ?? '');
           return QuranReaderScreen(
-            key: ValueKey('reader-$surah-$ayah'),
+            key: ValueKey('reader-$surah-$ayah-$page'),
             surah: surah,
             initialAyah: ayah,
+            page: page,
           );
         },
       ),

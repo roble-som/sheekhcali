@@ -1,0 +1,39 @@
+[21:39:51] original R3 sha256 before: 3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f
+[21:39:54] APK: build/app/outputs/flutter-apk/sheekhcali-1.0.0-debug-TESTING-with-R3-NOT-FOR-DISTRIBUTION.apk (220131732 bytes, sha256 bcbcb81cb243bfee924d9bb177815cfe7504c406e29b6a30ba913317bb20081e)
+[21:39:54] uninstalled: no app, no app data
+[21:39:58] offline: airplane mode on, Wi-Fi and data off, ping fails (Active default network: none)
+[21:40:02] installed with adb install (nothing else copied to the device)
+[21:40:02] before first launch: no recording in app storage
+[21:40:04] recording only: sheekh_emulator_capture:monitor_FL sheekh_emulator_capture:monitor_FR 
+[21:40:14] opened the Quran card
+[21:40:18] player ready (recording unpacked and verified by the app)
+total 12300
+-rw------- 1 u0_a251 u0_a251 12587299 2026-11-13 21:40:14.692000000 +0300 3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f.mp3
+[21:40:19] device copy sha256: 3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f (equal to the original)
+[21:40:43] ayah markers at: 1=(433 703) 2=(795 861) 3=(334 861) 4=(824 1018) 5=(121 1018) 6=(423 1176) 7=(441 1491) 
+[21:40:43] tapped ayah 1 (first launch, cold) at 1794595243579
+[21:41:00] tapped ayah 2 (first launch) at 1794595260614
+[21:41:10] tapped ayah 3 (segment end) at 1794595270689
+[21:41:36] tapped ayah 4 (first launch) at 1794595296456
+[21:41:46] tapped ayah 5 (first launch) at 1794595306883
+[21:41:56] tapped ayah 6 (first launch) at 1794595315962
+[21:42:06] tapped ayah 7 (first launch) at 1794595326228
+[21:42:16] rapid: ayah 2 at 1794595335738, ayah 6 at 1794595335946
+[21:42:26] force-stopped
+[21:42:40] restarted offline: player ready
+[21:43:00] ayah markers at: 1=(433 703) 2=(795 861) 3=(334 861) 4=(824 1018) 5=(121 1018) 6=(423 1176) 7=(441 1491) 
+[21:43:00] tapped ayah 5 (after restart, cold) at 1794595380426
+[21:43:18] after restart: same file reused (mtime 1794595214), no partial files (0)
+Idle output level: -240.0 dBFS
+ayah | label                | after tap | level dBFS | heard from | segment starts | match / best anywhere | agree | stop check | result
+   1 | first launch, cold   |      7.3s |      -28.0 |   25:58.95 |       25:58.90 | 0.37 / 0.37 @25:58.95 | 6 of 6 | - | PASS
+   2 | first launch         |      2.0s |      -28.8 |   32:59.89 |       33:00.00 | 0.176 / 0.176 @32:59.89 | 6 of 6 | - | PASS
+   3 | segment end          |      2.0s |      -27.6 |   37:47.59 |       37:47.10 | 0.128 / 0.128 @37:47.59 | 6 of 6 | stopped (-26.9→-240.0) | PASS
+   4 | first launch         |      2.0s |      -29.3 |   39:21.86 |       39:21.50 | 0.166 / 0.166 @39:21.86 | 5 of 6 | - | PASS
+   5 | first launch         |      2.0s |      -28.4 |   41:51.98 |       41:50.80 | 0.22 / 0.22 @41:51.98 | 6 of 6 | - | PASS
+   6 | first launch         |      2.0s |      -27.4 |   45:41.03 |       45:40.70 | 0.139 / 0.139 @45:41.03 | 5 of 6 | - | PASS
+   7 | first launch         |      2.0s |      -28.3 |   47:07.75 |       47:07.10 | 0.123 / 0.131 @18:34.01 | 6 of 6 | - | PASS
+   6 | rapid 2 then 6       |      2.0s |      -27.3 |   45:41.08 |       45:40.70 | 0.137 / 0.137 @45:41.08 | 6 of 6 | - | PASS
+   5 | after restart, cold  |     9.95s |      -27.4 |   41:50.92 |       41:50.80 | 0.251 / 0.251 @41:50.92 | 6 of 6 | - | PASS
+HEARD-SEGMENT CHECK: PASSED
+[21:44:29] original R3 sha256 after: 3300e3644ff3631414ffab463d4c34c2ee88da162b77564dd661a187f7b0834f (unchanged)

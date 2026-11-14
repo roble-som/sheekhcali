@@ -110,3 +110,34 @@ class QuranFontSizeController extends Notifier<double> {
 final quranFontSizeProvider = NotifierProvider<QuranFontSizeController, double>(
   QuranFontSizeController.new,
 );
+
+/// How the reader lays out the Quran.
+enum QuranLayout {
+  /// One Madinah Mushaf page at a time (604 pages), swiped right to left.
+  pages,
+
+  /// A whole surah as one continuous text.
+  surah,
+}
+
+/// The saved reading layout. Pages by default; the reader falls back to the
+/// whole-surah layout when no verified page data is installed.
+class QuranLayoutController extends Notifier<QuranLayout> {
+  static const _key = 'quran.layout';
+
+  @override
+  QuranLayout build() =>
+      ref.watch(sharedPreferencesProvider).getString(_key) == 'surah'
+      ? QuranLayout.surah
+      : QuranLayout.pages;
+
+  Future<void> set(QuranLayout layout) async {
+    state = layout;
+    await ref.read(sharedPreferencesProvider).setString(_key, layout.name);
+  }
+}
+
+final quranLayoutProvider =
+    NotifierProvider<QuranLayoutController, QuranLayout>(
+      QuranLayoutController.new,
+    );

@@ -153,8 +153,12 @@ void main() {
     expect(prefs.getString('quran.lastRead'), '2:4');
   });
 
-  testWidgets('next and previous surah', (tester) async {
-    await pumpApp(tester, location: AppRoutes.quranAt(113));
+  testWidgets('whole-surah layout: next and previous surah', (tester) async {
+    await pumpApp(
+      tester,
+      location: AppRoutes.quranAt(113),
+      extraPrefs: const {'quran.layout': 'surah'},
+    );
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('next-surah')),
       300,

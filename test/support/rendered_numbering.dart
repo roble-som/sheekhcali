@@ -7,11 +7,15 @@ import 'synthetic_alignment.dart' show quranParagraph;
 
 /// Character range of each ayah's displayed text in the laid-out paragraph,
 /// found by walking the spans actually handed to the renderer.
-Map<int, TextRange> renderedAyahRanges(RenderParagraph p, SurahText surah) {
+Map<int, TextRange> renderedAyahRanges(
+  RenderParagraph p,
+  SurahText surah, {
+  int first = 1,
+}) {
   // Matched in reading order: some ayahs repeat an earlier ayah's exact text
   // (for example 2:141 and 2:134), so text alone can't identify them.
   final out = <int, TextRange>{};
-  var next = 0;
+  var next = first - 1;
   var offset = 0;
   p.text.visitChildren((span) {
     if (span is TextSpan && span.text != null) {
@@ -85,21 +89,36 @@ Rect renderedAyahEnd(RenderParagraph p, TextRange range) {
   );
 }
 
-/// Checks every ayah of [surah] as rendered: exactly one number per ayah,
-/// equal to the ayah's ID, drawn right after the ayah's end on the same line.
+/// Checks every ayah of [surah] as rendered (or ayahs [first]…[last], as on
+/// a Mushaf page, in [paragraph]): exactly one number per ayah, equal to the
+/// ayah's ID, drawn right after the ayah's end on the same line.
 /// Returns a list of problems (empty when all is well).
-List<String> checkRenderedNumbering(WidgetTester tester, SurahText surah) {
-  final p = quranParagraph(tester);
-  final ranges = renderedAyahRanges(p, surah);
+List<String> checkRenderedNumbering(
+  WidgetTester tester,
+  SurahText surah, {
+  RenderParagraph? paragraph,
+  int first = 1,
+  int? last,
+}) {
+  final p = paragraph ?? quranParagraph(tester);
+  final ranges = renderedAyahRanges(p, surah, first: first);
   final markers = renderedMarkerRects(p);
+  final shown = surah.ayahs.sublist(first - 1, last ?? surah.ayahs.length);
   final problems = <String>[];
-  if (markers.length != surah.ayahs.length) {
+  if (markers.length != shown.length ||
+      !shown.every((a) => markers.containsKey(a.number))) {
     problems.add(
       '${surah.number}: ${markers.length} numbers drawn for '
-      '${surah.ayahs.length} ayahs',
+      '${shown.length} ayahs',
     );
   }
-  for (final a in surah.ayahs) {
+  if (ranges.length != shown.length) {
+    problems.add(
+      '${surah.number}: ${ranges.length} ayah texts found for '
+      '${shown.length} ayahs',
+    );
+  }
+  for (final a in shown) {
     final range = ranges[a.number];
     final marker = markers[a.number];
     if (range == null || marker == null) {
@@ -110,14 +129,33 @@ List<String> checkRenderedNumbering(WidgetTester tester, SurahText surah) {
     final sameLine =
         marker.center.dy >= end.top && marker.center.dy <= end.bottom;
     final after = marker.right <= end.left + 1;
-    final adjacent = end.left - marker.right < 24;
+    // 24 px at the reading size of 28 (scale 1), proportionally larger for
+    // larger text: the gap is a no-break space and two figure spaces.
+    final adjacent = end.left - marker.right < 24 * _effectiveSize(p) / 28;
     if (!sameLine || !after || !adjacent) {
       problems.add(
         '${surah.number}:${a.number} number '
         '${localizeDigits('${a.number}', const Locale('ar'))} misplaced '
-        '(same line $sameLine, after $after, adjacent $adjacent)',
+        '(same line $sameLine, after $after, adjacent $adjacent, '
+        'gap ${(end.left - marker.right).toStringAsFixed(1)})',
       );
     }
   }
   return problems;
+}
+
+/// The Quran text's font size as laid out (its style times the text scale).
+double _effectiveSize(RenderParagraph p) {
+  // The largest size in the paragraph is the Quran text (numbers are
+  // smaller; the root span carries the ambient default style).
+  // (visitChildren skips spans without text, such as the styled parent.)
+  var size = 0.0;
+  void walk(InlineSpan span) {
+    final s = span.style?.fontSize ?? 0;
+    if (s > size) size = s;
+    if (span is TextSpan) span.children?.forEach(walk);
+  }
+
+  walk(p.text);
+  return p.textScaler.scale(size == 0 ? 28 : size);
 }

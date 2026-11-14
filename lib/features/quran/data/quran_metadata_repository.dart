@@ -36,8 +36,9 @@ class BundledQuranMetadataRepository implements QuranMetadataRepository {
 }
 
 /// Parses and re-checks the metadata asset (114 surahs numbered 1–114 with
-/// 6,236 ayahs in total, 30 juz in order, cross-check recorded). Null on any
-/// inconsistency.
+/// 6,236 ayahs in total, 30 juz in order, cross-check recorded and, when
+/// pages are present, 604 pages in strict reading order from 1:1). Null on
+/// any inconsistency.
 QuranMetadata? parseQuranMetadata(String raw) {
   final json = jsonDecode(raw) as Map<String, dynamic>;
   if (json['schema'] != 1) return null;
@@ -76,6 +77,38 @@ QuranMetadata? parseQuranMetadata(String raw) {
     if (juzs[i].number != i + 1) return null;
   }
   if (surahs.fold<int>(0, (t, s) => t + s.ayahCount) != 6236) return null;
+  final pages = [
+    for (final p
+        in ((json['pages'] as List?) ?? const []).cast<Map<String, dynamic>>())
+      PageInfo(
+        number: p['number'] as int,
+        startSurah: p['startSurah'] as int,
+        startAyah: p['startAyah'] as int,
+      ),
+  ];
+  if (pages.isNotEmpty) {
+    if (pages.length != 604) return null;
+    final checked =
+        ((json['crossCheck'] as Map<String, dynamic>)['checked'] as List?)
+            ?.cast<String>() ??
+        const [];
+    if (!checked.any((c) => c.startsWith('Madinah Mushaf page'))) return null;
+    var previous = -1;
+    for (var i = 0; i < pages.length; i++) {
+      final p = pages[i];
+      if (p.number != i + 1) return null;
+      if (p.startSurah < 1 || p.startSurah > 114) return null;
+      if (p.startAyah < 1 || p.startAyah > surahs[p.startSurah - 1].ayahCount) {
+        return null;
+      }
+      var g = p.startAyah - 1;
+      for (var s = 0; s < p.startSurah - 1; s++) {
+        g += surahs[s].ayahCount;
+      }
+      if (i == 0 ? g != 0 : g <= previous) return null;
+      previous = g;
+    }
+  }
   return QuranMetadata(
     source: QuranMetadataSource(
       name: source['name'] as String,
@@ -84,6 +117,7 @@ QuranMetadata? parseQuranMetadata(String raw) {
     ),
     surahs: List.unmodifiable(surahs),
     juzs: List.unmodifiable(juzs),
+    pages: List.unmodifiable(pages),
   );
 }
 

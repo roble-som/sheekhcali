@@ -949,8 +949,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sourceQuranMetadataStatus =>
-      'Tanzil metadata 1.0 · 114 surahs, 30 juz · cross-checked with a second source';
+      'Tanzil metadata 1.0 · 114 surahs, 30 juz, 604 Madinah Mushaf pages · cross-checked with a second source';
 
   @override
   String get logoSemantics => 'Sheekh Calinuur logo';
+
+  @override
+  String pageLabel(String page) {
+    return 'Page $page';
+  }
+
+  @override
+  String get nextPage => 'Next page';
+
+  @override
+  String get previousPage => 'Previous page';
+
+  @override
+  String get goToPageTitle => 'Go to page';
+
+  @override
+  String goToPageHint(String first, String last) {
+    return 'Page number, $first–$last';
+  }
+
+  @override
+  String goToPageInvalid(String first, String last) {
+    return 'Enter a page number from $first to $last.';
+  }
+
+  @override
+  String get goToPageAction => 'Go';
+
+  @override
+  String get readingLayout => 'Layout';
+
+  @override
+  String get layoutPages => 'Pages';
+
+  @override
+  String get layoutSurah => 'Whole surah';
+
+  @override
+  String get layoutPagesNote =>
+      'Madinah Mushaf page boundaries (604 pages). The lines are laid out by the app, not as in the printed Mushaf.';
+
+  @override
+  String get pagesLabel => 'Pages';
+
+  @override
+  String get pagesSourceValue =>
+      'Madinah Mushaf page boundaries, 604 pages, from the Tanzil metadata. The page of every ayah was cross-checked with Quran Foundation. The line layout is the app\'s own, not the printed Mushaf\'s.';
+
+  @override
+  String get pageTextUnverified =>
+      'This page\'s text could not be verified, so it isn\'t shown.';
+
+  @override
+  String get recordingPreparing => 'Preparing the Sheikh\'s recording…';
+
+  @override
+  String get recordingUnpackFailed =>
+      'The recording in this testing build couldn\'t be prepared on this device. Free some storage, then reopen the app.';
+
+  @override
+  String get recordingNotInThisBuild =>
+      'This version doesn\'t include the Sheikh\'s recording yet: distribution rights are still being confirmed.';
+
+  @override
+  String get testingBuildBanner =>
+      'Testing build · includes the Sheikh\'s recording · not for distribution';
 }

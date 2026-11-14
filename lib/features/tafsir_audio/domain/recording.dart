@@ -78,6 +78,14 @@ final class RecordingChecksumMismatch extends RecordingStatus {
   final String actualSha256;
 }
 
+/// A testing build carries the recording, but copying it to app storage
+/// failed (for example, the device is out of space). [reason] is technical.
+final class RecordingUnpackFailed extends RecordingStatus {
+  const RecordingUnpackFailed(this.reason);
+
+  final String reason;
+}
+
 /// Present and byte-identical to the original.
 final class RecordingReady extends RecordingStatus {
   const RecordingReady(this.path, this.info);

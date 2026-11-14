@@ -46,7 +46,19 @@ class TafsirPlayerBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final status = ref.watch(fatihaRecordingProvider);
     return status.when(
-      loading: () => const _Shell(child: LinearProgressIndicator(minHeight: 2)),
+      // Verifying (and, in a testing build, unpacking) the recording.
+      loading: () => _Shell(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const LinearProgressIndicator(minHeight: 2),
+            _Notice(
+              icon: Icons.headphones,
+              text: AppLocalizations.of(context).recordingPreparing,
+            ),
+          ],
+        ),
+      ),
       error: (e, s) => _Shell(
         child: _Notice(
           icon: Icons.error_outline,
@@ -54,7 +66,19 @@ class TafsirPlayerBar extends ConsumerWidget {
         ),
       ),
       data: (s) => switch (s) {
-        RecordingNotPermitted() => const SizedBox.shrink(),
+        // A build without the testing-only recording says so plainly.
+        RecordingNotPermitted() => _Shell(
+          child: _Notice(
+            icon: Icons.headphones,
+            text: AppLocalizations.of(context).recordingNotInThisBuild,
+          ),
+        ),
+        RecordingUnpackFailed() => _Shell(
+          child: _Notice(
+            icon: Icons.sd_card_alert_outlined,
+            text: AppLocalizations.of(context).recordingUnpackFailed,
+          ),
+        ),
         RecordingPlatformUnsupported() => _Shell(
           child: _Notice(
             icon: Icons.phone_android,

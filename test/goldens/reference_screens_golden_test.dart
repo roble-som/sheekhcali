@@ -199,6 +199,42 @@ void main() {
     await shot('reader_light_en');
   });
 
+  // Representative Mushaf pages (page boundaries from the verified data):
+  // Al-Fatiha; Al-Baqarah's first page; a page inside a long surah;
+  // At-Tawbah's first page (a surah start without a basmala); At-Tin (the
+  // "بِّسْمِ" basmala variant) followed by the start of Al-Alaq; the last
+  // page (three short surahs). Every page's content is checked in
+  // test/quran/all_pages_test.dart.
+  for (final (page, name, locale, dark) in [
+    (1, 'fatiha', 'en', true),
+    (2, 'baqarah_start', 'ar', true),
+    (50, 'baqarah_inside', 'en', false),
+    (187, 'tawbah_start', 'en', true),
+    (597, 'tin_basmala_variant', 'ar', false),
+    (604, 'last_page', 'en', true),
+  ]) {
+    testWidgets('mushaf page $page $name $locale', (tester) async {
+      await pumpApp(
+        tester,
+        locale: locale,
+        location: AppRoutes.quranPage(page),
+        readerDark: dark,
+      );
+      await shot('page_${page.toString().padLeft(3, '0')}_${name}_$locale');
+    });
+  }
+
+  testWidgets('mushaf page 604 small phone, 130% text', (tester) async {
+    await pumpApp(
+      tester,
+      location: AppRoutes.quranPage(604),
+      physicalSize: const Size(640, 1280),
+      dpr: 2,
+      textScale: 1.3,
+    );
+    await shot('page_604_small_phone_130');
+  });
+
   testWidgets('home on a 360 dp phone en', (tester) async {
     await pumpApp(tester, physicalSize: const Size(1080, 2340), dpr: 3);
     await shot('home_en_360dp');

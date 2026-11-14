@@ -59,8 +59,8 @@ void main() {
     );
     expect(
       find.text(
-        'Tanzil metadata 1.0 · 114 surahs, 30 juz · cross-checked with a '
-        'second source',
+        'Tanzil metadata 1.0 · 114 surahs, 30 juz, 604 Madinah Mushaf pages · '
+        'cross-checked with a second source',
       ),
       findsOneWidget,
     );

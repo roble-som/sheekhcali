@@ -61,7 +61,7 @@ Original recommendation, kept for the record:
 
 - **Primary text: Tanzil Uthmani 1.1**, stored verbatim with attribution and a link back, as Tanzil's terms require.
 - **Independent cross-check:** a second source, either KFGQPC's own text or Quran Foundation's Uthmani text under its terms, used **only for verification at build time**, never shipped.
-- **Mushaf page mode** needs page and line data **from the same edition as the font**. That means KFGQPC/QPC page fonts and layout data, either through Quran Foundation (bundling permitted under conditions) or through KFGQPC's permission. Page mode stays **BLOCKED** until one of these is cleared. Continuous (reflowing) mode only needs the text and a licensed font.
+- **Mushaf page mode** needs page and line data **from the same edition as the font**. That means KFGQPC/QPC page fonts and layout data, either through Quran Foundation (bundling permitted under conditions) or through KFGQPC's permission. The printed line layout stays **BLOCKED** until one of these is cleared. Since C-30 the reader shows the Madinah Mushaf **page boundaries** (604 pages, copied from the approved Tanzil metadata and cross-checked ayah by ayah against Quran Foundation) with its own reflowing text, and says so in the source dialog and the reading controls. Continuous (reflowing) mode only needs the text and a licensed font.
 
 ### 2.3 Provenance record, stored for each imported source
 
@@ -90,7 +90,7 @@ Original recommendation, kept for the record:
 | Basmala | Not numbered in other surahs; absent from At-Tawbah (9) | Checked explicitly |
 | Juz / hizb / quarters | 30 / 60 / 240 boundaries, as ayah references | Source metadata + second source |
 | Sajdah positions | As the source lists them | Source metadata + second source |
-| Mushaf pages | 604 pages in the Madinah edition, as ayah ranges | From the font edition's own layout data only, **never computed by us** |
+| Mushaf pages | 604 pages in the Madinah edition, as ayah ranges | Boundaries copied from the approved Tanzil metadata (never computed by us) and the page of all 6,236 ayahs equal to Quran Foundation's `page_number` (C-30, `test/quran/mushaf_pages_test.dart`, every page rendered in `all_pages_test.dart`). Line layout only from the font edition's own data (P-24) |
 
 The "expected values" column states the generally accepted figures for the Hafs Madinah mushaf. The tests take their expected values from **the source data**, and a mismatch between sources fails the build. The figures are never typed in from memory.
 
@@ -194,7 +194,7 @@ Open Al-Fatiha → read the verified Arabic text → open the matching Tafsir �
 | Mushaf page 1 layout | **BLOCKED** on the font and layout licence (§2.1) | — |
 | Tafsir text for Al-Fatiha | **NOT FOUND.** Which Tafsir does the Sheikh teach from, and which edition? | `CONTENT_INVENTORY.md` |
 | The Sheikh's Al-Fatiha recording | **FOUND, unconfirmed.** `shiiq_mp3/003-الفاتحة 1-آخرها.mp3.mpeg`: 48:32.0, SHA-256 `3300e364…`, ID3 artist "الشيخ علي نور". The link to Al-Fatiha rests on its filename and title; nobody has listened to it yet | `CONTENT_INVENTORY.md` R3 |
-| Rights for the recording and the Tafsir | Recording: **testing only** (C-26), not bundled or distributed. Tafsir text: not supplied | `docs/content/R3_RECORDING_REPORT.md` |
+| Rights for the recording and the Tafsir | Recording: **testing only** (C-26): packed only into labelled testing APKs for the owner's devices (C-29), never in the default build, never distributed. Tafsir text: not supplied | `docs/content/R3_RECORDING_REPORT.md` |
 | A qualified reviewer for the mapping | **The owner** (C-27). Workflow ready; no spans reviewed yet | `docs/review/AL_FATIHA_TAFSIR_REVIEW.md` |
 | Transcript | Machine draft only (C-28), evidence for the reviewer; not published | `docs/content/R3_RECORDING_REPORT.md` |
 

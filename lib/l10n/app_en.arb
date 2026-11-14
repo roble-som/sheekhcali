@@ -577,6 +577,51 @@
   "aboutPrivacyBody": "No account and no tracking. Settings, bookmarks and your reading place stay on this device.",
   "openSourceLicences": "Open-source licences",
   "sourceQuranTextStatus": "All 114 surahs · Tanzil Uthmani 1.1, verbatim · cross-checked with a second source · reviewer check pending",
-  "sourceQuranMetadataStatus": "Tanzil metadata 1.0 · 114 surahs, 30 juz · cross-checked with a second source",
-  "logoSemantics": "Sheekh Calinuur logo"
+  "sourceQuranMetadataStatus": "Tanzil metadata 1.0 · 114 surahs, 30 juz, 604 Madinah Mushaf pages · cross-checked with a second source",
+  "logoSemantics": "Sheekh Calinuur logo",
+  "pageLabel": "Page {page}",
+  "@pageLabel": {
+    "placeholders": {
+      "page": {
+        "type": "String"
+      }
+    }
+  },
+  "nextPage": "Next page",
+  "previousPage": "Previous page",
+  "goToPageTitle": "Go to page",
+  "goToPageHint": "Page number, {first}–{last}",
+  "@goToPageHint": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      }
+    }
+  },
+  "goToPageInvalid": "Enter a page number from {first} to {last}.",
+  "@goToPageInvalid": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      }
+    }
+  },
+  "goToPageAction": "Go",
+  "readingLayout": "Layout",
+  "layoutPages": "Pages",
+  "layoutSurah": "Whole surah",
+  "layoutPagesNote": "Madinah Mushaf page boundaries (604 pages). The lines are laid out by the app, not as in the printed Mushaf.",
+  "pagesLabel": "Pages",
+  "pagesSourceValue": "Madinah Mushaf page boundaries, 604 pages, from the Tanzil metadata. The page of every ayah was cross-checked with Quran Foundation. The line layout is the app's own, not the printed Mushaf's.",
+  "pageTextUnverified": "This page's text could not be verified, so it isn't shown.",
+  "recordingPreparing": "Preparing the Sheikh's recording…",
+  "recordingUnpackFailed": "The recording in this testing build couldn't be prepared on this device. Free some storage, then reopen the app.",
+  "recordingNotInThisBuild": "This version doesn't include the Sheikh's recording yet: distribution rights are still being confirmed.",
+  "testingBuildBanner": "Testing build · includes the Sheikh's recording · not for distribution"
 }

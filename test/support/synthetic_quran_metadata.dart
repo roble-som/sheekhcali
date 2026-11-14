@@ -5,7 +5,7 @@ import 'package:sheekhcali/features/quran/domain/quran_metadata.dart';
 /// ("Synthetic chapter …", Arabic "اختبار" = "test"), so this fixture can
 /// never be mistaken for real surah data. It exercises the index UI: lists,
 /// search, RTL and navigation. It is never bundled with the app.
-const syntheticQuranMetadata = QuranMetadata(
+final syntheticQuranMetadata = QuranMetadata(
   source: QuranMetadataSource(
     name: 'synthetic-test-fixture',
     version: '0',
@@ -48,5 +48,5 @@ class SyntheticQuranMetadataRepository implements QuranMetadataRepository {
 
   @override
   Future<QuranMetadataAvailability> load() async =>
-      const QuranMetadataAvailable(syntheticQuranMetadata);
+      QuranMetadataAvailable(syntheticQuranMetadata);
 }

@@ -1745,7 +1745,7 @@ abstract class AppLocalizations {
   /// No description provided for @sourceQuranMetadataStatus.
   ///
   /// In en, this message translates to:
-  /// **'Tanzil metadata 1.0 · 114 surahs, 30 juz · cross-checked with a second source'**
+  /// **'Tanzil metadata 1.0 · 114 surahs, 30 juz, 604 Madinah Mushaf pages · cross-checked with a second source'**
   String get sourceQuranMetadataStatus;
 
   /// No description provided for @logoSemantics.
@@ -1753,6 +1753,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sheekh Calinuur logo'**
   String get logoSemantics;
+
+  /// No description provided for @pageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page}'**
+  String pageLabel(String page);
+
+  /// No description provided for @nextPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Next page'**
+  String get nextPage;
+
+  /// No description provided for @previousPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous page'**
+  String get previousPage;
+
+  /// No description provided for @goToPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to page'**
+  String get goToPageTitle;
+
+  /// No description provided for @goToPageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Page number, {first}–{last}'**
+  String goToPageHint(String first, String last);
+
+  /// No description provided for @goToPageInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a page number from {first} to {last}.'**
+  String goToPageInvalid(String first, String last);
+
+  /// No description provided for @goToPageAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Go'**
+  String get goToPageAction;
+
+  /// No description provided for @readingLayout.
+  ///
+  /// In en, this message translates to:
+  /// **'Layout'**
+  String get readingLayout;
+
+  /// No description provided for @layoutPages.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages'**
+  String get layoutPages;
+
+  /// No description provided for @layoutSurah.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole surah'**
+  String get layoutSurah;
+
+  /// No description provided for @layoutPagesNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Madinah Mushaf page boundaries (604 pages). The lines are laid out by the app, not as in the printed Mushaf.'**
+  String get layoutPagesNote;
+
+  /// No description provided for @pagesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages'**
+  String get pagesLabel;
+
+  /// No description provided for @pagesSourceValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Madinah Mushaf page boundaries, 604 pages, from the Tanzil metadata. The page of every ayah was cross-checked with Quran Foundation. The line layout is the app\'s own, not the printed Mushaf\'s.'**
+  String get pagesSourceValue;
+
+  /// No description provided for @pageTextUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'This page\'s text could not be verified, so it isn\'t shown.'**
+  String get pageTextUnverified;
+
+  /// No description provided for @recordingPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing the Sheikh\'s recording…'**
+  String get recordingPreparing;
+
+  /// No description provided for @recordingUnpackFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The recording in this testing build couldn\'t be prepared on this device. Free some storage, then reopen the app.'**
+  String get recordingUnpackFailed;
+
+  /// No description provided for @recordingNotInThisBuild.
+  ///
+  /// In en, this message translates to:
+  /// **'This version doesn\'t include the Sheikh\'s recording yet: distribution rights are still being confirmed.'**
+  String get recordingNotInThisBuild;
+
+  /// No description provided for @testingBuildBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing build · includes the Sheikh\'s recording · not for distribution'**
+  String get testingBuildBanner;
 }
 
 class _AppLocalizationsDelegate

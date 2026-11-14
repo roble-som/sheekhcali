@@ -41,6 +41,8 @@ Source: the owner's Phase 0 specification (2026-11-13) and the master prompt.
 | C-26 | Recording R3 (`shiiq_mp3/003-الفاتحة 1-آخرها.mp3.mpeg`) is, per the owner, **Sheikh Calinuur's own Tafsir of Al-Fatiha**. It is approved **for development and emulator testing only: not bundled, not distributed**. This partly answers P-08 and P-22 | Same |
 | C-27 | **P-07: the owner is the reviewer** for the Al-Fatiha Tafsir timestamps and the on-device Quran text check. Until the owner signs off, every mapping stays pending and nothing is highlighted from this recording | Same |
 | C-28 | A local draft transcript (whisper.cpp, run on this machine only) is allowed as a starting point for the reviewer. It is never published or shown as content | Same |
+| C-29 | **C-26 extended:** R3 may be packed, byte for byte, into a clearly labelled **testing APK for the owner's own devices** (`tool/build_testing_apk.sh`, Dart define `SHEEKH_TESTING_AUDIO=true`). The default build never contains it; it is still not for distribution or publishing. Testing APKs run the labelled review mode of P-25 | Owner answer, 2026-11-13 (Quran pages and offline audio task) |
+| C-30 | Mushaf **page boundaries** (604 Madinah pages) come from the approved Tanzil metadata file (same SHA-256 as at C-25), with every ayah's page cross-checked against Quran Foundation. The printed **line layout** stays blocked on P-24; pages use the app's own text flow and say so | Technical decision, 2026-11-13, within C-25 |
 
 ## 2. Pending decisions
 
@@ -69,7 +71,7 @@ Source: the owner's Phase 0 specification (2026-11-13) and the master prompt.
 | P-21 | iOS: Apple developer account and Mac or cloud macOS CI (no Mac on this machine) | Cloud macOS CI | iOS builds |
 | P-22 | Rights evidence for each book and recording (public, offline, audio) | A rights record per title | Publishing |
 | P-23 | The English translation of meanings to license | Choose in Phase 6 after a licence review | Translation feature |
-| P-24 | Mushaf page mode licence: KFGQPC permission, or Quran Foundation font and image terms | Ask KFGQPC in writing; Quran Foundation as a fallback | Page mode (screenshot 03) |
+| P-24 | Mushaf page mode licence: KFGQPC permission, or Quran Foundation font and image terms | Ask KFGQPC in writing; Quran Foundation as a fallback | The printed line layout of pages (screenshot 03). Page *boundaries* ship since C-30 |
 | P-25 | Review mode: in debug/testing builds, may a tap on an ayah with no reviewed segment play its AI-assisted **candidate**, labelled "Unreviewed AI candidate · … · not verified"? (Built this way on 2026-11-13 so the owner can hear and judge each segment; release builds can't play R3 at all) | Keep it for review; never in release; remove once all seven are reviewed | Owner review of R3 |
 | P-26 | Full Quran text: all 114 surahs were imported on 2026-11-13 under C-25 (same verified source bytes, every ayah cross-checked letter by letter against Quran Foundation `text_uthmani`, metadata cross-checked), with the basmala display rule in QURAN_AND_AUDIO_ACCURACY §3. Confirm, and name the qualified reader for the on-device check (P-07) | Keep; the reader check list in QURAN_AND_AUDIO_ACCURACY §3 applies | Publishing the full reader |
 
@@ -113,7 +115,7 @@ Summary; the full detail is in [QURAN_AND_AUDIO_ACCURACY.md](QURAN_AND_AUDIO_ACC
 - Automated checks: 114 surahs, 6,236 ayahs, per-surah counts, basmala rules, juz, hizb and sajdah positions. Every expected value comes from the source data and is cross-checked against a second source.
 - Checksum manifest, round-trip test and display-path test, run in CI.
 - Device review of a fixed page list by a qualified reader, with the result recorded.
-- Page mode only with layout data from the font's own edition; **page boundaries are never computed by us**.
+- Printed-page (line) layout only with layout data from the font's own edition; **page boundaries are never computed by us**: they are copied from the approved source and cross-checked (C-30).
 - Unverified text is never shown as Quran.
 
 ## 6. Audio and Tafsir verification requirements

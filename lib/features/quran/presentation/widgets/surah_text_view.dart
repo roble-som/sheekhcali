@@ -13,7 +13,8 @@ import '../../domain/quran_text_availability.dart';
 /// How an ayah is currently marked.
 enum AyahMark { none, selected, reading, explaining }
 
-/// Al-Fatiha (and later any surah) as continuous Quran text: a surah header,
+/// A surah, or a run of its ayahs (one surah's part of a Mushaf page), as
+/// Quran text: the surah header and basmala when the run starts the surah,
 /// the ayahs flowing right to left with ayah-end markers, and the source
 /// attribution required by the Tanzil terms.
 ///
@@ -30,9 +31,20 @@ class SurahTextView extends StatefulWidget {
     required this.onAyahLongPress,
     required this.onSourceTap,
     this.fontSize = 28,
+    this.firstAyah = 1,
+    this.lastAyah,
+    this.showSource = true,
   });
 
   final SurahText surah;
+
+  /// The ayahs shown: [firstAyah]…[lastAyah] (default: the whole surah).
+  final int firstAyah;
+  final int? lastAyah;
+
+  /// Whether the source line follows the text (a page shows it once, below
+  /// all its surahs).
+  final bool showSource;
   final bool dark;
 
   /// ayah number → mark. Missing means [AyahMark.none].
@@ -70,6 +82,9 @@ class SurahTextViewState extends State<SurahTextView> {
     final top = boxes.map((b) => b.top).reduce((a, b) => a < b ? a : b);
     return p.localToGlobal(Offset(0, top));
   }
+
+  /// Global top of the Quran text paragraph (null before layout).
+  double? paragraphGlobalTop() => _paragraph?.localToGlobal(Offset.zero).dy;
 
   /// The ayah shown at the global point [global] (nearest character).
   int? ayahAtGlobal(Offset global) {
@@ -116,7 +131,13 @@ class SurahTextViewState extends State<SurahTextView> {
         ? l10n.revelationMakki
         : l10n.revelationMadani;
 
-    final layout = _layout = AyahLayout(surah);
+    final layout = _layout = AyahLayout(
+      surah,
+      first: widget.firstAyah,
+      last: widget.lastAyah,
+    );
+    final startsSurah =
+        layout.slots.isNotEmpty && layout.slots.first.number == 1;
     final markerStyle = TextStyle(
       fontFamily: AppFonts.quran,
       fontSize: 15,
@@ -168,22 +189,24 @@ class SurahTextViewState extends State<SurahTextView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _SurahHeader(name: surah.nameArabic, dark: widget.dark),
-        const SizedBox(height: 6),
-        Text(
-          localizeDigits(
-            l10n.surahMeta(revelation, l10n.ayahCount(surah.ayahs.length)),
-            locale,
+        if (startsSurah) ...[
+          _SurahHeader(name: surah.nameArabic, dark: widget.dark),
+          const SizedBox(height: 6),
+          Text(
+            localizeDigits(
+              l10n.surahMeta(revelation, l10n.ayahCount(surah.ayahs.length)),
+              locale,
+            ),
+            textAlign: TextAlign.center,
+            style: context.text.listSubtitle.copyWith(
+              color: widget.dark
+                  ? const Color(0xB3FFFFFF)
+                  : ReaderColors.textSecondary,
+            ),
           ),
-          textAlign: TextAlign.center,
-          style: context.text.listSubtitle.copyWith(
-            color: widget.dark
-                ? const Color(0xB3FFFFFF)
-                : ReaderColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: 22),
-        if (surah.basmalaHeading != null) ...[
+          const SizedBox(height: 22),
+        ],
+        if (startsSurah && surah.basmalaHeading != null) ...[
           // Unnumbered, exactly as the source prefixes it to ayah 1.
           Text(
             surah.basmalaHeading!,
@@ -241,8 +264,14 @@ class SurahTextViewState extends State<SurahTextView> {
             ),
           ),
         ),
-        const SizedBox(height: 26),
-        _SourceLine(surah: surah, dark: widget.dark, onTap: widget.onSourceTap),
+        if (widget.showSource) ...[
+          const SizedBox(height: 26),
+          QuranSourceLine(
+            surah: surah,
+            dark: widget.dark,
+            onTap: widget.onSourceTap,
+          ),
+        ],
       ],
     );
   }
@@ -289,7 +318,9 @@ class _LongPressByAyah extends StatelessWidget {
 /// figure spaces (room for the ring), then a normal space.
 @immutable
 class AyahLayout {
-  AyahLayout(SurahText surah) : slots = _build(surah);
+  /// Ayahs [first]…[last] of [surah] (default: all of them).
+  AyahLayout(SurahText surah, {int first = 1, int? last})
+    : slots = _build(surah, first, last ?? surah.ayahs.length);
 
   static const beforeMarker = '\u00A0';
   static const afterMarker = ' ';
@@ -300,10 +331,12 @@ class AyahLayout {
 
   final List<AyahSlot> slots;
 
-  static List<AyahSlot> _build(SurahText surah) {
+  static List<AyahSlot> _build(SurahText surah, int first, int last) {
     final out = <AyahSlot>[];
     var cursor = 0;
-    for (var i = 0; i < surah.ayahs.length; i++) {
+    final from = (first - 1).clamp(0, surah.ayahs.length);
+    final to = last.clamp(from, surah.ayahs.length);
+    for (var i = from; i < to; i++) {
       final a = surah.ayahs[i];
       final textStart = cursor;
       final textEnd = textStart + a.displayText.length;
@@ -493,8 +526,10 @@ class _SurahHeader extends StatelessWidget {
   }
 }
 
-class _SourceLine extends StatelessWidget {
-  const _SourceLine({
+/// The Tanzil attribution and the reviewer status, below the Quran text.
+class QuranSourceLine extends StatelessWidget {
+  const QuranSourceLine({
+    super.key,
     required this.surah,
     required this.dark,
     required this.onTap,

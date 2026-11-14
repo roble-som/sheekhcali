@@ -98,11 +98,27 @@ void main() {
           tester,
           location: AppRoutes.quran,
           quranText: _UnavailableRepo(),
+          extraPrefs: const {'quran.layout': 'surah'},
         );
         expect(find.text('Layout preview · not Quran text'), findsOneWidget);
         expect(find.byKey(const ValueKey('quran-text')), findsNothing);
       },
     );
+
+    testWidgets('fails closed in the page layout: a notice, no text', (
+      tester,
+    ) async {
+      await pumpApp(
+        tester,
+        location: AppRoutes.quran,
+        quranText: _UnavailableRepo(),
+      );
+      expect(
+        find.text("This page's text could not be verified, so it isn't shown."),
+        findsOneWidget,
+      );
+      expect(find.byKey(const ValueKey('quran-text')), findsNothing);
+    });
 
     testWidgets(
       'long press ayah 6 → Copy puts the exact stored text on the clipboard',

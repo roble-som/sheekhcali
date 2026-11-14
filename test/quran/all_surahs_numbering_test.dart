@@ -8,8 +8,9 @@ import 'package:sheekhcali/features/quran/data/quran_text_repository.dart';
 import '../support/rendered_numbering.dart';
 import '../support/test_app.dart';
 
-/// Every surah, as rendered: each ayah number is drawn right after its own
-/// ayah (QURAN_AND_AUDIO_ACCURACY §3: numbering and display order).
+/// Every surah, as rendered in the whole-surah layout: each ayah number is
+/// drawn right after its own ayah (QURAN_AND_AUDIO_ACCURACY §3: numbering and
+/// display order). The page layout is checked in all_pages_test.dart.
 void main() {
   setUpAll(loadAppFonts);
 
@@ -26,6 +27,7 @@ void main() {
           tester,
           location: AppRoutes.quranAt(n),
           physicalSize: const Size(384 * referenceDpr, 832 * referenceDpr),
+          extraPrefs: const {'quran.layout': 'surah'},
         );
         problems.addAll(checkRenderedNumbering(tester, surah));
         // The basmala heading is shown exactly where the source has one.

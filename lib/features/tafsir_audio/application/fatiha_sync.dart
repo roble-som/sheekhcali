@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/build_flags.dart';
 import '../../quran/data/quran_text_repository.dart';
 import '../../quran/domain/quran_text_availability.dart';
 import '../data/recording_repository.dart';
@@ -37,10 +38,12 @@ AlignmentSpan? activeSpanAt(SpanIndex? index, int positionMs) =>
     index?.activeAt(positionMs);
 
 /// Whether unreviewed AI-assisted candidate segments may be played, clearly
-/// labelled, when an ayah has no reviewed segment yet. Debug/testing builds
-/// only: release builds can't play the testing-only recording at all (C-26),
-/// and production uses reviewed spans only.
-final reviewModeProvider = Provider<bool>((ref) => kDebugMode);
+/// labelled, when an ayah has no reviewed segment yet (P-25). Debug and
+/// testing builds only: other builds can't play the testing-only recording
+/// at all (C-26), and production uses reviewed spans only.
+final reviewModeProvider = Provider<bool>(
+  (ref) => kDebugMode || kTestingAudioBuild,
+);
 
 /// Bundled candidates file for R3 (generated from
 /// docs/review/candidates/r3-candidates.json by
